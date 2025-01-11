@@ -1,0 +1,35 @@
+package me.bedwarshurts.mmextension.conditions;
+
+import io.lumine.mythic.api.config.MythicLineConfig;
+import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.api.skills.conditions.ISkillMetaCondition;
+import io.lumine.mythic.core.skills.SkillCondition;
+import io.lumine.mythic.core.utils.annotations.MythicCondition;
+import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
+import org.jetbrains.annotations.Nullable;
+
+@MythicCondition(author = "bedwarshurts", name = "stringcontains", aliases = {}, description = "Check if one string is contained within another")
+public class StringContainsCondition extends SkillCondition implements ISkillMetaCondition {
+    private final PlaceholderString string;
+    private final PlaceholderString contains;
+
+    public StringContainsCondition(MythicLineConfig mlc) {
+        super(mlc.getLine());
+        this.string = placeholders(mlc.getString("s", "anexampleword"));
+        this.contains = placeholders(mlc.getString("c", "example"));
+
+    }
+
+    @Nullable
+    private PlaceholderString placeholders(@Nullable String input) {
+        return input == null ? null : PlaceholderString.of(input);
+    }
+
+    @Override
+    public boolean check(SkillMetadata skillMetadata) {
+        String parsedString = string.get(skillMetadata);
+        String parsedContains = contains.get(skillMetadata);
+
+        return parsedString.contains(parsedContains);
+    }
+}
