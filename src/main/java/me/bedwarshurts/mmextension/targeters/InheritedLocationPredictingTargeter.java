@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Objects;
 
 @MythicTargeter(author = "bedwarshurts", name = "inheritedtargetpredictedlocation", aliases = {"ITPL"}, description = "Predicts the location of the inherited target")
 public class InheritedLocationPredictingTargeter implements ILocationTargeter {
@@ -59,9 +60,8 @@ public class InheritedLocationPredictingTargeter implements ILocationTargeter {
 
             // Get the player's movement speed attribute
             double speed = 4.317; // Default speed
-            if (bukkitEntity instanceof Player) {
-                Player player = (Player) bukkitEntity;
-                speed = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue() * 20; // Convert to blocks per second
+            if (bukkitEntity instanceof Player player) {
+                speed = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue() * 20; // Convert to blocks per second
             }
 
             Location targetLocation;

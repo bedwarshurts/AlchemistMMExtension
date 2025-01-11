@@ -13,7 +13,7 @@ public abstract class Utilities {
         boolean found;
         do {
             Matcher matcher = placeholderPattern.matcher(text);
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             found = false;
 
             while (matcher.find()) {
