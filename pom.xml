@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <build>
-        <finalName>${project.name}-${project.version}</finalName>
+        <finalName>${project.name}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <defaultGoal>clean package install</defaultGoal>
 
