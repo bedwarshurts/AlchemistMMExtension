@@ -5,9 +5,7 @@ import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
 import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
-import me.bedwarshurts.mmextension.mechanics.BookGUIMechanic;
-import me.bedwarshurts.mmextension.mechanics.CancelPlayerDeathMechanic;
-import me.bedwarshurts.mmextension.mechanics.SphereShapeMechanic;
+import me.bedwarshurts.mmextension.mechanics.*;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.InheritedGroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.InheritedLocationPredictingTargeter;
@@ -30,6 +28,13 @@ public class MythicMobsHook implements Listener {
             case "cancelplayerdeath":
                 event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
                 break;
+            case "minimap":
+                event.register(new MinimapMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                break;
+            case "hidescoreboard":
+                event.register(new HideScoreboardMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+            case "hideactionbar":
+                event.register(new HideActionBarMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
             default: break;
         }
     }

@@ -1,5 +1,6 @@
 package me.bedwarshurts.mmextension;
 
+import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,7 +12,10 @@ public class AlchemistMMExtension extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+
         Bukkit.getPluginManager().registerEvents(new MythicMobsHook(), this);
+        Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
+
         getLogger().info("AlchemistMMExtension has been enabled! Made by bedwarshurts");
     }
 
