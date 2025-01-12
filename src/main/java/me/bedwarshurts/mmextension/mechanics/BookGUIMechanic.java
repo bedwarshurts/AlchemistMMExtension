@@ -1,6 +1,6 @@
 package me.bedwarshurts.mmextension.mechanics;
 
-import me.bedwarshurts.mmextension.utils.Utilities;
+import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
@@ -28,8 +28,8 @@ public class BookGUIMechanic implements INoTargetSkill {
 
     @Override
     public SkillResult cast(SkillMetadata skillMetadata) {
-        String parsedContents = Utilities.parseStringPlaceholders(contents, skillMetadata);
-        parsedContents = Utilities.parseMythicTags(parsedContents);
+        String parsedContents = PlaceholderUtils.parseStringPlaceholders(contents, skillMetadata);
+        parsedContents = PlaceholderUtils.parseMythicTags(parsedContents);
         String[] pages = parsedContents.split("\\n");
         Component[] components = new Component[pages.length];
         MiniMessage miniMessage = MiniMessage.miniMessage();
