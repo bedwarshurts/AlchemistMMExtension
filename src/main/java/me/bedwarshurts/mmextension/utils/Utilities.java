@@ -6,7 +6,7 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Utilities {
+public class Utilities {
     private static final Pattern placeholderPattern = Pattern.compile("<(world|caster|target|skill)(\\.var)?\\.[a-zA-Z0-9]+>");
 
     public static String parseStringPlaceholders(String text, SkillMetadata skillMetadata) {
