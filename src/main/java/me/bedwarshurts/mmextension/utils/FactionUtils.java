@@ -7,9 +7,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.Bukkit;
+
+import static me.bedwarshurts.mmextension.AlchemistMMExtension.AlchemistMMExtension;
 
 public class FactionUtils {
+
 
     private static String getFaction(Entity entity) {
         ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
@@ -43,7 +45,7 @@ public class FactionUtils {
                     try {
                         extraDamage = Double.parseDouble(placeholder);
                     } catch (NumberFormatException e) {
-                        Bukkit.getLogger().warning("Invalid placeholder value for %mythiclib_raw_stat_boss_damage%: " + placeholder);
+                        AlchemistMMExtension.getLogger().warning("Invalid placeholder value for %mythiclib_raw_stat_boss_damage%: " + placeholder);
                     }
                     damageResult += event.getDamage() * extraDamage / 100;
                     break;
