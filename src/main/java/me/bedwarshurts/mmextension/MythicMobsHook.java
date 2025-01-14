@@ -5,6 +5,7 @@ import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
 import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
+import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.mechanics.*;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.InheritedGroundLevelTargeter;
@@ -71,6 +72,9 @@ public class MythicMobsHook implements Listener {
                 break;
             case "isylevel":
                 event.register(new YLevelCondition(event.getConfig()));
+                break;
+            case "isinfaction":
+                event.register(new IsInFactionCondition(event.getConfig()));
                 break;
             default: break;
         }
