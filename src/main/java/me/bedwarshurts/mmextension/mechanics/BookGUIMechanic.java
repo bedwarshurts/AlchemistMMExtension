@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.Material;
+import me.clip.placeholderapi.PlaceholderAPI;
 
 @MythicMechanic(author = "bedwarshurts", name = "bookgui", aliases = {}, description = "Opens a book GUI for the target players with specified contents")
 public class BookGUIMechanic implements INoTargetSkill {
@@ -30,26 +31,26 @@ public class BookGUIMechanic implements INoTargetSkill {
     public SkillResult cast(SkillMetadata skillMetadata) {
         String parsedContents = PlaceholderUtils.parseStringPlaceholders(contents, skillMetadata);
         parsedContents = PlaceholderUtils.parseMythicTags(parsedContents);
-        String[] pages = parsedContents.split("\\n");
-        Component[] components = new Component[pages.length];
         MiniMessage miniMessage = MiniMessage.miniMessage();
-
-        for (int i = 0; i < pages.length; i++) {
-            components[i] = miniMessage.deserialize(pages[i]);
-        }
-
         ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta meta = (BookMeta) book.getItemMeta();
-
-        meta.addPages(components);
-        meta.setTitle(title);
-        meta.setAuthor(author);
-
-        book.setItemMeta(meta);
 
         for (AbstractEntity target : skillMetadata.getEntityTargets()) {
             if (target.isPlayer()) {
                 Player player = (Player) target.getBukkitEntity();
+                parsedContents = PlaceholderAPI.setPlaceholders(player, parsedContents);
+                String[] pages = parsedContents.split("\\n");
+                Component[] components = new Component[pages.length];
+
+                for (int i = 0; i < pages.length; i++) {
+                    components[i] = miniMessage.deserialize(pages[i]);
+                }
+
+                meta.addPages(components);
+                meta.setTitle(title);
+                meta.setAuthor(author);
+
+                book.setItemMeta(meta);
                 player.openBook(book);
             }
         }
