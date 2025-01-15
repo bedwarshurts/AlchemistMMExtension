@@ -1,6 +1,6 @@
+// src/main/java/me/bedwarshurts/mmextension/mechanics/HideActionBarMechanic.java
 package me.bedwarshurts.mmextension.mechanics;
 
-import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
@@ -8,6 +8,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -25,14 +26,10 @@ public class HideActionBarMechanic extends SkillMechanic implements INoTargetSki
 
     @Override
     public SkillResult cast(SkillMetadata data) {
-        for (AbstractEntity target : data.getEntityTargets()) {
-            if (target.isPlayer()) {
-                Player player = (Player) target.getBukkitEntity();
-                String command = String.format("rpg admin hideab %s %d", player.getName(), time);
-                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
-                return SkillResult.SUCCESS;
-            }
-        }
-        return SkillResult.CONDITION_FAILED;
+        return SkillUtils.getPlayerEntity(data).map(player -> {
+            String command = String.format("rpg admin hideab %s %d", player.getName(), time);
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+            return SkillResult.SUCCESS;
+        }).orElse(SkillResult.CONDITION_FAILED);
     }
 }

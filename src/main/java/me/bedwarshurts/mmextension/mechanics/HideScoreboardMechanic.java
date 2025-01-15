@@ -1,6 +1,6 @@
+// src/main/java/me/bedwarshurts/mmextension/mechanics/HideScoreboardMechanic.java
 package me.bedwarshurts.mmextension.mechanics;
 
-import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
@@ -8,6 +8,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,25 +28,21 @@ public class HideScoreboardMechanic extends SkillMechanic implements INoTargetSk
 
     @Override
     public SkillResult cast(SkillMetadata data) {
-        for (AbstractEntity target : data.getEntityTargets()) {
-            if (target.isPlayer()) {
-                Player player = (Player) target.getBukkitEntity();
-                String playerName = player.getName();
-                String hideCommand = String.format("tab bossbar off %s -s", playerName);
-                String showCommand = String.format("tab bossbar on %s -s", playerName);
+        return SkillUtils.getPlayerEntity(data).map(player -> {
+            String playerName = player.getName();
+            String hideCommand = String.format("tab bossbar off %s -s", playerName);
+            String showCommand = String.format("tab bossbar on %s -s", playerName);
 
-                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), hideCommand);
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), hideCommand);
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), showCommand);
-                    }
-                }.runTaskLater(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("AlchemistMMExtension")), time);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), showCommand);
+                }
+            }.runTaskLaterAsynchronously(Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("AlchemistMMExtension")), time);
 
-                return SkillResult.SUCCESS;
-            }
-        }
-        return SkillResult.CONDITION_FAILED;
+            return SkillResult.SUCCESS;
+        }).orElse(SkillResult.CONDITION_FAILED);
     }
 }
