@@ -7,8 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.AlchemistMMExtension;
+import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 
 public class FactionUtils {
 
@@ -42,11 +41,7 @@ public class FactionUtils {
             switch (fac.trim()) {
                 case "boss":
                     placeholder = PlaceholderAPI.setPlaceholders(player, "%mythiclib_raw_stat_boss_damage%");
-                    try {
-                        extraDamage = Double.parseDouble(placeholder);
-                    } catch (NumberFormatException e) {
-                        AlchemistMMExtension.getLogger().warning("Invalid placeholder value for %mythiclib_raw_stat_boss_damage%: " + placeholder);
-                    }
+                    extraDamage = PlaceholderUtils.parseStatPlaceholder(placeholder);
                     damageResult += event.getDamage() * extraDamage / 100;
                     break;
                 default:

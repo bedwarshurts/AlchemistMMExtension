@@ -2,6 +2,7 @@ package me.bedwarshurts.mmextension.utils;
 
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
+import static me.bedwarshurts.mmextension.AlchemistMMExtension.AlchemistMMExtension;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +28,15 @@ public class PlaceholderUtils {
         } while (found);
 
         return text;
+    }
+
+    public static double parseStatPlaceholder(String placeholder) {
+        try {
+            return Double.parseDouble(placeholder);
+        } catch (NumberFormatException e) {
+            AlchemistMMExtension.getLogger().warning("Invalid placeholder value for " + placeholder);
+            return 0;
+        }
     }
 
     public static String parseMythicTags(String text) {
