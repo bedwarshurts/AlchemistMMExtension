@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Objects;
 
-@MythicTargeter(author = "bedwarshurts", name = "targetpredictedlocation", aliases = {"TPL"}, description = "Predicts the location of the target")
+@MythicTargeter(author = "bedwarshurts", name = "inheritedtargetpredictedlocation", aliases = {"TPL"}, description = "Predicts the location of the inherited target")
 public class LocationPredictingTargeter implements ILocationTargeter {
 
     private final double predictionTime;
@@ -40,53 +40,52 @@ public class LocationPredictingTargeter implements ILocationTargeter {
     @Override
     public Collection<AbstractLocation> getLocations(SkillMetadata skillMetadata) {
         Set<AbstractLocation> locations = new HashSet<>();
-        AbstractEntity targetEntity = skillMetadata.getCaster().getEntity().getTarget();
 
-        if (targetEntity == null) {
-            return locations;
-        }
+        for (AbstractEntity targetEntity : skillMetadata.getEntityTargets()) {
+            Entity bukkitEntity = targetEntity.getBukkitEntity();
+            UUID entityId = bukkitEntity.getUniqueId();
+            Location currentLocation = bukkitEntity.getLocation();
+            Location previousLocation = previousLocations.getOrDefault(entityId, currentLocation);
 
-        Entity bukkitEntity = targetEntity.getBukkitEntity();
-        UUID entityId = bukkitEntity.getUniqueId();
-        Location currentLocation = bukkitEntity.getLocation();
-        Location previousLocation = previousLocations.getOrDefault(entityId, currentLocation);
+            // Calculate the direction based on the difference between current and previous locations
+            Vector direction = currentLocation.toVector().subtract(previousLocation.toVector()).normalize();
 
-        // Calculate the direction based on the difference between current and previous locations
-        Vector direction = currentLocation.toVector().subtract(previousLocation.toVector()).normalize();
+            // Always update the previous location
+            previousLocations.put(entityId, currentLocation);
 
-        // Ignore Y coordinate if ignoreY is true
-        if (ignoreY) {
-            direction.setY(0);
-        }
-
-        // Get the player's movement speed attribute
-        double speed = 4.317; // Default speed
-        if (bukkitEntity instanceof Player player) {
-            speed = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue() * 20; // Convert to blocks per second
-        }
-
-        Location targetLocation;
-        if (Double.isNaN(direction.length())) {
-            // If the player isn't moving, check ignoreIfStill
-            if (ignoreIfStill) {
-                previousLocations.put(entityId, currentLocation);
-                return locations; // Return empty locations
-            } else {
-                targetLocation = currentLocation.clone();
+            // Ignore Y coordinate if ignoreY is true
+            if (ignoreY) {
+                direction.setY(0);
             }
-        } else {
-            // Predict the future location based on direction, speed, and prediction time
-            Vector predictedMovement = direction.multiply(speed * predictionTime);
-            targetLocation = currentLocation.clone().add(predictedMovement);
-            targetLocation.setY(targetLocation.getY() + yOffset); // Apply the yOffset
+
+            // Get the player's movement speed attribute
+            double speed = 4.317; // Default speed
+            if (bukkitEntity instanceof Player player) {
+                speed = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue() * 20; // Convert to blocks per second
+            }
+
+            Location targetLocation;
+            if (Double.isNaN(direction.length())) {
+                // If the player isn't moving, check ignoreIfStill
+                if (ignoreIfStill) {
+                    continue; // Skip this target
+                } else {
+                    targetLocation = currentLocation.clone();
+                }
+            } else {
+                // Predict the future location based on direction, speed, and prediction time
+                Vector predictedMovement = direction.multiply(speed * predictionTime);
+                targetLocation = currentLocation.clone().add(predictedMovement);
+                targetLocation.setY(targetLocation.getY() + yOffset); // Apply the yOffset
+            }
+
+            // Use the predicted location directly
+            Position position = Position.of(targetLocation);
+            locations.add(new AbstractLocation(position));
+
+            // Update the previous location
+            previousLocations.put(entityId, currentLocation);
         }
-
-        // Use the predicted location directly
-        Position position = Position.of(targetLocation);
-        locations.add(new AbstractLocation(position));
-
-        // Update the previous location
-        previousLocations.put(entityId, currentLocation);
 
         return locations;
     }

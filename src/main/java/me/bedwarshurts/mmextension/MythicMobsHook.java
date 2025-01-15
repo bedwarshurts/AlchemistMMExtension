@@ -13,8 +13,6 @@ import me.bedwarshurts.mmextension.mechanics.MinimapMechanic;
 import me.bedwarshurts.mmextension.mechanics.HideScoreboardMechanic;
 import me.bedwarshurts.mmextension.mechanics.HideActionBarMechanic;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
-import me.bedwarshurts.mmextension.targeters.InheritedGroundLevelTargeter;
-import me.bedwarshurts.mmextension.targeters.InheritedLocationPredictingTargeter;
 import me.bedwarshurts.mmextension.targeters.LocationPredictingTargeter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -55,14 +53,6 @@ public class MythicMobsHook implements Listener {
             case "targetpredictedlocation":
             case "tpl":
                 event.register(new LocationPredictingTargeter(event.getConfig()));
-                break;
-            case "inheritedtargetpredictedlocation":
-            case "itpl":
-                event.register(new InheritedLocationPredictingTargeter(event.getConfig()));
-                break;
-            case "inheritedtargetgroundlocation":
-            case "itgl":
-                event.register(new InheritedGroundLevelTargeter(event.getConfig()));
                 break;
             default: break;
         }
