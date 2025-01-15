@@ -21,9 +21,9 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### SphereShapeMechanic
 
 ```
-
 - sphereshape{particle=; radius=; particle-count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=;}
 ```
+
 ## Targeters:
 
 ### GroundLevelTargeter (or @ITGL)
@@ -49,7 +49,6 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### YLevelCondition
 
 ```
-
 ?isylevel{y=}
 ```
 
