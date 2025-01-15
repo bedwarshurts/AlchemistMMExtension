@@ -9,9 +9,6 @@ import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.mechanics.BookGUIMechanic;
 import me.bedwarshurts.mmextension.mechanics.SphereShapeMechanic;
 import me.bedwarshurts.mmextension.mechanics.CancelPlayerDeathMechanic;
-import me.bedwarshurts.mmextension.mechanics.MinimapMechanic;
-import me.bedwarshurts.mmextension.mechanics.HideScoreboardMechanic;
-import me.bedwarshurts.mmextension.mechanics.HideActionBarMechanic;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.LocationPredictingTargeter;
 import org.bukkit.event.EventHandler;
@@ -32,14 +29,6 @@ public class MythicMobsHook implements Listener {
             case "cancelplayerdeath":
                 event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
                 break;
-            case "minimap":
-                event.register(new MinimapMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
-                break;
-            case "hidescoreboard":
-                event.register(new HideScoreboardMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
-            case "hideactionbar":
-                event.register(new HideActionBarMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
-            default: break;
         }
     }
     @EventHandler
