@@ -64,6 +64,7 @@ public class MythicMobsHook implements Listener {
             case "itgl":
                 event.register(new InheritedGroundLevelTargeter(event.getConfig()));
                 break;
+            default: break;
         }
     }
     @EventHandler
