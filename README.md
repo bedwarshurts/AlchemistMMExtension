@@ -1,1 +1,1 @@
-<strong>w</strong>
+<strong>w</strong> w
