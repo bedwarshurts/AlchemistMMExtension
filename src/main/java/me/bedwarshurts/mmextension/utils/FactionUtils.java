@@ -39,6 +39,7 @@ public class FactionUtils {
         for (String fac : factions) {
             String placeholder;
             double extraDamage = 0;
+            // TODO: Add more factions
             switch (fac.trim()) {
                 case "boss":
                     placeholder = PlaceholderAPI.setPlaceholders(player, "%mythiclib_raw_stat_boss_damage%");
