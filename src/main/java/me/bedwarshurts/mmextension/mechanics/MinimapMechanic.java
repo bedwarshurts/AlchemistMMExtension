@@ -45,7 +45,6 @@ public class MinimapMechanic extends SkillMechanic implements INoTargetSkill {
                 }
                 return SkillResult.SUCCESS;
             }
-            return SkillResult.CONDITION_FAILED;
         }
         return SkillResult.CONDITION_FAILED;
     }

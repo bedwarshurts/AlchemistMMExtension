@@ -64,8 +64,6 @@ public class MythicMobsHook implements Listener {
     @EventHandler
     public void loadConditions(MythicConditionLoadEvent event) {
         String conditionName = event.getConditionName().toLowerCase();
-        int s = event.getConditionName().indexOf(" "); if (s > 0) { conditionName = conditionName.substring(0, s); }
-
         switch (conditionName) {
             case "stringcontains":
                 event.register(new StringContainsCondition(event.getConfig()));
