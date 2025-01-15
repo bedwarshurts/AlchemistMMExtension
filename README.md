@@ -4,7 +4,7 @@
 
 An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and utilises the faction feature to apply bonus damage to mobs.
 
-## Mechanics:
+## Mechanics
 
 ### BookGUIMechanic
 
@@ -24,7 +24,7 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 - sphereshape{particle=; radius=; particle-count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=;}
 ```
 
-## Targeters:
+## Targeters
 
 ### GroundLevelTargeter (or @ITGL)
 
@@ -38,7 +38,7 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 @TPL{time=; y=; ignoreY=; ignoreIfStill=;}
 ```
 
-## Conditions:
+## Conditions
 
 ### StringContainsCondition
 
