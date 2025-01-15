@@ -7,7 +7,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 
 public class FactionUtils {
 
@@ -37,12 +36,10 @@ public class FactionUtils {
         String[] factions = faction.toLowerCase().split(",");
         for (String fac : factions) {
             String placeholder;
-            double extraDamage = 0;
             switch (fac.trim()) {
                 case "boss":
                     placeholder = PlaceholderAPI.setPlaceholders(player, "%mythiclib_raw_stat_boss_damage%");
-                    extraDamage = PlaceholderUtils.parseStatPlaceholder(placeholder);
-                    damageResult += event.getDamage() * extraDamage / 100;
+                    damageResult += event.getDamage() * PlaceholderUtils.parseStatPlaceholder(placeholder) / 100;
                     break;
                 default:
                     break;
