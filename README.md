@@ -1,6 +1,6 @@
 # Alchemist MM Extension 
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/5833d4e6d8a849c5ba05c4ad5458a43b)](https://app.codacy.com?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/5833d4e6d8a849c5ba05c4ad5458a43b)](https://app.codacy.com?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) \n
 An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and utilises the faction feature to apply bonus damage to mobs.
 
 ## Mechanics:
