@@ -29,6 +29,7 @@ public class MythicMobsHook implements Listener {
             case "cancelplayerdeath":
                 event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
                 break;
+            default: break;
         }
     }
     @EventHandler
