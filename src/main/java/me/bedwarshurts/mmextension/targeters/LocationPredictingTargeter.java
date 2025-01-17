@@ -31,10 +31,10 @@ public class LocationPredictingTargeter implements ILocationTargeter {
     private final Map<UUID, Location> previousLocations = new HashMap<>();
 
     public LocationPredictingTargeter(MythicLineConfig mlc) {
-        this.predictionTime = mlc.getDouble("time", 1.0); // Read the time parameter from the config, default to 1.0 seconds if not provided
-        this.yOffset = mlc.getDouble("y", 0.0); // Read the yOffset parameter from the config, default to 0.0 if not provided
-        this.ignoreY = mlc.getBoolean("iy", false); // Read the ignoreY parameter from the config, default to false if not provided
-        this.ignoreIfStill = mlc.getBoolean("is", false); // Read the ignoreIfStill parameter from the config, default to false if not provided
+        this.predictionTime = mlc.getDouble("time", 1.0);
+        this.yOffset = mlc.getDouble("y", 0.0);
+        this.ignoreY = mlc.getBoolean("iy", false);
+        this.ignoreIfStill = mlc.getBoolean("is", false);
     }
 
     @Override
@@ -53,12 +53,10 @@ public class LocationPredictingTargeter implements ILocationTargeter {
             // Always update the previous location
             previousLocations.put(entityId, currentLocation);
 
-            // Ignore Y coordinate if ignoreY is true
             if (ignoreY) {
                 direction.setY(0);
             }
 
-            // Get the player's movement speed attribute
             double speed = 4.317; // Default speed
             if (bukkitEntity instanceof Player player) {
                 speed = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue() * 20; // Convert to blocks per second
@@ -68,7 +66,7 @@ public class LocationPredictingTargeter implements ILocationTargeter {
             if (Double.isNaN(direction.length())) {
                 // If the player isn't moving, check ignoreIfStill
                 if (ignoreIfStill) {
-                    continue; // Skip this target
+                    continue;
                 } else {
                     targetLocation = currentLocation.clone();
                 }
@@ -76,10 +74,9 @@ public class LocationPredictingTargeter implements ILocationTargeter {
                 // Predict the future location based on direction, speed, and prediction time
                 Vector predictedMovement = direction.multiply(speed * predictionTime);
                 targetLocation = currentLocation.clone().add(predictedMovement);
-                targetLocation.setY(targetLocation.getY() + yOffset); // Apply the yOffset
+                targetLocation.setY(targetLocation.getY() + yOffset);
             }
 
-            // Use the predicted location directly
             Position position = Position.of(targetLocation);
             locations.add(new AbstractLocation(position));
 
