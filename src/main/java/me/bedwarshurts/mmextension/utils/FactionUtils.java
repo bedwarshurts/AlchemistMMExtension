@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+
 public class FactionUtils {
 
 
@@ -32,8 +33,9 @@ public class FactionUtils {
             return;
         }
 
-        double damageResult = 0;
         String[] factions = faction.toLowerCase().split(",");
+        double damageResult = 0;
+
         for (String fac : factions) {
             String placeholder;
             switch (fac.trim()) {
