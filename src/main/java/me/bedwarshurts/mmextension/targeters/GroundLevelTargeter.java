@@ -19,7 +19,7 @@ public class GroundLevelTargeter implements ILocationTargeter {
     private final int yOffset;
 
     public GroundLevelTargeter(MythicLineConfig mlc) {
-        this.yOffset = mlc.getInteger("y", 0); // Read the y parameter from the config, default to 0 if not provided
+        this.yOffset = mlc.getInteger("y", 0);
     }
 
     @Override
