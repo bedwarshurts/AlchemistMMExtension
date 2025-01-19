@@ -7,6 +7,7 @@ import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.mechanics.BookGUIMechanic;
+import me.bedwarshurts.mmextension.mechanics.OpenChestMechanic;
 import me.bedwarshurts.mmextension.mechanics.SphereShapeMechanic;
 import me.bedwarshurts.mmextension.mechanics.CancelPlayerDeathMechanic;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
@@ -29,6 +30,8 @@ public class MythicMobsHook implements Listener {
             case "cancelplayerdeath":
                 event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
                 break;
+            case "openchest":
+                event.register(new OpenChestMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
             default: break;
         }
     }
