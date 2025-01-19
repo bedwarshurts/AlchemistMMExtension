@@ -26,13 +26,13 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 
 ## Targeters
 
-### GroundLevelTargeter (or @ITGL)
+### GroundLevelTargeter
 
 ```
-@TGL{y=; origin=;}
+@TGL{y=;}
 ```
 
-### LocationPredictingTargeter (or @ITPL)
+### LocationPredictingTargeter
 
 ```
 @TPL{time=; y=; ignoreY=; ignoreIfStill=;}
@@ -62,3 +62,7 @@ Checks if the boss is in a faction taking into account that it could be in multi
 ```
 ?isinfaction{faction=}
 ```
+
+## Placeholders
+
+A placeholder to get a random color between 2 hex values was added. Requires PlaceholderAPI %alchemist_color_#hex1_hex2%, returns a random color between the hex values 1 and 2
