@@ -1,4 +1,4 @@
-package me.bedwarshurts.mmextension;
+package me.bedwarshurts.mmextension.comp;
 
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
