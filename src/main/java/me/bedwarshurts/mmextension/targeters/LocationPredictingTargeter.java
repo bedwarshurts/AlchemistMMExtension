@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Objects;
 
-@MythicTargeter(author = "bedwarshurts", name = "inheritedtargetpredictedlocation", aliases = {"TPL"}, description = "Predicts the location of the inherited target")
+@MythicTargeter(author = "bedwarshurts", name = "targetpredictedlocation", aliases = {"TPL"}, description = "Predicts the location of the target")
 public class LocationPredictingTargeter implements ILocationTargeter {
 
     private final double predictionTime;
@@ -63,8 +63,7 @@ public class LocationPredictingTargeter implements ILocationTargeter {
             }
 
             Location targetLocation;
-            if (Double.isNaN(direction.length())) {
-                // If the player isn't moving, check ignoreIfStill
+            if (Double.isNaN(direction.length())) { // direction.length() returns NaN if the player isn't moving
                 if (ignoreIfStill) {
                     continue;
                 } else {

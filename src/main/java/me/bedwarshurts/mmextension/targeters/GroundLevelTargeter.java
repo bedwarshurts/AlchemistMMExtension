@@ -13,7 +13,7 @@ import org.bukkit.entity.Entity;
 import java.util.HashSet;
 import java.util.Set;
 
-@MythicTargeter(author = "bedwarshurts", name = "inheritedtargetgroundlocation", aliases = {"TGL"}, description = "Targets the block location the inherited target is standing on")
+@MythicTargeter(author = "bedwarshurts", name = "targetgroundlocation", aliases = {"TGL"}, description = "Targets the block location the target is standing on")
 public class GroundLevelTargeter implements ILocationTargeter {
 
     private final int yOffset;
