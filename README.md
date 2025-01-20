@@ -1,6 +1,7 @@
 # <p align=center> Alchemist MM Extension </p>
 
- ![CodeQuality](https://img.shields.io/codefactor/grade/github/bedwarshurts/AlchemistMMExtension?style=flat&logo=codefactor&logoSize=auto)
+<p align=center> ![CodeQuality](https://img.shields.io/codefactor/grade/github/bedwarshurts/AlchemistMMExtension?style=flat&logo=codefactor&logoSize=auto) ![Discord](https://img.shields.io/discord/553890347470553088?style=flat&logo=discord&logoColor=%23FFFFFF&label=%20%20%20&labelColor=5865F2&color=5865F2) </p>
+
 
 
 An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and utilises the faction feature to apply bonus damage to mobs.
