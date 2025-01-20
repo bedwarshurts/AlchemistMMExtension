@@ -1,4 +1,4 @@
-<p style="text-align: center;"> # Alchemist MM Extension </p>
+<p style="text-align: center;"> <s> Alchemist MM Extension </s> </p>
 
 <p style="text-align: center;"> [![CodeFactor](https://www.codefactor.io/repository/github/bedwarshurts/alchemistmmextension/badge)](https://www.codefactor.io/repository/github/bedwarshurts/alchemistmmextension) </p>
 
