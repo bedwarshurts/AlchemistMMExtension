@@ -20,6 +20,32 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>true</minimizeJar>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.mariuszgromada.math</pattern>
+                                    <shadedPattern>me.bedwarshurts.shaded.math</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
     </build>
 
     <properties>
@@ -38,8 +64,8 @@
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
-        <id>phoenix</id>
-        <url>https://nexus.phoenixdevt.fr/repository/maven-public/</url>
+            <id>phoenix</id>
+            <url>https://nexus.phoenixdevt.fr/repository/maven-public/</url>
         </repository>
         <repository>
             <id>papermc</id>
@@ -60,8 +86,14 @@
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>1.21.1-R0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.mariuszgromada.math</groupId>
+            <artifactId>MathParser.org-mXparser</artifactId>
+            <version>6.1.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
@@ -80,7 +112,7 @@
             <groupId>io.lumine</groupId>
             <artifactId>Mythic-Dist</artifactId>
             <version>5.7.1</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <optional>true</optional>
         </dependency>
     </dependencies>

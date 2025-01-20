@@ -1,6 +1,8 @@
 package me.bedwarshurts.mmextension.utils;
 
 import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
+import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import static me.bedwarshurts.mmextension.AlchemistMMExtension.AlchemistMMExtension;
 
@@ -28,6 +30,30 @@ public class PlaceholderUtils {
         } while (found);
 
         return text;
+    }
+
+    public static String parseDoublePlaceholders(String text, SkillMetadata skillMetadata) {
+        Matcher matcher = placeholderPattern.matcher(text);
+        StringBuilder result = new StringBuilder();
+        while (matcher.find()) {
+            String placeholder = matcher.group(0);
+            String replacement = String.valueOf(PlaceholderDouble.of(placeholder).get(skillMetadata));
+            matcher.appendReplacement(result, replacement);
+        }
+        matcher.appendTail(result);
+        return result.toString();
+    }
+
+    public static String parseIntPlaceholders(String text, SkillMetadata skillMetadata) {
+        Matcher matcher = placeholderPattern.matcher(text);
+        StringBuilder result = new StringBuilder();
+        while (matcher.find()) {
+            String placeholder = matcher.group(0);
+            String replacement = String.valueOf(PlaceholderInt.of(placeholder).get(skillMetadata));
+            matcher.appendReplacement(result, replacement);
+        }
+        matcher.appendTail(result);
+        return result.toString();
     }
 
     public static double parseStatPlaceholder(String placeholder) {

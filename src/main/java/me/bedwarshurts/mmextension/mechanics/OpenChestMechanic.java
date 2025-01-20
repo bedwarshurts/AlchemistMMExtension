@@ -26,7 +26,6 @@ public class OpenChestMechanic extends SkillMechanic implements INoTargetSkill {
 
     public OpenChestMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
-
         this.action = mlc.getString("action", "open");
     }
 

@@ -6,10 +6,9 @@ import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
 import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
-import me.bedwarshurts.mmextension.mechanics.BookGUIMechanic;
-import me.bedwarshurts.mmextension.mechanics.OpenChestMechanic;
-import me.bedwarshurts.mmextension.mechanics.SphereShapeMechanic;
-import me.bedwarshurts.mmextension.mechanics.CancelPlayerDeathMechanic;
+import me.bedwarshurts.mmextension.mechanics.*;
+import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
+import me.bedwarshurts.mmextension.mechanics.loop.LoopMechanic;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.LocationPredictingTargeter;
 import org.bukkit.event.EventHandler;
@@ -20,6 +19,7 @@ public class MythicMobsHook implements Listener {
     @EventHandler
     public void loadMechanics(MythicMechanicLoadEvent event) {
         String mechanicName = event.getMechanicName().toLowerCase();
+
         switch (mechanicName) {
             case "bookgui":
                 event.register(new BookGUIMechanic(event.getConfig()));
@@ -32,12 +32,21 @@ public class MythicMobsHook implements Listener {
                 break;
             case "openchest":
                 event.register(new OpenChestMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                break;
+            case "loop":
+                event.register(new LoopMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                break;
+            case "break":
+                event.register(new BreakMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                break;
             default: break;
         }
     }
+
     @EventHandler
     public void loadTargeters(MythicTargeterLoadEvent event) {
         String targeterName = event.getTargeterName().toLowerCase();
+
         switch (targeterName) {
             case "targetgroundlocation":
             case "tgl":
@@ -50,9 +59,11 @@ public class MythicMobsHook implements Listener {
             default: break;
         }
     }
+
     @EventHandler
     public void loadConditions(MythicConditionLoadEvent event) {
         String conditionName = event.getConditionName().toLowerCase();
+
         switch (conditionName) {
             case "stringcontains":
                 event.register(new StringContainsCondition(event.getConfig()));
