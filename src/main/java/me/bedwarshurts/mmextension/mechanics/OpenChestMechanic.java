@@ -1,6 +1,5 @@
 package me.bedwarshurts.mmextension.mechanics;
 
-import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
@@ -19,11 +18,16 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static me.bedwarshurts.mmextension.AlchemistMMExtension.AlchemistMMExtension;
+
 @MythicMechanic(author = "bedwarshurts", name = "openchest", aliases = {}, description = "Opens a chest by mimicking a player opening it")
 public class OpenChestMechanic extends SkillMechanic implements INoTargetSkill {
+    private final String action;
 
     public OpenChestMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
+
+        this.action = mlc.getString("action", "open");
     }
 
     @Override
@@ -37,10 +41,22 @@ public class OpenChestMechanic extends SkillMechanic implements INoTargetSkill {
                     .filter(entity -> entity instanceof Player)
                     .map(entity -> (Player) entity)
                     .collect(Collectors.toList());
-            SkillUtils.setChestOpened(block, true, players);
-            return SkillResult.SUCCESS;
-        }
 
+            return switch (action) {
+                case "open" -> {
+                    SkillUtils.setChestOpened(block, true, players);
+                    yield SkillResult.SUCCESS;
+                }
+                case "close" -> {
+                    SkillUtils.setChestOpened(block, false, players);
+                    yield SkillResult.SUCCESS;
+                }
+                default -> {
+                    AlchemistMMExtension.getLogger().warning("Invalid action for openchest mechanic: " + action + " (valid actions: open, close)");
+                    yield SkillResult.INVALID_CONFIG;
+                }
+            };
+        }
         return SkillResult.CONDITION_FAILED;
     }
 }
