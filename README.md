@@ -24,6 +24,12 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 - sphereshape{particle=; radius=; particle-count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=;}
 ```
 
+### OpenChestMechanic
+
+```
+- openchest{action=;}
+```
+
 ## Targeters
 
 ### GroundLevelTargeter
