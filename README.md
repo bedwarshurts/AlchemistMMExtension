@@ -21,7 +21,7 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### SphereShapeMechanic
 
 ```
-- sphereshape{particle=; radius=; particleCount=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=;}
+- sphereshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=;}
 ```
 
 ### OpenChestMechanic
