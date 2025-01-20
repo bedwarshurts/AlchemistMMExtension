@@ -41,20 +41,20 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
         super(manager, file, line, mlc);
         this.particleType = Particle.valueOf(mlc.getString("particle", "FLAME").toUpperCase());
         this.radius = PlaceholderDouble.of(mlc.getString("radius", "1.0"));
-        this.particleCount = PlaceholderInt.of(mlc.getString("particleCount", "100"));
+        this.particleCount = PlaceholderInt.of(mlc.getString("count", "100"));
         this.dirMultiplier = PlaceholderDouble.of(mlc.getString("dirMultiplier", "1.0"));
         this.shiftRadius = PlaceholderDouble.of(mlc.getString("shift", "0.0"));
         this.variance = PlaceholderDouble.of(mlc.getString("variance", "0.0"));
         String[] directionArgs = mlc.getString("direction", "0,0,0").split(",");
+        this.speed = PlaceholderDouble.of(mlc.getString("speed", "0.1"));
+        this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
+        this.delay = PlaceholderDouble.of(mlc.getString("delay", "0"));
         this.direction = List.of(
                 PlaceholderDouble.of(directionArgs[0]),
                 PlaceholderDouble.of(directionArgs[1]),
                 PlaceholderDouble.of(directionArgs[2])
         );
-        this.speed = PlaceholderDouble.of(mlc.getString("speed", "0.1"));
-        this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
         this.skillExecutor = manager;
-        this.delay = PlaceholderDouble.of(mlc.getString("delay", "0"));
     }
 
     @Override
