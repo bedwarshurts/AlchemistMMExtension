@@ -14,6 +14,11 @@
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/bedwarshurts/AlchemistMMExtension</url>
         </repository>
+        <snapshotRepository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/bedwarshurts/AlchemistMMExtension</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <build>
