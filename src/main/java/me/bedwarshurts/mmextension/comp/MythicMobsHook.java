@@ -6,10 +6,7 @@ import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
 import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
-import me.bedwarshurts.mmextension.mechanics.BookGUIMechanic;
-import me.bedwarshurts.mmextension.mechanics.CancelPlayerDeathMechanic;
-import me.bedwarshurts.mmextension.mechanics.OpenChestMechanic;
-import me.bedwarshurts.mmextension.mechanics.SphereShapeMechanic;
+import me.bedwarshurts.mmextension.mechanics.*;
 import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.LoopMechanic;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
@@ -29,6 +26,9 @@ public class MythicMobsHook implements Listener {
                 break;
             case "sphereshape":
                 event.register(new SphereShapeMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                break;
+            case "ringshape":
+                event.register(new RingShapeMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
                 break;
             case "cancelplayerdeath":
                 event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));

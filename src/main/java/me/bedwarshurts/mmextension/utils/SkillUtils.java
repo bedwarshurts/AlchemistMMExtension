@@ -5,10 +5,17 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
+import io.lumine.mythic.api.adapters.AbstractLocation;
+import io.lumine.mythic.api.skills.Skill;
+import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
+import io.lumine.mythic.core.skills.SkillExecutor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SkillUtils {
 
@@ -21,6 +28,18 @@ public class SkillUtils {
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
         for (Player player : players) {
             manager.sendServerPacket(player, libPacket);
+        }
+    }
+
+    public static void castSkillAtPoint(SkillMetadata data, Location pointLocation, PlaceholderString skillName, SkillExecutor skillExecutor) {
+        if (!skillName.get(data).isEmpty()) { // Execute skill logic
+            Optional<Skill> skillOptional = skillExecutor.getSkill(skillName.get(data));
+            if (skillOptional.isPresent()) {
+                Skill skill = skillOptional.get();
+                skill.execute(data.deepClone().setLocationTarget(
+                        new AbstractLocation(pointLocation.getWorld().getName(), pointLocation.getX(), pointLocation.getY(), pointLocation.getZ()))
+                );
+            }
         }
     }
 }

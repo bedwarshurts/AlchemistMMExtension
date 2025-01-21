@@ -7,10 +7,10 @@ import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
+import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
-import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-@MythicMechanic(author = "bedwarshurts", name = "sphereshape", aliases = {}, description = "Spawns particles in a sphere shape and casts a skill at each particle location")
-public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocationSkill {
+@MythicMechanic(author = "bedwarshurts", name = "ringshape", aliases = {}, description = "Spawns particles in a ring shape and casts a skill at each particle location")
+public class RingShapeMechanic extends SkillMechanic implements ITargetedLocationSkill {
     private final Particle particleType;
     private final PlaceholderInt particleCount;
     private final PlaceholderDouble radius;
@@ -36,7 +36,7 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
     private final SkillExecutor skillExecutor;
     private final PlaceholderDouble delay;
 
-    public SphereShapeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
+    public RingShapeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
         this.particleType = Particle.valueOf(mlc.getString("particle", "FLAME").toUpperCase());
         this.radius = PlaceholderDouble.of(mlc.getString("radius", "1.0"));
@@ -44,7 +44,7 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
         this.dirMultiplier = PlaceholderDouble.of(mlc.getString("dirMultiplier", "1.0"));
         this.shiftRadius = PlaceholderDouble.of(mlc.getString("shift", "0.0"));
         this.variance = PlaceholderDouble.of(mlc.getString("variance", "0.0"));
-        String[] directionArgs = mlc.getString("direction", "0,0,0").split(",");
+        String[] directionArgs = mlc.getString("direction", "0,0,0").split(","); // y variable here gets ignored since it's a ring shape
         this.speed = PlaceholderDouble.of(mlc.getString("speed", "0.1"));
         this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
         this.delay = PlaceholderDouble.of(mlc.getString("delay", "0"));
@@ -66,16 +66,12 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
 
         for (int i = 0; i < particleCount.get(data); i++) {
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
-                double theta = -360 + random.nextDouble() * 720;
-                double phi = -720 + random.nextDouble() * 1440;
-
+                double angle = 2 * Math.PI * random.nextDouble();
                 double dr = newRadius[0] + (random.nextDouble() * 2 - 1) * variance.get(data);
-                double x = dr * Math.sin(theta) * Math.cos(phi);
-                double y = dr * Math.cos(theta);
-                double z = dr * Math.sin(theta) * Math.sin(phi);
+                double x = dr * Math.cos(angle);
+                double z = dr * Math.sin(angle);
 
                 double dx = x * newDirection.get(0);
-                double dy = y * newDirection.get(1);
                 double dz = z * newDirection.get(2);
 
                 newRadius[0] += shiftRadius.get(data);
@@ -84,8 +80,8 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
                     newDirection.set(j, newDirection.get(j) * dirMultiplier.get(data));
                 }
 
-                Location particleLocation = origin.clone().add(x, y, z);
-                origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
+                Location particleLocation = origin.clone().add(x, 0, z);
+                origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, 0, dz, speed.get(data));
 
                 SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
             }, (long) (delay.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
