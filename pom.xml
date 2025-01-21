@@ -8,6 +8,14 @@
     <artifactId>AlchemistMMExtension</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/bedwarshurts/AlchemistMMExtension</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <finalName>${project.name}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
