@@ -13,6 +13,7 @@ import io.lumine.mythic.core.skills.SkillExecutor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,5 +42,22 @@ public class SkillUtils {
                 );
             }
         }
+    }
+
+    public static void rotateVector(Vector vector, double xRotation, double yRotation, double zRotation) {
+        // Rotate around x-axis
+        double y = vector.getY() * Math.cos(xRotation) - vector.getZ() * Math.sin(xRotation);
+        double z = vector.getY() * Math.sin(xRotation) + vector.getZ() * Math.cos(xRotation);
+        vector.setY(y).setZ(z);
+
+        // Rotate around y-axis
+        double x = vector.getX() * Math.cos(yRotation) + vector.getZ() * Math.sin(yRotation);
+        z = vector.getZ() * Math.cos(yRotation) - vector.getX() * Math.sin(yRotation);
+        vector.setX(x).setZ(z);
+
+        // Rotate around z-axis
+        x = vector.getX() * Math.cos(zRotation) - vector.getY() * Math.sin(zRotation);
+        y = vector.getX() * Math.sin(zRotation) + vector.getY() * Math.cos(zRotation);
+        vector.setX(x).setY(y);
     }
 }

@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.List;
@@ -35,6 +36,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
     private final PlaceholderString skillName;
     private final SkillExecutor skillExecutor;
     private final PlaceholderDouble delay;
+    private final List<PlaceholderDouble> rotation;
 
     public RingShapeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
@@ -44,7 +46,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
         this.dirMultiplier = PlaceholderDouble.of(mlc.getString("dirMultiplier", "1.0"));
         this.shiftRadius = PlaceholderDouble.of(mlc.getString("shift", "0.0"));
         this.variance = PlaceholderDouble.of(mlc.getString("variance", "0.0"));
-        String[] directionArgs = mlc.getString("direction", "0,0,0").split(","); // y variable here gets ignored since it's a ring shape
+        String[] directionArgs = mlc.getString("direction", "0,0,0").split(",");
         this.speed = PlaceholderDouble.of(mlc.getString("speed", "0.1"));
         this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
         this.delay = PlaceholderDouble.of(mlc.getString("delay", "0"));
@@ -52,6 +54,12 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                 PlaceholderDouble.of(directionArgs[0]),
                 PlaceholderDouble.of(directionArgs[1]),
                 PlaceholderDouble.of(directionArgs[2])
+        );
+        String[] rotationArgs = mlc.getString("rotation", "0,0,0").split(",");
+        this.rotation = List.of(
+                PlaceholderDouble.of(rotationArgs[0]),
+                PlaceholderDouble.of(rotationArgs[1]),
+                PlaceholderDouble.of(rotationArgs[2])
         );
         this.skillExecutor = manager;
     }
@@ -63,6 +71,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
 
         final double[] newRadius = {radius.get(data)};
         List<Double> newDirection = direction.stream().map(d -> d.get(data)).collect(Collectors.toList());
+        List<Double> newRotation = rotation.stream().map(r -> Math.toRadians(r.get(data))).toList();
 
         for (int i = 0; i < particleCount.get(data); i++) {
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
@@ -71,8 +80,15 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                 double x = dr * Math.cos(angle);
                 double z = dr * Math.sin(angle);
 
-                double dx = x * newDirection.get(0);
-                double dz = z * newDirection.get(2);
+                Vector particleVector = new Vector(x, 0, z);
+                SkillUtils.rotateVector(particleVector, newRotation.get(0), newRotation.get(1), newRotation.get(2));
+
+                Location particleLocation = origin.clone().add(particleVector);
+                Vector directionVector = origin.clone().subtract(particleLocation).toVector().normalize();
+
+                double dx = directionVector.getX() * dirMultiplier.get(data);
+                double dy = directionVector.getY() * dirMultiplier.get(data);
+                double dz = directionVector.getZ() * dirMultiplier.get(data);
 
                 newRadius[0] += shiftRadius.get(data);
 
@@ -80,8 +96,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                     newDirection.set(j, newDirection.get(j) * dirMultiplier.get(data));
                 }
 
-                Location particleLocation = origin.clone().add(x, 0, z);
-                origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, 0, dz, speed.get(data));
+                origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
 
                 SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
             }, (long) (delay.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)

@@ -22,7 +22,7 @@
     </distributionManagement>
 
     <build>
-        <finalName>${project.name}</finalName>
+        <finalName>AlchemistMMExtension</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <defaultGoal>clean package install</defaultGoal>
 
