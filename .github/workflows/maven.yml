@@ -19,11 +19,12 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
       - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+        run: mvn deploy -s AlchemistMMExtension/.github/workflows/settings.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
