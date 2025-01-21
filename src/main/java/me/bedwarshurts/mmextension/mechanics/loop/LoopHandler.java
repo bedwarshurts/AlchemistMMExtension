@@ -33,7 +33,10 @@ public class LoopHandler {
     }
 
     private void executeSkillWithDelay() {
-        if (shouldBreak) return;
+        if (shouldBreak) {
+            LoopMechanic.removeLoopHandler(loopID);
+            return;
+        }
 
         String parsedCondition = PlaceholderUtils.parseDoublePlaceholders(condition, data);
         parsedCondition = PlaceholderUtils.parseIntPlaceholders(parsedCondition, data);
@@ -42,6 +45,8 @@ public class LoopHandler {
         if (expression.calculate() == 1) {
             skill.execute(data);
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), this::executeSkillWithDelay, (long) (delay / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
+        } else {
+            LoopMechanic.removeLoopHandler(loopID);
         }
     }
 
