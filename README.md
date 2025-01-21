@@ -45,6 +45,12 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 - loop{condition=; skill=; delay=; loopID=; onStart=; onEnd=;}
 ```
 
+### RingShapeMechanic
+
+```
+- ringshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=; rotation=;}
+```
+
 ## Targeters
 
 ### GroundLevelTargeter
