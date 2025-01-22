@@ -91,10 +91,13 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                 newDirection.set(k, newDirection.get(k) * dirMultiplier.get(data));
                 k++;
             }
+            newRotation.set(0, newRotation.get(0) + newRotMultiplier.get(0));
+            newRotation.set(1, newRotation.get(1) + newRotMultiplier.get(1));
+            newRotation.set(2, newRotation.get(2) + newRotMultiplier.get(2));
+            double dr = newRadius[0] + (random.nextDouble() * 2 - 1) * variance.get(data);
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
                 for (int j = 0; j < densityValue; j++) {
-                    double angle = 2 * Math.PI * random.nextDouble();
-                    double dr = newRadius[0] + (random.nextDouble() * 2 - 1) * variance.get(data);
+                    double angle = 2 * Math.PI * random.nextDouble() + dr;
                     double x = dr * Math.cos(angle);
                     double z = dr * Math.sin(angle);
 
@@ -107,10 +110,6 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                     double dx = directionVector.getX() * dirMultiplier.get(data);
                     double dy = directionVector.getY() * dirMultiplier.get(data);
                     double dz = directionVector.getZ() * dirMultiplier.get(data);
-
-                    newRotation.set(0, newRotation.get(0) + newRotMultiplier.get(0));
-                    newRotation.set(1, newRotation.get(1) + newRotMultiplier.get(1));
-                    newRotation.set(2, newRotation.get(2) + newRotMultiplier.get(2));
 
                     origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
 
