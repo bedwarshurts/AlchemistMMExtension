@@ -37,6 +37,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
     private final SkillExecutor skillExecutor;
     private final PlaceholderDouble delay;
     private final List<PlaceholderDouble> rotation;
+    private final PlaceholderDouble rotMultiplier;
 
     public RingShapeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
@@ -61,6 +62,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                 PlaceholderDouble.of(rotationArgs[1]),
                 PlaceholderDouble.of(rotationArgs[2])
         );
+        this.rotMultiplier = PlaceholderDouble.of(mlc.getString("rotMultiplier", "1.0"));
         this.skillExecutor = manager;
     }
 
@@ -71,7 +73,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
 
         final double[] newRadius = {radius.get(data)};
         List<Double> newDirection = direction.stream().map(d -> d.get(data)).collect(Collectors.toList());
-        List<Double> newRotation = rotation.stream().map(r -> Math.toRadians(r.get(data))).toList();
+        List<Double> newRotation = rotation.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());
 
         for (int i = 0; i < particleCount.get(data); i++) {
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
@@ -92,9 +94,9 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
 
                 newRadius[0] += shiftRadius.get(data);
 
-                for (int j = 0; j < newDirection.size(); j++) {
-                    newDirection.set(j, newDirection.get(j) * dirMultiplier.get(data));
-                }
+                newDirection.replaceAll(aDouble -> aDouble * dirMultiplier.get(data));
+
+                newRotation.replaceAll(aDouble -> aDouble * rotMultiplier.get(data));
 
                 origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
 
