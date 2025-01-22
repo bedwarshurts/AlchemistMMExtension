@@ -97,7 +97,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
             double dr = newRadius[0] + (random.nextDouble() * 2 - 1) * variance.get(data);
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
                 for (int j = 0; j < densityValue; j++) {
-                    double angle = 2 * Math.PI * random.nextDouble() + dr;
+                    double angle = 2 * Math.PI * random.nextDouble();
                     double x = dr * Math.cos(angle);
                     double z = dr * Math.sin(angle);
 
@@ -105,7 +105,11 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                     SkillUtils.rotateVector(particleVector, newRotation.get(0), newRotation.get(1), newRotation.get(2));
 
                     Location particleLocation = origin.clone().add(particleVector);
-                    Vector directionVector = origin.clone().subtract(particleLocation).toVector().normalize();
+                    Vector directionVector = new Vector(
+                            newDirection.get(0),
+                            newDirection.get(1),
+                            newDirection.get(2)
+                    ).normalize();
 
                     double dx = directionVector.getX() * dirMultiplier.get(data);
                     double dy = directionVector.getY() * dirMultiplier.get(data);
