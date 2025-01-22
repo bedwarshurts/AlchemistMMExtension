@@ -105,7 +105,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                     SkillUtils.rotateVector(particleVector, newRotation.get(0), newRotation.get(1), newRotation.get(2));
 
                     Location particleLocation = origin.clone().add(particleVector);
-                    Vector directionVector = origin.clone().subtract(particleLocation).toVector().normalize();
+                    Vector directionVector = particleLocation.toVector().subtract(origin.toVector()).normalize();
 
                     directionVector.multiply(new Vector(
                             newDirection.get(0),
