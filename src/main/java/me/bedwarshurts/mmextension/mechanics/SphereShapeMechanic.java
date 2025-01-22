@@ -80,8 +80,10 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
 
                 newRadius[0] += shiftRadius.get(data);
 
-                for (int j = 0; j < newDirection.size(); j++) {
+                int j = 0;
+                while (j < newDirection.size()) {
                     newDirection.set(j, newDirection.get(j) * dirMultiplier.get(data));
+                    j++;
                 }
 
                 Location particleLocation = origin.clone().add(x, y, z);
