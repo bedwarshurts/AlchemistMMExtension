@@ -100,7 +100,9 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
 
                 newRadius[0] += shiftRadius.get(data);
 
-                newDirection.replaceAll(aDouble -> aDouble * dirMultiplier.get(data));
+                for (int j = 0; j < newDirection.size(); j++) {
+                    newDirection.set(j, newDirection.get(j) * dirMultiplier.get(data));
+                }
 
                 newRotation.set(0, newRotation.get(0) + newRotMultiplier.get(0));
                 newRotation.set(1, newRotation.get(1) + newRotMultiplier.get(1));
