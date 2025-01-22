@@ -37,7 +37,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
     private final SkillExecutor skillExecutor;
     private final PlaceholderDouble delay;
     private final List<PlaceholderDouble> rotation;
-    private final PlaceholderDouble rotMultiplier;
+    private final List<PlaceholderDouble> rotMultiplier;
 
     public RingShapeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
@@ -62,7 +62,12 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                 PlaceholderDouble.of(rotationArgs[1]),
                 PlaceholderDouble.of(rotationArgs[2])
         );
-        this.rotMultiplier = PlaceholderDouble.of(mlc.getString("rotMultiplier", "1.0"));
+        String[] rotMultiplierArgs = mlc.getString("rotMultiplier", "0,0,0").split(",");
+        this.rotMultiplier = List.of(
+                PlaceholderDouble.of(rotMultiplierArgs[0]),
+                PlaceholderDouble.of(rotMultiplierArgs[1]),
+                PlaceholderDouble.of(rotMultiplierArgs[2])
+        );
         this.skillExecutor = manager;
     }
 
@@ -74,11 +79,12 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
         final double[] newRadius = {radius.get(data)};
         List<Double> newDirection = direction.stream().map(d -> d.get(data)).collect(Collectors.toList());
         List<Double> newRotation = rotation.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());
+        List<Double> newRotMultiplier = rotMultiplier.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());
 
         for (int i = 0; i < particleCount.get(data); i++) {
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
                 double angle = 2 * Math.PI * random.nextDouble();
-                double dr = newRadius[0] + (random.nextDouble() * 2 - 1) * variance.get(data);
+                double dr = newRadius[0] + (random.nextDouble() * 2 - 1) * variance.get(data); 
                 double x = dr * Math.cos(angle);
                 double z = dr * Math.sin(angle);
 
@@ -96,7 +102,9 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
 
                 newDirection.replaceAll(aDouble -> aDouble * dirMultiplier.get(data));
 
-                newRotation.replaceAll(aDouble -> aDouble * rotMultiplier.get(data));
+                newRotation.set(0, newRotation.get(0) + newRotMultiplier.get(0));
+                newRotation.set(1, newRotation.get(1) + newRotMultiplier.get(1));
+                newRotation.set(2, newRotation.get(2) + newRotMultiplier.get(2));
 
                 origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
 
