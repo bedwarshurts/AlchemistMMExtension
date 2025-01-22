@@ -38,6 +38,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
     private final PlaceholderDouble delay;
     private final List<PlaceholderDouble> rotation;
     private final List<PlaceholderDouble> rotMultiplier;
+    private final PlaceholderInt density;
 
     public RingShapeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
@@ -68,6 +69,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                 PlaceholderDouble.of(rotMultiplierArgs[1]),
                 PlaceholderDouble.of(rotMultiplierArgs[2])
         );
+        this.density = PlaceholderInt.of(mlc.getString("density", "1"));
         this.skillExecutor = manager;
     }
 
@@ -80,37 +82,40 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
         List<Double> newDirection = direction.stream().map(d -> d.get(data)).collect(Collectors.toList());
         List<Double> newRotation = rotation.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());
         List<Double> newRotMultiplier = rotMultiplier.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());
+        final int densityValue = density.get(data);
 
         for (int i = 0; i < particleCount.get(data); i++) {
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
-                double angle = 2 * Math.PI * random.nextDouble();
-                double dr = newRadius[0] + (random.nextDouble() * 2 - 1) * variance.get(data); 
-                double x = dr * Math.cos(angle);
-                double z = dr * Math.sin(angle);
+                for (int j = 0; j < densityValue; j++) {
+                    double angle = 2 * Math.PI * random.nextDouble();
+                    double dr = newRadius[0] + (random.nextDouble() * 2 - 1) * variance.get(data);
+                    double x = dr * Math.cos(angle);
+                    double z = dr * Math.sin(angle);
 
-                Vector particleVector = new Vector(x, 0, z);
-                SkillUtils.rotateVector(particleVector, newRotation.get(0), newRotation.get(1), newRotation.get(2));
+                    Vector particleVector = new Vector(x, 0, z);
+                    SkillUtils.rotateVector(particleVector, newRotation.get(0), newRotation.get(1), newRotation.get(2));
 
-                Location particleLocation = origin.clone().add(particleVector);
-                Vector directionVector = origin.clone().subtract(particleLocation).toVector().normalize();
+                    Location particleLocation = origin.clone().add(particleVector);
+                    Vector directionVector = origin.clone().subtract(particleLocation).toVector().normalize();
 
-                double dx = directionVector.getX() * dirMultiplier.get(data);
-                double dy = directionVector.getY() * dirMultiplier.get(data);
-                double dz = directionVector.getZ() * dirMultiplier.get(data);
+                    double dx = directionVector.getX() * dirMultiplier.get(data);
+                    double dy = directionVector.getY() * dirMultiplier.get(data);
+                    double dz = directionVector.getZ() * dirMultiplier.get(data);
 
-                newRadius[0] += shiftRadius.get(data);
+                    newRadius[0] += shiftRadius.get(data);
 
-                for (int j = 0; j < newDirection.size(); j++) {
-                    newDirection.set(j, newDirection.get(j) * dirMultiplier.get(data));
+                    for (int k = 0; k < newDirection.size(); k++) {
+                        newDirection.set(k, newDirection.get(k) * dirMultiplier.get(data));
+                    }
+
+                    newRotation.set(0, newRotation.get(0) + newRotMultiplier.get(0));
+                    newRotation.set(1, newRotation.get(1) + newRotMultiplier.get(1));
+                    newRotation.set(2, newRotation.get(2) + newRotMultiplier.get(2));
+
+                    origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
+
+                    SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
                 }
-
-                newRotation.set(0, newRotation.get(0) + newRotMultiplier.get(0));
-                newRotation.set(1, newRotation.get(1) + newRotMultiplier.get(1));
-                newRotation.set(2, newRotation.get(2) + newRotMultiplier.get(2));
-
-                origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
-
-                SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
             }, (long) (delay.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
         }
 
