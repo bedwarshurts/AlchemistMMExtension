@@ -10,17 +10,20 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
+import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @MythicMechanic(author = "bedwarshurts", name = "ringshape", aliases = {}, description = "Spawns particles in a ring shape and casts a skill at each particle location")
@@ -39,6 +42,7 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
     private final List<PlaceholderDouble> rotation;
     private final List<PlaceholderDouble> rotMultiplier;
     private final PlaceholderInt density;
+    private final TargeterAudience audienceTargeter;
 
     public RingShapeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
@@ -71,6 +75,8 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
         );
         this.density = PlaceholderInt.of(mlc.getString("density", "1"));
         this.skillExecutor = manager;
+        String audienceTargeterString = mlc.getString("audience", null);
+        this.audienceTargeter = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
     }
 
     @Override
@@ -83,6 +89,16 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
         List<Double> currentRotation = rotation.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());
         List<Double> currentRotMultiplier = rotMultiplier.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());
         final int densityValue = density.get(data);
+
+        final Set<Player> audience;
+        if (audienceTargeter != null) {
+            audience = audienceTargeter.get(data, data.getCaster().getEntity()).stream()
+                    .filter(e -> e instanceof Player)
+                    .map(e -> (Player) e)
+                    .collect(Collectors.toSet());
+        } else {
+            audience = null;
+        }
 
         for (int i = 0; i < particleCount.get(data); i++) {
             currentRadius += shiftRadius.get(data);
@@ -116,7 +132,13 @@ public class RingShapeMechanic extends SkillMechanic implements ITargetedLocatio
                     double dy = directionVector.getY() * dirMultiplier.get(data);
                     double dz = directionVector.getZ() * dirMultiplier.get(data);
 
-                    origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
+                    if (audience != null) {
+                        for (Player player : audience) {
+                            player.spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
+                        }
+                    } else {
+                        origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
+                    }
 
                     SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
                 }
