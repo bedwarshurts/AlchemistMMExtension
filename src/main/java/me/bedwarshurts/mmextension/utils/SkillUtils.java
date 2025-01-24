@@ -5,18 +5,23 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
+import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.skills.Skill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.core.skills.SkillExecutor;
+import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SkillUtils {
 
@@ -59,5 +64,17 @@ public class SkillUtils {
         x = vector.getX() * Math.cos(zRotation) - vector.getY() * Math.sin(zRotation);
         y = vector.getX() * Math.sin(zRotation) + vector.getY() * Math.cos(zRotation);
         vector.setX(x).setY(y);
+    }
+
+    public static Set<Player> getAudienceTargets(SkillMetadata data, TargeterAudience audienceTargeter) {
+        if (audienceTargeter != null) {
+            return audienceTargeter.get(data, data.getCaster().getEntity()).stream()
+                    .filter(Objects::nonNull)
+                    .map(AbstractEntity::getBukkitEntity)
+                    .filter(e -> e instanceof Player)
+                    .map(e -> (Player) e)
+                    .collect(Collectors.toSet());
+        }
+        return null;
     }
 }

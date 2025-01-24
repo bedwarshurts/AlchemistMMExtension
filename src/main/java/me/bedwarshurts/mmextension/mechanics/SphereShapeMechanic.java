@@ -7,19 +7,23 @@ import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
+import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
+import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
-import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @MythicMechanic(author = "bedwarshurts", name = "sphereshape", aliases = {}, description = "Spawns particles in a sphere shape and casts a skill at each particle location")
@@ -35,6 +39,7 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
     private final PlaceholderString skillName;
     private final SkillExecutor skillExecutor;
     private final PlaceholderDouble delay;
+    private final TargeterAudience audienceTargeter;
 
     public SphereShapeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
@@ -54,6 +59,9 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
                 PlaceholderDouble.of(directionArgs[2])
         );
         this.skillExecutor = manager;
+        String audienceTargeterString = mlc.getString("audience", null);
+        this.audienceTargeter = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
+        AlchemistMMExtension.AlchemistMMExtension.getLogger().info("Audience Targeter String: " + audienceTargeterString);
     }
 
     @Override
@@ -63,6 +71,8 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
 
         final double[] newRadius = {radius.get(data)};
         List<Double> newDirection = direction.stream().map(d -> d.get(data)).collect(Collectors.toList());
+
+        final Set<Player> audience = SkillUtils.getAudienceTargets(data, audienceTargeter);
 
         for (int i = 0; i < particleCount.get(data); i++) {
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
@@ -87,7 +97,14 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
                 }
 
                 Location particleLocation = origin.clone().add(x, y, z);
-                origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
+
+                if (audience != null) {
+                    for (Player player : audience) {
+                        player.spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
+                    }
+                } else {
+                    origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
+                }
 
                 SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
             }, (long) (delay.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
