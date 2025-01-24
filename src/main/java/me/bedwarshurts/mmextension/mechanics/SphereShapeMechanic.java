@@ -12,7 +12,6 @@ import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
-import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -61,7 +60,6 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
         this.skillExecutor = manager;
         String audienceTargeterString = mlc.getString("audience", null);
         this.audienceTargeter = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
-        AlchemistMMExtension.AlchemistMMExtension.getLogger().info("Audience Targeter String: " + audienceTargeterString);
     }
 
     @Override
