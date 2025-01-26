@@ -42,6 +42,9 @@ public class MythicMobsHook implements Listener {
             case "break":
                 event.register(new BreakMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
                 break;
+            case "primedtnt":
+                event.register(new PrimedTnTMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                break;
             default: break;
         }
     }
