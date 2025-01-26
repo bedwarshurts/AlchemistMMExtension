@@ -25,10 +25,10 @@ public class MythicMobsHook implements Listener {
                 event.register(new BookGUIMechanic(event.getConfig()));
                 break;
             case "sphereshape":
-                event.register(new SphereShapeMechanic(event.getContainer().getManager(),event.getConfig()));
+                event.register(new SphereShapeMechanic(event.getContainer().getManager(), event.getConfig()));
                 break;
             case "ringshape":
-                event.register(new RingShapeMechanic(event.getContainer().getManager(),event.getConfig()));
+                event.register(new RingShapeMechanic(event.getContainer().getManager(), event.getConfig()));
                 break;
             case "cancelplayerdeath":
                 event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getConfig()));
@@ -37,7 +37,7 @@ public class MythicMobsHook implements Listener {
                 event.register(new OpenChestMechanic(event.getConfig()));
                 break;
             case "loop":
-                event.register(new LoopMechanic(event.getContainer().getManager(),event.getConfig()));
+                event.register(new LoopMechanic(event.getContainer().getManager(), event.getConfig()));
                 break;
             case "break":
                 event.register(new BreakMechanic(event.getConfig()));
