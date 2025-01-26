@@ -7,14 +7,12 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.core.skills.SkillExecutor;
-import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
-import java.io.File;
 import java.util.*;
 
 @MythicMechanic(author = "bedwarshurts", name = "loop", aliases = {}, description = "Loop through a set of skills multiple times with a delay")
-public class LoopMechanic extends SkillMechanic implements INoTargetSkill {
+public class LoopMechanic implements INoTargetSkill {
     private final String condition;
     private final SkillExecutor skillExecutor;
     private final String skillName;
@@ -24,8 +22,7 @@ public class LoopMechanic extends SkillMechanic implements INoTargetSkill {
     private final String onEnd;
     private static final Map<String, LoopHandler> loopHandlers = new HashMap<>();
 
-    public LoopMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
-        super(manager, file, line, mlc);
+    public LoopMechanic(SkillExecutor manager, MythicLineConfig mlc) {
         this.condition = mlc.getString("condition", "0=0");
         this.skillExecutor = manager;
         this.skillName = mlc.getString("skill", "");

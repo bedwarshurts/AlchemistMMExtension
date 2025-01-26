@@ -9,7 +9,6 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.skills.SkillExecutor;
-import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
@@ -19,14 +18,13 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @MythicMechanic(author = "bedwarshurts", name = "sphereshape", aliases = {}, description = "Spawns particles in a sphere shape and casts a skill at each particle location")
-public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocationSkill {
+public class SphereShapeMechanic implements ITargetedLocationSkill {
     private final Particle particleType;
     private final PlaceholderInt particleCount;
     private final PlaceholderDouble radius;
@@ -40,8 +38,7 @@ public class SphereShapeMechanic extends SkillMechanic implements ITargetedLocat
     private final PlaceholderDouble delay;
     private final TargeterAudience audienceTargeter;
 
-    public SphereShapeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
-        super(manager, file, line, mlc);
+    public SphereShapeMechanic(SkillExecutor manager, MythicLineConfig mlc) {
         this.particleType = Particle.valueOf(mlc.getString("particle", "FLAME").toUpperCase());
         this.radius = PlaceholderDouble.of(mlc.getString("radius", "1.0"));
         this.particleCount = PlaceholderInt.of(mlc.getString("count", "100"));

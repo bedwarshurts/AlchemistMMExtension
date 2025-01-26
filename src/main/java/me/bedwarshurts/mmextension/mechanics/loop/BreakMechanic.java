@@ -4,18 +4,13 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
-import io.lumine.mythic.core.skills.SkillExecutor;
-import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
-import java.io.File;
-
 @MythicMechanic(author = "bedwarshurts", name = "break", aliases = {}, description = "Breaks the loop in LoopMechanic")
-public class BreakMechanic extends SkillMechanic implements INoTargetSkill {
+public class BreakMechanic implements INoTargetSkill {
     private final String loopID;
 
-    public BreakMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
-        super(manager, file, line, mlc);
+    public BreakMechanic(MythicLineConfig mlc) {
         this.loopID = mlc.getString("loopID", "");
     }
 

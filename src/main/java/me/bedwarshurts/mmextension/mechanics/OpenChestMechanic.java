@@ -4,8 +4,6 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
-import io.lumine.mythic.core.skills.SkillExecutor;
-import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
@@ -14,18 +12,16 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static me.bedwarshurts.mmextension.AlchemistMMExtension.AlchemistMMExtension;
 
 @MythicMechanic(author = "bedwarshurts", name = "openchest", aliases = {}, description = "Opens a chest by mimicking a player opening it")
-public class OpenChestMechanic extends SkillMechanic implements INoTargetSkill {
+public class OpenChestMechanic implements INoTargetSkill {
     private final String action;
 
-    public OpenChestMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
-        super(manager, file, line, mlc);
+    public OpenChestMechanic(MythicLineConfig mlc) {
         this.action = mlc.getString("action", "open");
     }
 

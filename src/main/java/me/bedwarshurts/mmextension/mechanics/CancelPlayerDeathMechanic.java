@@ -5,7 +5,6 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.*;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.skills.SkillExecutor;
-import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -18,7 +17,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,15 +24,14 @@ import java.util.Set;
 import java.util.UUID;
 
 @MythicMechanic(author = "bedwarshurts", name = "cancelplayerdeath", aliases = {}, description = "Cancels the player's next death if activated")
-public class CancelPlayerDeathMechanic extends SkillMechanic implements ITargetedEntitySkill, Listener {
+public class CancelPlayerDeathMechanic implements ITargetedEntitySkill, Listener {
     private final Set<UUID> playersWithCancelDeath = new HashSet<>();
     private final double healthPercentage;
     private final String skillName;
     private final SkillExecutor skillExecutor;
     private SkillMetadata data;
 
-    public CancelPlayerDeathMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
-        super(manager, file, line, mlc);
+    public CancelPlayerDeathMechanic(SkillExecutor manager, MythicLineConfig mlc) {
         this.healthPercentage = mlc.getDouble("healthPercentage", 100.0);
         this.skillName = mlc.getString("skill", "");
         this.skillExecutor = manager;

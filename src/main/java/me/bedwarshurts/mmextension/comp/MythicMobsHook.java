@@ -25,25 +25,25 @@ public class MythicMobsHook implements Listener {
                 event.register(new BookGUIMechanic(event.getConfig()));
                 break;
             case "sphereshape":
-                event.register(new SphereShapeMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                event.register(new SphereShapeMechanic(event.getContainer().getManager(),event.getConfig()));
                 break;
             case "ringshape":
-                event.register(new RingShapeMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                event.register(new RingShapeMechanic(event.getContainer().getManager(),event.getConfig()));
                 break;
             case "cancelplayerdeath":
-                event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getConfig()));
                 break;
             case "openchest":
-                event.register(new OpenChestMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                event.register(new OpenChestMechanic(event.getConfig()));
                 break;
             case "loop":
-                event.register(new LoopMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                event.register(new LoopMechanic(event.getContainer().getManager(),event.getConfig()));
                 break;
             case "break":
-                event.register(new BreakMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                event.register(new BreakMechanic(event.getConfig()));
                 break;
             case "primedtnt":
-                event.register(new PrimedTnTMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getMechanicName(), event.getConfig()));
+                event.register(new PrimedTnTMechanic(event.getConfig()));
                 break;
             default: break;
         }
