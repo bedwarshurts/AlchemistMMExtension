@@ -9,6 +9,8 @@ import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.mechanics.*;
 import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.LoopMechanic;
+import me.bedwarshurts.mmextension.mechanics.particle.RingShapeMechanic;
+import me.bedwarshurts.mmextension.mechanics.particle.SphereShapeMechanic;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.LocationPredictingTargeter;
 import org.bukkit.event.EventHandler;

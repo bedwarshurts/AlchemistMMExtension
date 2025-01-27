@@ -1,4 +1,4 @@
-package me.bedwarshurts.mmextension.mechanics;
+package me.bedwarshurts.mmextension.mechanics.particle;
 
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.config.MythicLineConfig;
@@ -6,15 +6,12 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
-import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.skills.SkillExecutor;
-import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
@@ -25,39 +22,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @MythicMechanic(author = "bedwarshurts", name = "ringshape", aliases = {}, description = "Spawns particles in a ring shape and casts a skill at each particle location")
-public class RingShapeMechanic implements ITargetedLocationSkill {
-    private final Particle particleType;
-    private final PlaceholderInt particleCount;
-    private final PlaceholderDouble radius;
-    private final PlaceholderDouble dirMultiplier;
-    private final PlaceholderDouble variance;
-    private final PlaceholderDouble shiftRadius;
-    private final List<PlaceholderDouble> direction;
-    private final PlaceholderDouble speed;
-    private final PlaceholderString skillName;
-    private final SkillExecutor skillExecutor;
-    private final PlaceholderDouble delay;
+public class RingShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill {
     private final List<PlaceholderDouble> rotation;
     private final List<PlaceholderDouble> rotMultiplier;
     private final PlaceholderInt density;
-    private final TargeterAudience audienceTargeter;
 
     public RingShapeMechanic(SkillExecutor manager, MythicLineConfig mlc) {
-        this.particleType = Particle.valueOf(mlc.getString("particle", "FLAME").toUpperCase());
-        this.radius = PlaceholderDouble.of(mlc.getString("radius", "1.0"));
-        this.particleCount = PlaceholderInt.of(mlc.getString("count", "100"));
-        this.dirMultiplier = PlaceholderDouble.of(mlc.getString("dirMultiplier", "1.0"));
-        this.shiftRadius = PlaceholderDouble.of(mlc.getString("shift", "0.0"));
-        this.variance = PlaceholderDouble.of(mlc.getString("variance", "0.0"));
-        String[] directionArgs = mlc.getString("direction", "0,0,0").split(",");
-        this.speed = PlaceholderDouble.of(mlc.getString("speed", "0.1"));
-        this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
-        this.delay = PlaceholderDouble.of(mlc.getString("delay", "0"));
-        this.direction = List.of(
-                PlaceholderDouble.of(directionArgs[0]),
-                PlaceholderDouble.of(directionArgs[1]),
-                PlaceholderDouble.of(directionArgs[2])
-        );
+        super(manager, mlc);
         String[] rotationArgs = mlc.getString("rotation", "0,0,0").split(",");
         this.rotation = List.of(
                 PlaceholderDouble.of(rotationArgs[0]),
@@ -71,9 +42,6 @@ public class RingShapeMechanic implements ITargetedLocationSkill {
                 PlaceholderDouble.of(rotMultiplierArgs[2])
         );
         this.density = PlaceholderInt.of(mlc.getString("density", "1"));
-        this.skillExecutor = manager;
-        String audienceTargeterString = mlc.getString("audience", null);
-        this.audienceTargeter = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
     }
 
     @Override
