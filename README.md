@@ -48,7 +48,13 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### RingShapeMechanic
 
 ```
-- ringshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=; rotation=;}
+- ringshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=; rotation=; rotMultiplier=;}
+```
+
+### PrimedTntMechanic
+
+```
+- primedtnt{fuse=; break=; damage=;}
 ```
 
 ## Targeters
