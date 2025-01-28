@@ -60,16 +60,6 @@ public class SkillUtils {
         }
     }
 
-    public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, int count, double dx, double dy, double dz, int speed ) {
-        if (audience != null) {
-            for (Player player : audience) {
-                player.spawnParticle(particleType, particleLocation, count, dx, dy, dz, speed);
-            }
-        } else {
-            particleLocation.getWorld().spawnParticle(particleType, particleLocation, count, dx, dy, dz, speed);
-        }
-    }
-
     public static void rotateVector(Vector vector, double xRotation, double yRotation, double zRotation) {
         // Rotate around x-axis
         double y = vector.getY() * Math.cos(xRotation) - vector.getZ() * Math.sin(xRotation);
