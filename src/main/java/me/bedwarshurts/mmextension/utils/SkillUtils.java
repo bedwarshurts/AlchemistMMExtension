@@ -50,7 +50,7 @@ public class SkillUtils {
         }
     }
 
-    public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, int speed ) {
+    public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, double speed ) {
         if (audience != null) {
             for (Player player : audience) {
                 player.spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed);

@@ -18,7 +18,7 @@ public abstract class ParticleMechanic {
     protected final PlaceholderDouble variance;
     protected final PlaceholderDouble shiftRadius;
     protected final List<PlaceholderDouble> direction;
-    protected final PlaceholderInt speed;
+    protected final PlaceholderDouble speed;
     protected final PlaceholderString skillName;
     protected final SkillExecutor skillExecutor;
     protected final PlaceholderDouble delay;
@@ -32,7 +32,7 @@ public abstract class ParticleMechanic {
         this.shiftRadius = PlaceholderDouble.of(mlc.getString("shift", "0.0"));
         this.variance = PlaceholderDouble.of(mlc.getString("variance", "0.0"));
         String[] directionArgs = mlc.getString("direction", "0,0,0").split(",");
-        this.speed = PlaceholderInt.of(mlc.getString("speed", "0.1"));
+        this.speed = PlaceholderDouble.of(mlc.getString("speed", "0.1"));
         this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
         this.delay = PlaceholderDouble.of(mlc.getString("delay", "0"));
         this.direction = List.of(
