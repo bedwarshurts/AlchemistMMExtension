@@ -13,6 +13,7 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -46,6 +47,26 @@ public class SkillUtils {
                         new AbstractLocation(pointLocation.getWorld().getName(), pointLocation.getX(), pointLocation.getY(), pointLocation.getZ()))
                 );
             }
+        }
+    }
+
+    public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, int speed ) {
+        if (audience != null) {
+            for (Player player : audience) {
+                player.spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed);
+            }
+        } else {
+            particleLocation.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed);
+        }
+    }
+
+    public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, int count, double dx, double dy, double dz, int speed ) {
+        if (audience != null) {
+            for (Player player : audience) {
+                player.spawnParticle(particleType, particleLocation, count, dx, dy, dz, speed);
+            }
+        } else {
+            particleLocation.getWorld().spawnParticle(particleType, particleLocation, count, dx, dy, dz, speed);
         }
     }
 

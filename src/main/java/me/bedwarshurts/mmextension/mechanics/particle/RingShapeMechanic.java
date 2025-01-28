@@ -89,13 +89,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
                     double dy = directionVector.getY() * dirMultiplier.get(data);
                     double dz = directionVector.getZ() * dirMultiplier.get(data);
 
-                    if (audience != null) {
-                        for (Player player : audience) {
-                            player.spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
-                        }
-                    } else {
-                        origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
-                    }
+                    SkillUtils.spawnParticle(audience, particleType, particleLocation, dx, dy, dz, speed.get(data));
 
                     SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
                 }

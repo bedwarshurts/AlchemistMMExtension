@@ -59,13 +59,7 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
 
                 Location particleLocation = origin.clone().add(x, y, z);
 
-                if (audience != null) {
-                    for (Player player : audience) {
-                        player.spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
-                    }
-                } else {
-                    origin.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed.get(data));
-                }
+                SkillUtils.spawnParticle(audience, particleType, particleLocation, dx, dy, dz, speed.get(data));
 
                 SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
             }, (long) (delay.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
