@@ -71,6 +71,12 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 @TPL{time=; y=; ignoreY=; ignoreIfStill=;}
 ```
 
+### ConnectedBlocksTargeter
+
+```
+@TCB{loc=; locOffset=; exclude=; depth=;}
+```
+
 ## Conditions
 
 ### StringContainsCondition
