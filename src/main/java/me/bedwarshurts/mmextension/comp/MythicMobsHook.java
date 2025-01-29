@@ -11,6 +11,7 @@ import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.LoopMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.RingShapeMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.SphereShapeMechanic;
+import me.bedwarshurts.mmextension.targeters.ConnectedBlocksTargeter;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.LocationPredictingTargeter;
 import org.bukkit.event.EventHandler;
@@ -63,6 +64,10 @@ public class MythicMobsHook implements Listener {
             case "targetpredictedlocation":
             case "tpl":
                 event.register(new LocationPredictingTargeter(event.getConfig()));
+                break;
+            case "targetconnectedblocks":
+            case "tcb":
+                event.register(new ConnectedBlocksTargeter(event.getConfig()));
                 break;
             default: break;
         }
