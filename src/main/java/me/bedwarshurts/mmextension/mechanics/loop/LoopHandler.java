@@ -61,7 +61,6 @@ public class LoopHandler {
     }
 
     private void executeOnEndSkill(SkillExecutor skillExecutor, String skillName) {
-        Bukkit.getLogger().info("Executing onEnd skill" + skillName + " " + skillExecutor);
         if (!skillName.isEmpty()) {
             Optional<Skill> onEndSkill = skillExecutor.getSkill(skillName);
             onEndSkill.ifPresent(skill -> skill.execute(data));
