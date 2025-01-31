@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.bedwarshurs</groupId>
   <artifactId>alchemistmmextension</artifactId>
-  <version>2.0.1-SNAPSHOT</version>
+  <version>2.0.2-SNAPSHOT</version>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <defaultGoal>clean package install</defaultGoal>
@@ -49,10 +49,6 @@
       <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
     </repository>
     <repository>
-      <id>phoenix</id>
-      <url>https://nexus.phoenixdevt.fr/repository/maven-public/</url>
-    </repository>
-    <repository>
       <id>papermc</id>
       <url>https://repo.papermc.io/repository/maven-public/</url>
     </repository>
@@ -63,6 +59,10 @@
     <repository>
       <id>dmulloy2-repo</id>
       <url>https://repo.dmulloy2.net/repository/public/</url>
+    </repository>
+    <repository>
+      <id>phoenix</id>
+      <url>https://nexus.phoenixdevt.fr/repository/maven-public/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -77,6 +77,19 @@
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
       <version>5.3.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.lumine</groupId>
+      <artifactId>MythicLib-dist</artifactId>
+      <version>1.7.1-SNAPSHOT</version>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>net.Indyuce</groupId>
+      <artifactId>MMOCore-API</artifactId>
+      <version>1.13.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
