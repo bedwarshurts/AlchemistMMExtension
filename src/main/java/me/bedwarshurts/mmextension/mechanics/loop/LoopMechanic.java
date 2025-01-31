@@ -8,7 +8,6 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
-import org.bukkit.Bukkit;
 
 import java.util.*;
 
