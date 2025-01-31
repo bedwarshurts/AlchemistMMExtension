@@ -8,6 +8,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import org.bukkit.Bukkit;
 
 import java.util.*;
 
@@ -38,7 +39,7 @@ public class LoopMechanic implements INoTargetSkill {
             Optional<Skill> skillOptional = skillExecutor.getSkill(skillName);
             if (skillOptional.isPresent()) {
                 Skill skillToExecute = skillOptional.get();
-                LoopHandler loopHandler = new LoopHandler(skillToExecute, data, condition, delay.get(data), loopID);
+                LoopHandler loopHandler = new LoopHandler(skillToExecute, data, skillExecutor, condition, delay.get(data), loopID, this);
                 loopHandlers.put(loopID, loopHandler);
 
                 // Execute onStart skill
@@ -48,12 +49,6 @@ public class LoopMechanic implements INoTargetSkill {
                 }
 
                 loopHandler.startLoop();
-
-                // Execute onEnd skill
-                if (!onEnd.isEmpty()) {
-                    Optional<Skill> onEndSkill = skillExecutor.getSkill(onEnd);
-                    onEndSkill.ifPresent(skill -> skill.execute(data));
-                }
 
                 return SkillResult.SUCCESS;
             }
@@ -67,5 +62,9 @@ public class LoopMechanic implements INoTargetSkill {
 
     public static void removeLoopHandler(String loopID) {
         loopHandlers.remove(loopID);
+    }
+
+    public String getOnEnd() {
+        return this.onEnd;
     }
 }

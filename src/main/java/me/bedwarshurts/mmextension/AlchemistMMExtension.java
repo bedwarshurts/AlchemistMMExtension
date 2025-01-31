@@ -13,7 +13,7 @@ public class AlchemistMMExtension extends JavaPlugin {
     public static AlchemistMMExtension AlchemistMMExtension;
 
     static {
-        License.iConfirmNonCommercialUse("bedwarshurts@alchemistnetwork.org");
+        License.iConfirmCommercialUse("bedwarshurts@alchemistnetwork.org");
     }
 
     @Override
