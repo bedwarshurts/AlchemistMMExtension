@@ -48,6 +48,10 @@ public class MythicMobsHook implements Listener {
             case "primedtnt":
                 event.register(new PrimedTnTMechanic(event.getConfig()));
                 break;
+            case "setmmocooldown":
+            case "setmmocd":
+                event.register(new SetMMOCooldownMechanic(event.getConfig()));
+                break;
             default: break;
         }
     }

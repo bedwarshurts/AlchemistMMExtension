@@ -5,3 +5,4 @@ api-version: 1.21
 description: An extension for MythicMobs
 author: bedwarshurts
 depend: [MythicMobs,PlaceholderAPI,ProtocolLib]
+softdepend: [MythicLib,MMOCore]
