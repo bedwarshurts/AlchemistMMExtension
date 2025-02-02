@@ -53,6 +53,23 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
                 }
             }
         }
+        if (identifier.startsWith("string_replace_")) {
+            String[] parts = identifier.split("_", 5);
+            if (parts.length == 5) {
+                String inputString = parts[2];
+                String oldString = parts[3];
+                String newString = parts[4];
+
+                int index = inputString.lastIndexOf(oldString);
+                if (index != -1) {
+                    StringBuilder sb = new StringBuilder(inputString);
+                    sb.replace(index, index + oldString.length(), newString);
+                    return sb.toString();
+                }
+                return inputString;
+            }
+            return "Invalid format";
+        }
         return null;
     }
 }
