@@ -57,6 +57,17 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
 
         final Set<Player> audience = SkillUtils.getAudienceTargets(data, audienceTargeter);
 
+        Vector offset;
+        if (dirOverride != null) {
+            offset = new Vector(
+                    dirOverride.get(0).get(data),
+                    dirOverride.get(1).get(data),
+                    dirOverride.get(2).get(data)
+            ).subtract(origin.toVector());
+        } else {
+            offset = null;
+        }
+
         for (int i = 0; i < particleCount.get(data); i++) {
             currentRadius += shiftRadius.get(data);
             for (int k = 0; k < currentDirection.size(); k++) {
@@ -77,8 +88,15 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
                     SkillUtils.rotateVector(particleVector, updatedRotation.get(0), updatedRotation.get(1), updatedRotation.get(2));
 
                     Location particleLocation = origin.clone().add(particleVector);
-                    Vector directionVector = particleLocation.toVector().subtract(origin.toVector()).normalize();
 
+                    Vector endLocation;
+                    if (offset != null) {
+                        endLocation = particleLocation.clone().add(offset).toVector();
+                    } else {
+                        endLocation = particleLocation.toVector();
+                    }
+
+                    Vector directionVector = endLocation.subtract(particleLocation.toVector()).normalize();
                     directionVector.multiply(new Vector(
                             currentDirection.get(0),
                             currentDirection.get(1),

@@ -23,6 +23,7 @@ public abstract class ParticleMechanic {
     protected final SkillExecutor skillExecutor;
     protected final PlaceholderDouble delay;
     protected final TargeterAudience audienceTargeter;
+    protected final List<PlaceholderDouble> dirOverride;
 
     public ParticleMechanic(SkillExecutor manager, MythicLineConfig mlc) {
         this.particleType = Particle.valueOf(mlc.getString("particle", "FLAME").toUpperCase());
@@ -43,5 +44,11 @@ public abstract class ParticleMechanic {
         this.skillExecutor = manager;
         String audienceTargeterString = mlc.getString("audience", null);
         this.audienceTargeter = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
+        String[] dirOverrideArgs = mlc.getString("dirOverride", "null").split(",");
+        this.dirOverride = dirOverrideArgs.length == 3 ? List.of(
+                PlaceholderDouble.of(dirOverrideArgs[0]),
+                PlaceholderDouble.of(dirOverrideArgs[1]),
+                PlaceholderDouble.of(dirOverrideArgs[2])
+        ) : null;
     }
 }

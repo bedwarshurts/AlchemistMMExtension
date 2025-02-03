@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.Random;
@@ -35,6 +36,17 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
 
         final Set<Player> audience = SkillUtils.getAudienceTargets(data, audienceTargeter);
 
+        Vector offset;
+        if (dirOverride != null) {
+            offset = new Vector(
+                    dirOverride.get(0).get(data),
+                    dirOverride.get(1).get(data),
+                    dirOverride.get(2).get(data)
+            ).subtract(origin.toVector());
+        } else {
+            offset = null;
+        }
+
         for (int i = 0; i < particleCount.get(data); i++) {
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
                 double theta = -360 + random.nextDouble() * 720;
@@ -45,9 +57,9 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
                 double y = dr * Math.cos(theta);
                 double z = dr * Math.sin(theta) * Math.sin(phi);
 
-                double dx = x * newDirection.get(0);
-                double dy = y * newDirection.get(1);
-                double dz = z * newDirection.get(2);
+                double dx;
+                double dy;
+                double dz;
 
                 newRadius[0] += shiftRadius.get(data);
 
@@ -58,6 +70,24 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
                 }
 
                 Location particleLocation = origin.clone().add(x, y, z);
+
+                Vector endLocation;
+                if (offset != null) {
+                    endLocation = particleLocation.clone().add(offset).toVector();
+                } else {
+                    endLocation = particleLocation.toVector();
+                }
+
+                Vector directionVector = endLocation.subtract(particleLocation.toVector()).normalize();
+                directionVector.multiply(new Vector(
+                        newDirection.get(0),
+                        newDirection.get(1),
+                        newDirection.get(2)
+                ));
+
+                dx = directionVector.getX() * dirMultiplier.get(data);
+                dy = directionVector.getY() * dirMultiplier.get(data);
+                dz = directionVector.getZ() * dirMultiplier.get(data);
 
                 SkillUtils.spawnParticle(audience, particleType, particleLocation, dx, dy, dz, speed.get(data));
 
