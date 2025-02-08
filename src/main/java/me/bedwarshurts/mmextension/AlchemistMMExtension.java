@@ -3,6 +3,7 @@ package me.bedwarshurts.mmextension;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
+import me.bedwarshurts.mmextension.listeners.PlayerSkillCastListener;
 import me.bedwarshurts.mmextension.listeners.TnTExplosionListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,6 +29,7 @@ public class AlchemistMMExtension extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MythicMobsHook(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
         Bukkit.getPluginManager().registerEvents(new TnTExplosionListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerSkillCastListener(), this);
 
         new PlaceholderAPIHook().register();
 
