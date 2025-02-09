@@ -26,6 +26,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
     private final List<PlaceholderDouble> rotation;
     private final List<PlaceholderDouble> rotMultiplier;
     private final PlaceholderInt density;
+    private final boolean matchRotation;
 
     public RingShapeMechanic(SkillExecutor manager, MythicLineConfig mlc) {
         super(manager, mlc);
@@ -42,6 +43,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
                 PlaceholderDouble.of(rotMultiplierArgs[2])
         );
         this.density = PlaceholderInt.of(mlc.getString("density", "1"));
+        this.matchRotation = mlc.getBoolean("matchRotation", false);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
 
         final Set<Player> audience = SkillUtils.getAudienceTargets(data, audienceTargeter);
 
-        Vector offset;
+        final Vector offset;
         if (dirOverride != null) {
             offset = new Vector(
                     dirOverride.get(0).get(data),
@@ -66,6 +68,13 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
             ).subtract(origin.toVector());
         } else {
             offset = null;
+        }
+
+        if (matchRotation) {
+            Location casterLocation = data.getCaster().getEntity().getBukkitEntity().getLocation();
+            currentRotation.set(0, Math.toRadians(casterLocation.getPitch()));
+            currentRotation.set(1, Math.toRadians(casterLocation.getYaw()));
+            currentRotation.set(2, 0.0); // Assuming no roll rotation
         }
 
         for (int i = 0; i < particleCount.get(data); i++) {
@@ -90,13 +99,14 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
                     Location particleLocation = origin.clone().add(particleVector);
 
                     Vector endLocation;
+                    Vector directionVector;
                     if (offset != null) {
                         endLocation = particleLocation.clone().add(offset).toVector();
+                        directionVector = endLocation.subtract(particleLocation.toVector()).normalize();
                     } else {
-                        endLocation = particleLocation.toVector();
+                        directionVector = particleLocation.toVector().subtract(origin.toVector()).normalize();
                     }
 
-                    Vector directionVector = endLocation.subtract(particleLocation.toVector()).normalize();
                     directionVector.multiply(new Vector(
                             currentDirection.get(0),
                             currentDirection.get(1),
@@ -111,7 +121,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
 
                     SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
                 }
-            }, (long) (delay.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
+            }, (long) (delayMs.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
         }
         return SkillResult.SUCCESS;
     }
