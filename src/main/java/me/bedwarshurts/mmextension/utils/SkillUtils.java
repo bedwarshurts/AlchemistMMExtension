@@ -88,4 +88,34 @@ public class SkillUtils {
         }
         return null;
     }
+
+    public static Vector rotateVectorToDirection(Vector vector, Vector direction) {
+        direction = direction.clone().normalize();
+        double yaw = Math.atan2(direction.getZ(), direction.getX());
+        double pitch = Math.asin(direction.getY());
+
+        // Default rotation of 90 degrees on the Z-axis
+        double cosZ = Math.cos(Math.toRadians(90));
+        double sinZ = Math.sin(Math.toRadians(90));
+        double x = vector.getX() * cosZ - vector.getY() * sinZ;
+        double y = vector.getX() * sinZ + vector.getY() * cosZ;
+        vector.setX(x).setY(y);
+
+        double cosYaw = Math.cos(yaw);
+        double sinYaw = Math.sin(yaw);
+        double cosPitch = Math.cos(pitch);
+        double sinPitch = Math.sin(pitch);
+
+        // Rotate around yaw (Y axis)
+        x = vector.getX() * cosYaw - vector.getZ() * sinYaw;
+        double z = vector.getX() * sinYaw + vector.getZ() * cosYaw;
+        vector.setX(x).setZ(z);
+
+        // Rotate around pitch (X axis)
+        y = vector.getY() * cosPitch - vector.getZ() * sinPitch;
+        z = vector.getY() * sinPitch + vector.getZ() * cosPitch;
+        vector.setY(y).setZ(z);
+
+        return vector;
+    }
 }

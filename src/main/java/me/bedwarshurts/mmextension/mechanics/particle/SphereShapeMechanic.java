@@ -36,7 +36,7 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
 
         final Set<Player> audience = SkillUtils.getAudienceTargets(data, audienceTargeter);
 
-        Vector offset;
+        final Vector offset;
         if (dirOverride != null) {
             offset = new Vector(
                     dirOverride.get(0).get(data),
