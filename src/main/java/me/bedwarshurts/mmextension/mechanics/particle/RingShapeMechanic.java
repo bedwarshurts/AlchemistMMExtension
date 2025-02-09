@@ -70,11 +70,13 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
             offset = null;
         }
 
+        Vector lookDirection;
         if (matchRotation) {
-            Location casterLocation = data.getCaster().getEntity().getBukkitEntity().getLocation();
-            currentRotation.set(0, Math.toRadians(casterLocation.getPitch()));
-            currentRotation.set(1, Math.toRadians(casterLocation.getYaw()));
-            currentRotation.set(2, 0.0); // Assuming no roll rotation
+            lookDirection = data.getCaster().getEntity().getBukkitEntity().getLocation().getDirection();
+            // Apply rotation as an offset if match rotation is true
+            SkillUtils.rotateVector(lookDirection, currentRotation.get(0), currentRotation.get(1), currentRotation.get(2));
+        } else {
+            lookDirection = null;
         }
 
         for (int i = 0; i < particleCount.get(data); i++) {
@@ -95,6 +97,11 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
 
                     Vector particleVector = new Vector(x, 0, z);
                     SkillUtils.rotateVector(particleVector, updatedRotation.get(0), updatedRotation.get(1), updatedRotation.get(2));
+
+                    // Apply the look direction rotation if matchRotation is true
+                    if (lookDirection != null) {
+                        SkillUtils.rotateVectorToDirection(particleVector, lookDirection);
+                    }
 
                     Location particleLocation = origin.clone().add(particleVector);
 
