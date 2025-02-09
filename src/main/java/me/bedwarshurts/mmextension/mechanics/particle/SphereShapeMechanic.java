@@ -72,13 +72,14 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
                 Location particleLocation = origin.clone().add(x, y, z);
 
                 Vector endLocation;
+                Vector directionVector;
                 if (offset != null) {
                     endLocation = particleLocation.clone().add(offset).toVector();
+                    directionVector = endLocation.subtract(particleLocation.toVector()).normalize();
                 } else {
-                    endLocation = particleLocation.toVector();
+                    directionVector = particleLocation.toVector().subtract(origin.toVector()).normalize();
                 }
 
-                Vector directionVector = endLocation.subtract(particleLocation.toVector()).normalize();
                 directionVector.multiply(new Vector(
                         newDirection.get(0),
                         newDirection.get(1),
@@ -92,7 +93,7 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
                 SkillUtils.spawnParticle(audience, particleType, particleLocation, dx, dy, dz, speed.get(data));
 
                 SkillUtils.castSkillAtPoint(data, particleLocation, skillName, skillExecutor);
-            }, (long) (delay.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
+            }, (long) (delayMs.get(data) * i / 50)); // Convert delayMs from milliseconds to ticks (50 ms = 1 tick)
         }
 
         return SkillResult.SUCCESS;
