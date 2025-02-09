@@ -8,12 +8,12 @@ import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.core.utils.annotations.MythicCondition;
 import org.bukkit.entity.Entity;
 
-@MythicCondition(author = "bedwarshurts", name = "isinfaction", aliases = {}, description = "Check if the entity is in a specified faction")
+@MythicCondition(author = "bedwarshurts", name = "isinfaction", aliases = {}, description = "Check if the entity is in any of the specified factions")
 public class IsInFactionCondition implements IEntityCondition {
-    private final String faction;
+    private final String[] factions;
 
     public IsInFactionCondition(MythicLineConfig mlc) {
-        this.faction = mlc.getString("faction", "default");
+        this.factions = mlc.getString("factions", "default").toLowerCase().split(",");
     }
 
     @Override
@@ -24,10 +24,12 @@ public class IsInFactionCondition implements IEntityCondition {
             return false;
         }
 
-        String[] factions = mob.getFaction().toLowerCase().split(",");
-        for (String fac : factions) {
-            if (fac.trim().equalsIgnoreCase(faction)) {
-                return true;
+        String[] mobFactions = mob.getFaction().toLowerCase().split(",");
+        for (String mobFaction : mobFactions) {
+            for (String faction : factions) {
+                if (mobFaction.trim().equalsIgnoreCase(faction.trim())) {
+                    return true;
+                }
             }
         }
         return false;
