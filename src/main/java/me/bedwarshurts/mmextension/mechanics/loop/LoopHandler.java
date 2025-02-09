@@ -16,7 +16,7 @@ public class LoopHandler {
     private final SkillMetadata data;
     private final SkillExecutor skillExecutor;
     private final String condition;
-    private final double delay;
+    private final double delayMs;
     private boolean shouldBreak;
     private final LoopMechanic mechanic;
 
@@ -26,7 +26,7 @@ public class LoopHandler {
         this.data = data;
         this.skillExecutor = skillExecutor;
         this.condition = condition;
-        this.delay = delay;
+        this.delayMs = delay;
         this.shouldBreak = false;
         this.mechanic = mechanic;
     }
@@ -35,11 +35,10 @@ public class LoopHandler {
         return loopID;
     }
 
-
     public void startLoop() {
         if (shouldBreak) {
             LoopMechanic.removeLoopHandler(loopID);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> executeOnEndSkill(skillExecutor, mechanic.getOnEnd()), (long) (delay / 50));
+            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> executeOnEndSkill(skillExecutor, mechanic.getOnEnd()), (long) (delayMs / 50));
             return;
         }
 
@@ -49,10 +48,10 @@ public class LoopHandler {
 
         if (expression.calculate() == 1) {
             skill.execute(data);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), this::startLoop, (long) (delay / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
+            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), this::startLoop, (long) (delayMs / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
         } else {
             LoopMechanic.removeLoopHandler(loopID);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> executeOnEndSkill(skillExecutor, mechanic.getOnEnd()), (long) (delay / 50));
+            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> executeOnEndSkill(skillExecutor, mechanic.getOnEnd()), (long) (delayMs / 50));
         }
     }
 
@@ -65,20 +64,6 @@ public class LoopHandler {
             Optional<Skill> onEndSkill = skillExecutor.getSkill(skillName);
             onEndSkill.ifPresent(skill -> skill.execute(data));
         }
-    }
-
-    @Override
-    public String toString() {
-        return "LoopHandler{" +
-                "loopID='" + loopID + '\'' +
-                ", skill=" + skill +
-                ", data=" + data +
-                ", skillExecutor=" + skillExecutor +
-                ", condition='" + condition + '\'' +
-                ", delay=" + delay +
-                ", shouldBreak=" + shouldBreak +
-                ", mechanic=" + mechanic +
-                '}';
     }
 
 }

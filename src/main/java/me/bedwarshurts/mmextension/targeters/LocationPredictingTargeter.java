@@ -24,14 +24,14 @@ import java.util.Objects;
 @MythicTargeter(author = "bedwarshurts", name = "targetpredictedlocation", aliases = {"TPL"}, description = "Predicts the location of the target")
 public class LocationPredictingTargeter implements ILocationTargeter {
 
-    private final double predictionTime;
+    private final double predictionTimeSeconds;
     private final double yOffset;
     private final boolean ignoreY;
     private final boolean ignoreIfStill;
     private final Map<UUID, Location> previousLocations = new HashMap<>();
 
     public LocationPredictingTargeter(MythicLineConfig mlc) {
-        this.predictionTime = mlc.getDouble("time", 1.0);
+        this.predictionTimeSeconds = mlc.getDouble("time", 1.0);
         this.yOffset = mlc.getDouble("y", 0.0);
         this.ignoreY = mlc.getBoolean("iy", false);
         this.ignoreIfStill = mlc.getBoolean("is", false);
@@ -57,9 +57,9 @@ public class LocationPredictingTargeter implements ILocationTargeter {
                 direction.setY(0);
             }
 
-            double speed = 4.317; // Default speed
+            double speedBps = 4.317; // Default speed
             if (bukkitEntity instanceof Player player) {
-                speed = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue() * 20; // Convert to blocks per second
+                speedBps = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue() * 20; // Convert to blocks per second
             }
 
             Location targetLocation;
@@ -70,8 +70,7 @@ public class LocationPredictingTargeter implements ILocationTargeter {
                     targetLocation = currentLocation.clone();
                 }
             } else {
-                // Predict the future location based on direction, speed, and prediction time
-                Vector predictedMovement = direction.multiply(speed * predictionTime);
+                Vector predictedMovement = direction.multiply(speedBps * predictionTimeSeconds);
                 targetLocation = currentLocation.clone().add(predictedMovement);
                 targetLocation.setY(targetLocation.getY() + yOffset);
             }

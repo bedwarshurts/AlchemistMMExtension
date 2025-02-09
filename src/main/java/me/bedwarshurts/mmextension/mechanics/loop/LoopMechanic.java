@@ -11,12 +11,12 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 import java.util.*;
 
-@MythicMechanic(author = "bedwarshurts", name = "loop", aliases = {}, description = "Loop through a set of skills multiple times with a delay")
+@MythicMechanic(author = "bedwarshurts", name = "loop", aliases = {}, description = "Loop through a set of skills multiple times with a delayMs")
 public class LoopMechanic implements INoTargetSkill {
     private final String condition;
     private final SkillExecutor skillExecutor;
     private final String skillName;
-    private final PlaceholderDouble delay;
+    private final PlaceholderDouble delayMs;
     private final String loopID;
     private final String onStart;
     private final String onEnd;
@@ -26,7 +26,7 @@ public class LoopMechanic implements INoTargetSkill {
         this.condition = mlc.getString("condition", "0=0");
         this.skillExecutor = manager;
         this.skillName = mlc.getString("skill", "");
-        this.delay = PlaceholderDouble.of(mlc.getString("delay", "0"));
+        this.delayMs = PlaceholderDouble.of(mlc.getString("delay", "0"));
         this.loopID = mlc.getString("loopID", UUID.randomUUID().toString());
         this.onStart = mlc.getString("onStart", "");
         this.onEnd = mlc.getString("onEnd", "");
@@ -38,7 +38,7 @@ public class LoopMechanic implements INoTargetSkill {
             Optional<Skill> skillOptional = skillExecutor.getSkill(skillName);
             if (skillOptional.isPresent()) {
                 Skill skillToExecute = skillOptional.get();
-                LoopHandler loopHandler = new LoopHandler(skillToExecute, data, skillExecutor, condition, delay.get(data), loopID, this);
+                LoopHandler loopHandler = new LoopHandler(skillToExecute, data, skillExecutor, condition, delayMs.get(data), loopID, this);
                 loopHandlers.put(loopID, loopHandler);
 
                 // Execute onStart skill

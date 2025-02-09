@@ -21,7 +21,7 @@ public abstract class ParticleMechanic {
     protected final PlaceholderDouble speed;
     protected final PlaceholderString skillName;
     protected final SkillExecutor skillExecutor;
-    protected final PlaceholderDouble delay;
+    protected final PlaceholderDouble delayMs;
     protected final TargeterAudience audienceTargeter;
     protected final List<PlaceholderDouble> dirOverride;
 
@@ -32,10 +32,10 @@ public abstract class ParticleMechanic {
         this.dirMultiplier = PlaceholderDouble.of(mlc.getString("dirMultiplier", "1.0"));
         this.shiftRadius = PlaceholderDouble.of(mlc.getString("shift", "0.0"));
         this.variance = PlaceholderDouble.of(mlc.getString("variance", "0.0"));
-        String[] directionArgs = mlc.getString("direction", "0,0,0").split(",");
+        String[] directionArgs = mlc.getString("direction", "1,1,1").split(",");
         this.speed = PlaceholderDouble.of(mlc.getString("speed", "0.1"));
         this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
-        this.delay = PlaceholderDouble.of(mlc.getString("delay", "0"));
+        this.delayMs = PlaceholderDouble.of(mlc.getString("delay", "0"));
         this.direction = List.of(
                 PlaceholderDouble.of(directionArgs[0]),
                 PlaceholderDouble.of(directionArgs[1]),
