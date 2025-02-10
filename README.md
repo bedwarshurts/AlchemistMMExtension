@@ -60,7 +60,7 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### PeriodicBreakMechanic
 
 ```
-- primedtnt{delay=; block=; startingLocation=; skill=;}
+- periodicbreak{delay=; block=; startingLocation=; skill=;}
 ```
 
 ## Targeters
