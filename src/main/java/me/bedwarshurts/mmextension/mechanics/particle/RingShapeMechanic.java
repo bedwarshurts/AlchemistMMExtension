@@ -54,7 +54,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
         double currentRadius = radius.get(data);
         List<Double> currentDirection = direction.stream().map(d -> d.get(data)).collect(Collectors.toList());
         List<Double> currentRotation = rotation.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());
-        List<Double> currentRotMultiplier = rotMultiplier.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());
+        List<Double> currentRotMultiplier = rotMultiplier.stream().map(r -> Math.toRadians(r.get(data))).toList();
         final int densityValue = density.get(data);
 
         final Set<Player> audience = SkillUtils.getAudienceTargets(data, audienceTargeter);
@@ -81,9 +81,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
 
         for (int i = 0; i < particleCount.get(data); i++) {
             currentRadius += shiftRadius.get(data);
-            for (int k = 0; k < currentDirection.size(); k++) {
-                currentDirection.set(k, currentDirection.get(k) * dirMultiplier.get(data));
-            }
+            currentDirection.replaceAll(aDouble -> aDouble * dirMultiplier.get(data));
             currentRotation.set(0, currentRotation.get(0) + currentRotMultiplier.get(0));
             currentRotation.set(1, currentRotation.get(1) + currentRotMultiplier.get(1));
             currentRotation.set(2, currentRotation.get(2) + currentRotMultiplier.get(2));
