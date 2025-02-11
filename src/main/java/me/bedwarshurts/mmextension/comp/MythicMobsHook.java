@@ -53,6 +53,10 @@ public class MythicMobsHook implements Listener {
             case "setmmocd":
                 event.register(new SetMMOCooldownMechanic(event.getConfig()));
                 break;
+            case "periodicblockbreak":
+            case "periodicbreak":
+                event.register(new PeriodicBlockBreakMechanic(event.getContainer().getManager(), event.getConfig()));
+                break;
             default: break;
         }
     }
