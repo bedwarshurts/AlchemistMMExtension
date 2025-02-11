@@ -39,7 +39,7 @@ public class SkillUtils {
     }
 
     public static void castSkillAtPoint(SkillMetadata data, Location pointLocation, PlaceholderString skillName, SkillExecutor skillExecutor) {
-        if (!skillName.get(data).isEmpty()) { // Execute skill logic
+        if (!skillName.get(data).isEmpty()) {
             Optional<Skill> skillOptional = skillExecutor.getSkill(skillName.get(data));
             if (skillOptional.isPresent()) {
                 Skill skill = skillOptional.get();
@@ -89,7 +89,7 @@ public class SkillUtils {
         return null;
     }
 
-    public static Vector rotateVectorToDirection(Vector vector, Vector direction) {
+    public static void rotateVectorToDirection(Vector vector, Vector direction) {
         direction = direction.clone().normalize();
         double yaw = Math.atan2(direction.getZ(), direction.getX());
         double pitch = Math.asin(direction.getY());
@@ -116,6 +116,5 @@ public class SkillUtils {
         z = vector.getY() * sinPitch + vector.getZ() * cosPitch;
         vector.setY(y).setZ(z);
 
-        return vector;
     }
 }
