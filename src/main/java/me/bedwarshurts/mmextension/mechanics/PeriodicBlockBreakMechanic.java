@@ -33,7 +33,7 @@ public class PeriodicBlockBreakMechanic implements INoTargetSkill {
     private final SkillExecutor manager;
 
     public PeriodicBlockBreakMechanic(SkillExecutor manager, MythicLineConfig mlc) {
-        this.delayMs = PlaceholderInt.of(mlc.getString("delay", "1"));
+        this.delayMs = PlaceholderInt.of(mlc.getString("interval", "1"));
 
         PlaceholderString block = PlaceholderString.of(mlc.getString("block", "AIR"));
         this.blockType = Material.valueOf(String.valueOf(block).toUpperCase());

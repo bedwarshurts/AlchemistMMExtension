@@ -35,7 +35,7 @@ public abstract class ParticleMechanic {
         String[] directionArgs = mlc.getString("direction", "1,1,1").split(",");
         this.speed = PlaceholderDouble.of(mlc.getString("speed", "0.1"));
         this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
-        this.delayMs = PlaceholderDouble.of(mlc.getString("delay", "0"));
+        this.delayMs = PlaceholderDouble.of(mlc.getString("interval", "0"));
         this.direction = List.of(
                 PlaceholderDouble.of(directionArgs[0]),
                 PlaceholderDouble.of(directionArgs[1]),
