@@ -30,7 +30,7 @@ public class ConnectedBlocksTargeter implements ILocationTargeter {
     private final int depth;
 
     public ConnectedBlocksTargeter(MythicLineConfig mlc) {
-        String[] excluded = mlc.getString("exclude", "").split(",");
+        String[] excluded = mlc.getString("exclude", "AIR").split(",");
         this.excludedMaterials = new HashSet<>();
         for (String material : excluded) {
             try {
@@ -39,14 +39,14 @@ public class ConnectedBlocksTargeter implements ILocationTargeter {
                 AlchemistMMExtension.AlchemistMMExtension.getLogger().warning("Invalid material: " + material);
             }
         }
-        String[] locationArgs = mlc.getString("loc", "").split(",");
+        String[] locationArgs = mlc.getString(new String[]{"loc","location"}, "").split(",");
         this.location = locationArgs.length == 3 ? List.of(
                 PlaceholderDouble.of(locationArgs[0]),
                 PlaceholderDouble.of(locationArgs[1]),
                 PlaceholderDouble.of(locationArgs[2])
         ) : null;
 
-        String[] offsetArgs = mlc.getString("locOffset", "0,0,0").split(",");
+        String[] offsetArgs = mlc.getString(new String[]{"locOffset", "locationOffset"}, "0,0,0").split(",");
         this.locationOffset = List.of(
                 PlaceholderDouble.of(offsetArgs[0]),
                 PlaceholderDouble.of(offsetArgs[1]),
