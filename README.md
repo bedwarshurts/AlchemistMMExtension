@@ -30,7 +30,7 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### SphereShapeMechanic
 
 ```
-- sphereshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=;}
+- sphereshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; interval=;}
 ```
 
 ### OpenChestMechanic
@@ -42,13 +42,13 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### LoopMechanic
 
 ```
-- loop{condition=; skill=; delay=; loopID=; onStart=; onEnd=;}
+- loop{condition=; skill=; interval=; loopID=; onStart=; onEnd=;}
 ```
 
 ### RingShapeMechanic
 
 ```
-- ringshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; delay=; rotation=; rotMultiplier=; matchRotation=}
+- ringshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; interval=; rotation=; rotMultiplier=; matchRotation=}
 ```
 
 ### PrimedTntMechanic
@@ -60,7 +60,7 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### PeriodicBreakMechanic
 
 ```
-- periodicbreak{delay=; block=; startingLocation=; skill=;}
+- periodicbreak{interval=; block=; startingLocation=; skill=;}
 ```
 
 ## Targeters
