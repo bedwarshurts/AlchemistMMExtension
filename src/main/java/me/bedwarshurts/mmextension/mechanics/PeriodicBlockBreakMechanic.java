@@ -33,17 +33,17 @@ public class PeriodicBlockBreakMechanic implements INoTargetSkill {
     private final SkillExecutor manager;
 
     public PeriodicBlockBreakMechanic(SkillExecutor manager, MythicLineConfig mlc) {
-        this.delayMs = PlaceholderInt.of(mlc.getString("interval", "0"));
+        this.delayMs = PlaceholderInt.of(mlc.getString(new String[]{"interval", "i"}, "0"));
 
         PlaceholderString block = PlaceholderString.of(mlc.getString("block", "AIR"));
         this.blockType = Material.valueOf(String.valueOf(block).toUpperCase());
 
-        String[] coords = mlc.getString("startingLocation", "0,0,0").split(",");
+        String[] coords = mlc.getString(new String[]{"startingLocation", "sLoc"},"0,0,0").split(",");
         this.startX = PlaceholderDouble.of(coords[0]);
         this.startY = PlaceholderDouble.of(coords[1]);
         this.startZ = PlaceholderDouble.of(coords[2]);
 
-        this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
+        this.skillName = PlaceholderString.of(mlc.getString(new String[]{"skill","onBlockBreak","oBB"}, ""));
         this.manager = manager;
     }
 

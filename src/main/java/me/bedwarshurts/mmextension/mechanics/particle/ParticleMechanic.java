@@ -26,16 +26,16 @@ public abstract class ParticleMechanic {
     protected final List<PlaceholderDouble> dirOverride;
 
     public ParticleMechanic(SkillExecutor manager, MythicLineConfig mlc) {
-        this.particleType = Particle.valueOf(mlc.getString("particle", "FLAME").toUpperCase());
-        this.radius = PlaceholderDouble.of(mlc.getString("radius", "1.0"));
-        this.particleCount = PlaceholderInt.of(mlc.getString("count", "100"));
-        this.dirMultiplier = PlaceholderDouble.of(mlc.getString("dirMultiplier", "1.0"));
-        this.shiftRadius = PlaceholderDouble.of(mlc.getString("shift", "0.0"));
-        this.variance = PlaceholderDouble.of(mlc.getString("variance", "0.0"));
-        String[] directionArgs = mlc.getString("direction", "1,1,1").split(",");
-        this.speed = PlaceholderDouble.of(mlc.getString("speed", "0.1"));
-        this.skillName = PlaceholderString.of(mlc.getString("skill", ""));
-        this.delayMs = PlaceholderDouble.of(mlc.getString("interval", "0"));
+        this.particleType = Particle.valueOf(mlc.getString(new String[]{"particle", "p"}, "FLAME").toUpperCase());
+        this.radius = PlaceholderDouble.of(mlc.getString(new String[]{"radius","r"}, "1.0"));
+        this.particleCount = PlaceholderInt.of(mlc.getString(new String[]{"count", "c", "a"}, "100"));
+        this.dirMultiplier = PlaceholderDouble.of(mlc.getString(new String[]{"dirMultiplier", "dirMult"}, "1.0"));
+        this.shiftRadius = PlaceholderDouble.of(mlc.getString(new String[]{"shift", "s"}, "0.0"));
+        this.variance = PlaceholderDouble.of(mlc.getString(new String[]{"variance", "v"}, "0.0"));
+        String[] directionArgs = mlc.getString(new String[]{"direction", "dir"}, "1,1,1").split(",");
+        this.speed = PlaceholderDouble.of(mlc.getString(new String[]{"speed", "s"}, "0.1"));
+        this.skillName = PlaceholderString.of(mlc.getString(new String[]{"skill", "onPoint", "oP"}, ""));
+        this.delayMs = PlaceholderDouble.of(mlc.getString(new String[]{"interval", "i"}, "0"));
         this.direction = List.of(
                 PlaceholderDouble.of(directionArgs[0]),
                 PlaceholderDouble.of(directionArgs[1]),
@@ -44,7 +44,7 @@ public abstract class ParticleMechanic {
         this.skillExecutor = manager;
         String audienceTargeterString = mlc.getString("audience", null);
         this.audienceTargeter = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
-        String[] dirOverrideArgs = mlc.getString("dirOverride", "null").split(",");
+        String[] dirOverrideArgs = mlc.getString(new String[]{"dirOverride", "dirO"}, "null").split(",");
         this.dirOverride = dirOverrideArgs.length == 3 ? List.of(
                 PlaceholderDouble.of(dirOverrideArgs[0]),
                 PlaceholderDouble.of(dirOverrideArgs[1]),

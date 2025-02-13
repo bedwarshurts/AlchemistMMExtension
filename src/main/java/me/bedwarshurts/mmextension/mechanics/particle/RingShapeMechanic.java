@@ -30,20 +30,20 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
 
     public RingShapeMechanic(SkillExecutor manager, MythicLineConfig mlc) {
         super(manager, mlc);
-        String[] rotationArgs = mlc.getString("rotation", "0,0,0").split(",");
+        String[] rotationArgs = mlc.getString(new String[]{"rotation", "rot"}, "0,0,0").split(",");
         this.rotation = List.of(
                 PlaceholderDouble.of(rotationArgs[0]),
                 PlaceholderDouble.of(rotationArgs[1]),
                 PlaceholderDouble.of(rotationArgs[2])
         );
-        String[] rotMultiplierArgs = mlc.getString("rotMultiplier", "0,0,0").split(",");
+        String[] rotMultiplierArgs = mlc.getString(new String[]{"rotMultiplier","rotMult"}, "0,0,0").split(",");
         this.rotMultiplier = List.of(
                 PlaceholderDouble.of(rotMultiplierArgs[0]),
                 PlaceholderDouble.of(rotMultiplierArgs[1]),
                 PlaceholderDouble.of(rotMultiplierArgs[2])
         );
-        this.density = PlaceholderInt.of(mlc.getString("density", "1"));
-        this.matchRotation = mlc.getBoolean("matchRotation", false);
+        this.density = PlaceholderInt.of(mlc.getString(new String[]{"density","d"}, "1"));
+        this.matchRotation = mlc.getBoolean(new String[]{"matchRotation", "mp"}, false);
     }
 
     @Override

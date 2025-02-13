@@ -13,7 +13,7 @@ public class IsInFactionCondition implements IEntityCondition {
     private final String[] factions;
 
     public IsInFactionCondition(MythicLineConfig mlc) {
-        this.factions = mlc.getString("factions", "default").toLowerCase().split(",");
+        this.factions = mlc.getString(new String[]{"factions", "faction", "f"}, "default").toLowerCase().split(",");
     }
 
     @Override

@@ -33,8 +33,8 @@ public class LocationPredictingTargeter implements ILocationTargeter {
     public LocationPredictingTargeter(MythicLineConfig mlc) {
         this.predictionTimeSeconds = mlc.getDouble("time", 1.0);
         this.yOffset = mlc.getDouble("y", 0.0);
-        this.ignoreY = mlc.getBoolean("iy", false);
-        this.ignoreIfStill = mlc.getBoolean("is", false);
+        this.ignoreY = mlc.getBoolean(new String[]{"ignoreY","iy"}, false);
+        this.ignoreIfStill = mlc.getBoolean(new String[]{"ignoreStill","is"}, false);
     }
 
     @Override
