@@ -64,6 +64,7 @@ public class PeriodicBlockBreakMechanic implements INoTargetSkill {
         List<AbstractLocation> sortedLocations = locations.stream()
                 .sorted(Comparator.comparingDouble(loc -> loc.distanceSquared(BukkitAdapter.adapt(startingLocation))))
                 .toList();
+
         for (int i = 0; i < sortedLocations.size(); i++) {
             AbstractLocation abstractLocation = sortedLocations.get(i);
             Location location = BukkitAdapter.adapt(abstractLocation);
@@ -71,14 +72,11 @@ public class PeriodicBlockBreakMechanic implements INoTargetSkill {
                         Block block = location.getBlock();
                         if (block.getType() != blockType) {
                             block.setType(blockType, false);
-                            if (!skillName.get(data).isEmpty()) {
-                                SkillUtils.castSkillAtPoint(data, location, skillName, manager);
-                            }
+                            SkillUtils.castSkillAtPoint(data, location, skillName, manager);
                         }
                     }, ((long) delayMs.get(data) * i / 50)
             );
         }
-
         return SkillResult.SUCCESS;
     }
 }
