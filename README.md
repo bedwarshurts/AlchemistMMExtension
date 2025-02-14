@@ -48,7 +48,7 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### RingShapeMechanic
 
 ```
-- ringshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; interval=; rotation=; rotMultiplier=; matchRotation=}
+- ringshape{particle=; radius=; count=; dirMultiplier=; shiftRadius=; variance=; direction=; speed=; skill=; interval=; rotation=; rotMultiplier=; matchRotation=;}
 ```
 
 ### PrimedTntMechanic
@@ -61,6 +61,13 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 
 ```
 - periodicbreak{interval=; block=; startingLocation=; skill=;}
+```
+
+### ForEachMechanic
+
+This mechanic loops through the locations returned by a targeter and executes the skill sequence for each one. While this will also work with single location returning targeters, it will serve no value.
+```
+- foreach{interval=; skill=;}
 ```
 
 ## Targeters
