@@ -26,10 +26,10 @@ public class LoopMechanic implements INoTargetSkill {
         this.condition = mlc.getString("condition", "0=0");
         this.skillExecutor = manager;
         this.skillName = mlc.getString("skill", "");
-        this.delayMs = PlaceholderDouble.of(mlc.getString("interval", "0"));
+        this.delayMs = PlaceholderDouble.of(mlc.getString(new String[]{"interval", "i"}, "0"));
         this.loopID = mlc.getString("loopID", UUID.randomUUID().toString());
-        this.onStart = mlc.getString("onStart", "");
-        this.onEnd = mlc.getString("onEnd", "");
+        this.onStart = mlc.getString(new String[]{"onStart", "oS"}, "");
+        this.onEnd = mlc.getString(new String[]{"onEnd", "oE"}, "");
     }
 
     @Override

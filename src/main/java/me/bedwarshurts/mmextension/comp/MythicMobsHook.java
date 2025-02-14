@@ -8,6 +8,7 @@ import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.mechanics.*;
 import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
+import me.bedwarshurts.mmextension.mechanics.loop.ForEachMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.LoopMechanic;
 import me.bedwarshurts.mmextension.mechanics.mmocore.SetMMOCooldownMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.RingShapeMechanic;
@@ -56,6 +57,9 @@ public class MythicMobsHook implements Listener {
             case "periodicblockbreak":
             case "periodicbreak":
                 event.register(new PeriodicBlockBreakMechanic(event.getContainer().getManager(), event.getConfig()));
+                break;
+            case "foreach":
+                event.register(new ForEachMechanic(event.getContainer().getManager(), event.getConfig()));
                 break;
             default: break;
         }
