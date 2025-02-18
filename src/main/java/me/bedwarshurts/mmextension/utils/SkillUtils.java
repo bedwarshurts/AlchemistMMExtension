@@ -38,15 +38,24 @@ public class SkillUtils {
         }
     }
 
-    public static void castSkillAtPoint(SkillMetadata data, Location pointLocation, PlaceholderString skillName, SkillExecutor skillExecutor) {
+    public static void castSkill(SkillExecutor manager, SkillMetadata data, String skillName) {
+        if (!skillName.isEmpty()) {
+            Optional<Skill> skillOptional = manager.getSkill(skillName);
+            if (skillOptional.isEmpty()) return;
+
+            skillOptional.ifPresent(skill -> skill.execute(data));
+        }
+    }
+
+    public static void castSkillAtPoint(SkillMetadata data, Location pointLocation, PlaceholderString skillName, SkillExecutor manager) {
         if (!skillName.get(data).isEmpty()) {
-            Optional<Skill> skillOptional = skillExecutor.getSkill(skillName.get(data));
-            if (skillOptional.isPresent()) {
-                Skill skill = skillOptional.get();
-                skill.execute(data.deepClone().setLocationTarget(
-                        new AbstractLocation(pointLocation.getWorld().getName(), pointLocation.getX(), pointLocation.getY(), pointLocation.getZ()))
-                );
-            }
+            Optional<Skill> skillOptional = manager.getSkill(skillName.get(data));
+            if (skillOptional.isEmpty()) return;
+
+            Skill skill = skillOptional.get();
+            skill.execute(data.deepClone().setLocationTarget(
+                    new AbstractLocation(pointLocation.getWorld().getName(), pointLocation.getX(), pointLocation.getY(), pointLocation.getZ()))
+            );
         }
     }
 
