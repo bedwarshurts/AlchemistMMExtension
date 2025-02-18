@@ -15,7 +15,7 @@ public class TnTExplosionListener implements Listener {
         if (event.getEntity() instanceof TNTPrimed tnt && tnt.hasMetadata("noBreak")) {
                 for (MetadataValue value : tnt.getMetadata("noBreak")) {
                     if (value.asBoolean()) {
-                        event.blockList().clear(); // Prevent blocks from being broken
+                        event.blockList().clear();
                         break;
                     }
                 }

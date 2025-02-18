@@ -8,6 +8,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.utils.SkillUtils;
 
 import java.util.*;
 
@@ -42,10 +43,7 @@ public class LoopMechanic implements INoTargetSkill {
                 loopHandlers.put(loopID, loopHandler);
 
                 // Execute onStart skill
-                if (!onStart.isEmpty()) {
-                    Optional<Skill> onStartSkill = skillExecutor.getSkill(onStart);
-                    onStartSkill.ifPresent(skill -> skill.execute(data));
-                }
+                SkillUtils.castSkill(skillExecutor, data, onStart);
 
                 loopHandler.startLoop();
 

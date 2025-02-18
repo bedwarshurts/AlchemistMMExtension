@@ -61,6 +61,11 @@ public class MythicMobsHook implements Listener {
             case "foreach":
                 event.register(new ForEachMechanic(event.getContainer().getManager(), event.getConfig()));
                 break;
+            case "randomizehotbar":
+                event.register(new RandomizeHotbarMechanic());
+                break;
+            case "chestgui":
+                event.register(new ChestGUIMechanic(event.getConfig()));
             default: break;
         }
     }

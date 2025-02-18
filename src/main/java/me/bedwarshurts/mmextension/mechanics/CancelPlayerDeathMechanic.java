@@ -62,7 +62,7 @@ public class CancelPlayerDeathMechanic implements ITargetedEntitySkill, Listener
             double newHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() * (healthPercentage / 100.0);
             player.setHealth(Math.min(newHealth, Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()));
 
-            if (!skillName.isEmpty()) { // Execute skill logic
+            if (!skillName.isEmpty()) {
                 Optional<Skill> skillOptional = skillExecutor.getSkill(skillName);
                 if (skillOptional.isPresent()) {
                     Skill skill = skillOptional.get();

@@ -20,7 +20,7 @@ public abstract class ParticleMechanic {
     protected final List<PlaceholderDouble> direction;
     protected final PlaceholderDouble speed;
     protected final PlaceholderString skillName;
-    protected final SkillExecutor skillExecutor;
+    protected final SkillExecutor manager;
     protected final PlaceholderDouble delayMs;
     protected final TargeterAudience audienceTargeter;
     protected final List<PlaceholderDouble> dirOverride;
@@ -41,7 +41,7 @@ public abstract class ParticleMechanic {
                 PlaceholderDouble.of(directionArgs[1]),
                 PlaceholderDouble.of(directionArgs[2])
         );
-        this.skillExecutor = manager;
+        this.manager = manager;
         String audienceTargeterString = mlc.getString("audience", null);
         this.audienceTargeter = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
         String[] dirOverrideArgs = mlc.getString(new String[]{"dirOverride", "dirO"}, "null").split(",");

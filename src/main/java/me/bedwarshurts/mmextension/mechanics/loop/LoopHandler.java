@@ -4,27 +4,26 @@ import io.lumine.mythic.api.skills.Skill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
+import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mariuszgromada.math.mxparser.Expression;
-
-import java.util.Optional;
 
 public class LoopHandler {
     private final String loopID;
     private final Skill skill;
     private final SkillMetadata data;
-    private final SkillExecutor skillExecutor;
+    private final SkillExecutor manager;
     private final String condition;
     private final double delayMs;
     private boolean shouldBreak;
     private final LoopMechanic mechanic;
 
-    public LoopHandler(Skill skill, SkillMetadata data, SkillExecutor skillExecutor, String condition, double delay, String loopID, LoopMechanic mechanic) {
+    public LoopHandler(Skill skill, SkillMetadata data, SkillExecutor manager, String condition, double delay, String loopID, LoopMechanic mechanic) {
         this.loopID = loopID;
         this.skill = skill;
         this.data = data;
-        this.skillExecutor = skillExecutor;
+        this.manager = manager;
         this.condition = condition;
         this.delayMs = delay;
         this.shouldBreak = false;
@@ -38,7 +37,7 @@ public class LoopHandler {
     public void startLoop() {
         if (shouldBreak) {
             LoopMechanic.removeLoopHandler(loopID);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> executeOnEndSkill(skillExecutor, mechanic.getOnEnd()), (long) (delayMs / 50));
+            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> executeOnEndSkill(manager, mechanic.getOnEnd()), (long) (delayMs / 50));
             return;
         }
 
@@ -51,7 +50,7 @@ public class LoopHandler {
             Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), this::startLoop, (long) (delayMs / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
         } else {
             LoopMechanic.removeLoopHandler(loopID);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> executeOnEndSkill(skillExecutor, mechanic.getOnEnd()), (long) (delayMs / 50));
+            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> executeOnEndSkill(manager, mechanic.getOnEnd()), (long) (delayMs / 50));
         }
     }
 
@@ -60,10 +59,7 @@ public class LoopHandler {
     }
 
     private void executeOnEndSkill(SkillExecutor skillExecutor, String skillName) {
-        if (!skillName.isEmpty()) {
-            Optional<Skill> onEndSkill = skillExecutor.getSkill(skillName);
-            onEndSkill.ifPresent(skill -> skill.execute(data));
-        }
+        SkillUtils.castSkill(skillExecutor, data, skillName);
     }
 
 }
