@@ -104,6 +104,7 @@ This mechanic loops through the locations returned by a targeter and executes th
 
 ## Conditions
 
+
 ### StringContainsCondition
 
 ```
