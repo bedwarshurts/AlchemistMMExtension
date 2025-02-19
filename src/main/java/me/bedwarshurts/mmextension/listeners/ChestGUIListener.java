@@ -27,9 +27,7 @@ public class ChestGUIListener implements Listener {
         if (event.getRawSlot() < 0 || event.getCurrentItem() == null) return;
 
         Map<Integer, Map<String, String>> actionsMap = ChestGUIMechanic.INVENTORY_ACTIONS.get(inv);
-
         if (!actionsMap.containsKey(event.getRawSlot())) return;
-
         Map<String, String> actions = actionsMap.get(event.getRawSlot());
 
         if ("false".equalsIgnoreCase(actions.getOrDefault("interact", "false"))) {
@@ -38,14 +36,12 @@ public class ChestGUIListener implements Listener {
 
         Player player = (Player) event.getWhoClicked();
         ClickType clickType = event.getClick();
-
         boolean rightClick = (clickType == ClickType.RIGHT || clickType == ClickType.SHIFT_RIGHT);
-        boolean leftClick  = (clickType == ClickType.LEFT  || clickType == ClickType.SHIFT_LEFT);
+        boolean leftClick = (clickType == ClickType.LEFT || clickType == ClickType.SHIFT_LEFT);
 
         if (rightClick && actions.containsKey("right_click_action")) {
             runAction(player, data, actions.get("right_click_action"));
         }
-
         if (leftClick && actions.containsKey("left_click_action")) {
             runAction(player, data, actions.get("left_click_action"));
         }
@@ -54,10 +50,9 @@ public class ChestGUIListener implements Listener {
     private void runAction(Player player, SkillMetadata data, String action) {
         // action example: "command:some_command" or "console_command:some_console_command"
         String[] parts = action.split(":", 2);
-
         if (parts.length < 2) return;
 
-        String type    = parts[0];
+        String type = parts[0];
         String execute = parts[1];
 
         if ("command".equalsIgnoreCase(type)) {
@@ -76,7 +71,6 @@ public class ChestGUIListener implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         Inventory inv = event.getInventory();
-
         ChestGUIMechanic.INVENTORY_ACTIONS.remove(inv);
         ChestGUIMechanic.INVENTORY_METADATA.remove(inv);
     }

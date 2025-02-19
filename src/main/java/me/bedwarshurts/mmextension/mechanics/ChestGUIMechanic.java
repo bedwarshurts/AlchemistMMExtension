@@ -33,8 +33,8 @@ public class ChestGUIMechanic implements INoTargetSkill {
     public static final Map<Inventory, SkillMetadata> INVENTORY_METADATA = new HashMap<>();
 
     public ChestGUIMechanic(MythicLineConfig config) {
-        this.title       = config.getString("title", "Chest GUI");
-        this.slots       = Math.max(9, config.getInteger("slots", 9));
+        this.title = config.getString("title", "Chest GUI");
+        this.slots = Math.max(9, config.getInteger("slots", 9));
         this.rawContents = config.getString("contents", "");
     }
 
@@ -45,7 +45,7 @@ public class ChestGUIMechanic implements INoTargetSkill {
             Player player = (Player) abstractEntity.getBukkitEntity();
 
             String parsedTitle = PlaceholderUtils.parseStringPlaceholders(title, data);
-            parsedTitle        = PlaceholderAPI.setPlaceholders(player, parsedTitle);
+            parsedTitle = PlaceholderAPI.setPlaceholders(player, parsedTitle);
 
             Inventory inv = Bukkit.createInventory(null, slots, MiniMessage.miniMessage().deserialize(parsedTitle));
             INVENTORY_METADATA.put(inv, data);
@@ -55,43 +55,36 @@ public class ChestGUIMechanic implements INoTargetSkill {
             String[] items = rawContents.split("],");
             for (String itemString : items) {
                 itemString = itemString.trim();
-
                 if (!itemString.contains("[")) continue;
 
                 String materialPart = itemString.substring(0, itemString.indexOf('[')).trim().toUpperCase();
                 Material mat = Material.matchMaterial(materialPart);
-
                 if (mat == null) mat = Material.BARRIER;
 
                 String bracketContent = itemString.substring(itemString.indexOf('[') + 1).replace("]", "");
                 Map<String, String> infoMap = parseBracketContent(bracketContent);
 
                 String parsedName = PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("name", ""), data);
-                parsedName        = PlaceholderAPI.setPlaceholders(player, parsedName);
-
                 String parsedLore = PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("lore", ""), data);
-                parsedLore        = PlaceholderAPI.setPlaceholders(player, parsedLore);
+
+                parsedName = PlaceholderAPI.setPlaceholders(player, parsedName);
+                parsedLore = PlaceholderAPI.setPlaceholders(player, parsedLore);
 
                 Component displayName = MiniMessage.miniMessage().deserialize(parsedName);
                 List<Component> loreComponents = new ArrayList<>();
-
                 for (String line : parsedLore.split("\\\\n")) {
                     loreComponents.add(MiniMessage.miniMessage().deserialize(line));
                 }
 
                 ItemStack stack = new ItemStack(mat);
-                ItemMeta  meta  = stack.getItemMeta();
-
+                ItemMeta meta = stack.getItemMeta();
                 meta.displayName(displayName);
-
                 if (!loreComponents.isEmpty()) {
                     meta.lore(loreComponents);
                 }
-
                 if ("true".equalsIgnoreCase(infoMap.get("enchanted"))) {
                     meta.addEnchant(Enchantment.UNBREAKING, 1, true);
                 }
-
                 stack.setItemMeta(meta);
 
                 int slot = Integer.parseInt(infoMap.getOrDefault("slot", "0"));
@@ -103,7 +96,6 @@ public class ChestGUIMechanic implements INoTargetSkill {
                 addAction("right_click_action", infoMap, actions);
                 addAction("left_click_action", infoMap, actions);
                 addAction("interact", infoMap, actions);
-
                 slotActions.put(slot, actions);
             }
             INVENTORY_ACTIONS.put(inv, slotActions);
@@ -117,7 +109,7 @@ public class ChestGUIMechanic implements INoTargetSkill {
         Pattern pattern = Pattern.compile("(\\w+)=(.*?)(?:,|$)");
         Matcher matcher = pattern.matcher(content);
         while (matcher.find()) {
-            String key   = matcher.group(1).trim();
+            String key = matcher.group(1).trim();
             String value = matcher.group(2).trim();
             value = value.replaceAll("^\"|\"$", "");
             map.put(key.toLowerCase(), value);
