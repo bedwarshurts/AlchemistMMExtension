@@ -104,7 +104,6 @@ This mechanic loops through the locations returned by a targeter and executes th
 
 ## Conditions
 
-
 ### StringContainsCondition
 
 ```
@@ -120,6 +119,7 @@ This mechanic loops through the locations returned by a targeter and executes th
 ## Signals
 
 ### SkillCastSignal
+
 ```
 ~onSkillCast, the variable <caster.var.skillname> will return the internal name of the skill used
 ```
