@@ -28,7 +28,7 @@ public class ChestGUISlot {
     }
 
     public boolean canInteract() {
-        return !"false".equalsIgnoreCase(actions.getOrDefault("interact", "true"));
+        return !"false".equalsIgnoreCase(actions.getOrDefault("interact", "false"));
     }
 
     public String getRightClickAction() {
