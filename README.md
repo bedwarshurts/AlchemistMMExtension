@@ -104,6 +104,12 @@ This mechanic loops through the locations returned by a targeter and executes th
 ?isylevel{y=}
 ```
 
+## Signals
+
+```
+~onSkillCast, the variable <caster.var.skillname> will return the internal name of the skill used
+```
+
 ## Factions
 
 Factions are used to tell when to apply extra damage to the mob. For example if the mob is in the faction "boss" then extra damage will be applied based on a placeholder such as %player_stat_boss_damage_bonus%. A mob can be in multiple factions, if the faction setting is for example boss,fire both bonuses will be applied.
