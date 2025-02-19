@@ -1,4 +1,4 @@
-package me.bedwarshurts.mmextension.mechanics;
+package me.bedwarshurts.mmextension.mechanics.chestgui;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
@@ -8,6 +8,9 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.Indyuce.mmoitems.MMOItems;
+import net.Indyuce.mmoitems.api.Type;
+import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -29,7 +32,7 @@ public class ChestGUIMechanic implements INoTargetSkill {
     private final int slots;
     private final String rawContents;
 
-    public static final Map<Inventory, Map<Integer, Map<String, String>>> INVENTORY_ACTIONS = new HashMap<>();
+    public static final Map<Inventory, ChestGUISlot[]> INVENTORY_SLOTS = new HashMap<>();
     public static final Map<Inventory, SkillMetadata> INVENTORY_METADATA = new HashMap<>();
 
     public ChestGUIMechanic(MythicLineConfig config) {
@@ -44,41 +47,36 @@ public class ChestGUIMechanic implements INoTargetSkill {
             if (!abstractEntity.isPlayer()) continue;
             Player player = (Player) abstractEntity.getBukkitEntity();
 
-            String parsedTitle = PlaceholderUtils.parseStringPlaceholders(title, data);
-            parsedTitle = PlaceholderAPI.setPlaceholders(player, parsedTitle);
+            String parsedTitle = PlaceholderAPI.setPlaceholders(player,
+            PlaceholderUtils.parseStringPlaceholders(title, data));
 
             Inventory inv = Bukkit.createInventory(null, slots, MiniMessage.miniMessage().deserialize(parsedTitle));
-            INVENTORY_METADATA.put(inv, data);
 
-            Map<Integer, Map<String, String>> slotActions = new HashMap<>();
+            INVENTORY_METADATA.put(inv, data);
+            ChestGUISlot[] slotArray = new ChestGUISlot[slots];
 
             String[] items = rawContents.split("],");
             for (String itemString : items) {
                 itemString = itemString.trim();
                 if (!itemString.contains("[")) continue;
 
-                String materialPart = itemString.substring(0, itemString.indexOf('[')).trim().toUpperCase();
-                Material mat = Material.matchMaterial(materialPart);
-                if (mat == null) mat = Material.BARRIER;
-
+                String itemName = itemString.substring(0, itemString.indexOf('[')).trim().toUpperCase();
                 String bracketContent = itemString.substring(itemString.indexOf('[') + 1).replace("]", "");
                 Map<String, String> infoMap = parseBracketContent(bracketContent);
 
-                String parsedName = PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("name", ""), data);
-                String parsedLore = PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("lore", ""), data);
+                String parsedName = PlaceholderAPI.setPlaceholders(player,
+                PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("name", ""), data));
+                String parsedLore = PlaceholderAPI.setPlaceholders(player,
+                PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("lore", ""), data));
 
-                parsedName = PlaceholderAPI.setPlaceholders(player, parsedName);
-                parsedLore = PlaceholderAPI.setPlaceholders(player, parsedLore);
+                ItemStack stack = getItemFromConfig(itemName);
+                ItemMeta meta = stack.getItemMeta();
+                meta.displayName(MiniMessage.miniMessage().deserialize(parsedName));
 
-                Component displayName = MiniMessage.miniMessage().deserialize(parsedName);
                 List<Component> loreComponents = new ArrayList<>();
                 for (String line : parsedLore.split("\\\\n")) {
                     loreComponents.add(MiniMessage.miniMessage().deserialize(line));
                 }
-
-                ItemStack stack = new ItemStack(mat);
-                ItemMeta meta = stack.getItemMeta();
-                meta.displayName(displayName);
                 if (!loreComponents.isEmpty()) {
                     meta.lore(loreComponents);
                 }
@@ -91,14 +89,9 @@ public class ChestGUIMechanic implements INoTargetSkill {
                 if (slot < 0 || slot >= slots) continue;
 
                 inv.setItem(slot, stack);
-
-                Map<String, String> actions = new HashMap<>();
-                addAction("right_click_action", infoMap, actions);
-                addAction("left_click_action", infoMap, actions);
-                addAction("interact", infoMap, actions);
-                slotActions.put(slot, actions);
+                slotArray[slot] = new ChestGUISlot(slot, stack, extractActions(infoMap));
             }
-            INVENTORY_ACTIONS.put(inv, slotActions);
+            INVENTORY_SLOTS.put(inv, slotArray);
             player.openInventory(inv);
         }
         return SkillResult.SUCCESS;
@@ -110,16 +103,37 @@ public class ChestGUIMechanic implements INoTargetSkill {
         Matcher matcher = pattern.matcher(content);
         while (matcher.find()) {
             String key = matcher.group(1).trim();
-            String value = matcher.group(2).trim();
-            value = value.replaceAll("^\"|\"$", "");
+            String value = matcher.group(2).trim().replaceAll("^\"|\"$", "");
             map.put(key.toLowerCase(), value);
         }
         return map;
     }
 
-    private void addAction(String actionKey, Map<String, String> infoMap, Map<String, String> actions) {
-        if (infoMap.containsKey(actionKey)) {
-            actions.put(actionKey, infoMap.get(actionKey));
+    private Map<String, String> extractActions(Map<String, String> infoMap) {
+        Map<String, String> actions = new HashMap<>();
+        if (infoMap.containsKey("right_click_action")) {
+            actions.put("right_click_action", infoMap.get("right_click_action"));
         }
+        if (infoMap.containsKey("left_click_action")) {
+            actions.put("left_click_action", infoMap.get("left_click_action"));
+        }
+        if (infoMap.containsKey("interact")) {
+            actions.put("interact", infoMap.get("interact"));
+        }
+        return actions;
+    }
+
+    private ItemStack getItemFromConfig(String itemString) {
+        if (itemString.toLowerCase().startsWith("mmoitem:")) {
+            String[] parts = itemString.split(":");
+            if (parts.length == 3) {
+                MMOItem mmoItem = MMOItems.plugin.getMMOItem(Type.get(parts[1]), parts[2]);
+                if (mmoItem != null) {
+                    return mmoItem.newBuilder().build();
+                }
+            }
+        }
+        Material mat = Material.matchMaterial(itemString);
+        return new ItemStack(mat != null ? mat : Material.BARRIER);
     }
 }

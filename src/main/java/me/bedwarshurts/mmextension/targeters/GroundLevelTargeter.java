@@ -35,7 +35,6 @@ public class GroundLevelTargeter implements ILocationTargeter {
                 location.subtract(0, 1, 0);
             }
 
-            // Increase the final Y level by the yOffset
             Location blockLocation = location.getBlock().getLocation().add(0, yOffset, 0);
             Position position = Position.of(blockLocation);
             locations.add(new AbstractLocation(position));

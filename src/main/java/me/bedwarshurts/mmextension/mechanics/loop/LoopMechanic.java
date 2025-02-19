@@ -12,7 +12,7 @@ import me.bedwarshurts.mmextension.utils.SkillUtils;
 
 import java.util.*;
 
-@MythicMechanic(author = "bedwarshurts", name = "loop", aliases = {}, description = "Loop through a set of skills multiple times with a delayMs")
+@MythicMechanic(author = "bedwarshurts", name = "loop", aliases = {}, description = "Loop through a set of skills multiple times with a delay")
 public class LoopMechanic implements INoTargetSkill {
     private final String condition;
     private final SkillExecutor skillExecutor;
