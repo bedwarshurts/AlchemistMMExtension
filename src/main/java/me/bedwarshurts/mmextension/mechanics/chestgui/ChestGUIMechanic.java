@@ -35,10 +35,10 @@ public class ChestGUIMechanic implements INoTargetSkill {
     public static final Map<Inventory, ChestGUISlot[]> INVENTORY_SLOTS = new HashMap<>();
     public static final Map<Inventory, SkillMetadata> INVENTORY_METADATA = new HashMap<>();
 
-    public ChestGUIMechanic(MythicLineConfig config) {
-        this.title = config.getString("title", "Chest GUI");
-        this.slots = Math.max(9, config.getInteger("slots", 9));
-        this.rawContents = config.getString("contents", "");
+    public ChestGUIMechanic(MythicLineConfig mlc) {
+        this.title = mlc.getString("title", "Alchemist Chest GUI");
+        this.slots = Math.max(9, mlc.getInteger("slots", 9));
+        this.rawContents = mlc.getString("contents", "");
     }
 
     @Override
@@ -48,8 +48,7 @@ public class ChestGUIMechanic implements INoTargetSkill {
             Player player = (Player) abstractEntity.getBukkitEntity();
 
             String parsedTitle = PlaceholderAPI.setPlaceholders(player,
-            PlaceholderUtils.parseStringPlaceholders(title, data));
-
+                    PlaceholderUtils.parseStringPlaceholders(title, data));
             Inventory inv = Bukkit.createInventory(null, slots, MiniMessage.miniMessage().deserialize(parsedTitle));
 
             INVENTORY_METADATA.put(inv, data);
@@ -61,20 +60,27 @@ public class ChestGUIMechanic implements INoTargetSkill {
                 if (!itemString.contains("[")) continue;
 
                 String itemName = itemString.substring(0, itemString.indexOf('[')).trim().toUpperCase();
-                String bracketContent = itemString.substring(itemString.indexOf('[') + 1).replace("]", "");
+                String bracketContent = itemString
+                        .substring(itemString.indexOf('[') + 1)
+                        .replace("]", "");
                 Map<String, String> infoMap = parseBracketContent(bracketContent);
 
                 String parsedName = PlaceholderAPI.setPlaceholders(player,
-                PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("name", ""), data));
+                        PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("name", ""), data));
                 String parsedLore = PlaceholderAPI.setPlaceholders(player,
-                PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("lore", ""), data));
+                        PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("lore", ""), data));
 
                 ItemStack stack = getItemFromConfig(itemName);
                 ItemMeta meta = stack.getItemMeta();
-                meta.displayName(MiniMessage.miniMessage().deserialize(parsedName));
+
+                if (!parsedName.isEmpty()) {
+                    meta.displayName(MiniMessage.miniMessage().deserialize(parsedName));
+                }
 
                 List<Component> loreComponents = new ArrayList<>();
                 for (String line : parsedLore.split("\\\\n")) {
+                    if (line.isEmpty()) continue;
+
                     loreComponents.add(MiniMessage.miniMessage().deserialize(line));
                 }
                 if (!loreComponents.isEmpty()) {
@@ -99,7 +105,7 @@ public class ChestGUIMechanic implements INoTargetSkill {
 
     private Map<String, String> parseBracketContent(String content) {
         Map<String, String> map = new HashMap<>();
-        Pattern pattern = Pattern.compile("(\\w+)=(.*?)(?:,|$)");
+        Pattern pattern = Pattern.compile("(\\w+)=([^,\\]]*)");
         Matcher matcher = pattern.matcher(content);
         while (matcher.find()) {
             String key = matcher.group(1).trim();
