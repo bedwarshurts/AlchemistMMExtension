@@ -70,6 +70,18 @@ This mechanic loops through the locations returned by a targeter and executes th
 - foreach{interval=; skill=;}
 ```
 
+### RandomizeHotbarMechanic
+
+```
+- randomizehotbar{}
+```
+
+### ChestGUIMechanic
+
+```
+- chestgui{contents=; title=; slots=;}
+```
+
 ## Targeters
 
 ### GroundLevelTargeter
@@ -102,6 +114,14 @@ This mechanic loops through the locations returned by a targeter and executes th
 
 ```
 ?isylevel{y=}
+```
+
+## Signals
+
+### SkillCastSignal
+
+```
+~onSkillCast, the variable <caster.var.skillname> will return the internal name of the skill used
 ```
 
 ## Factions
