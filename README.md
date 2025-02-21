@@ -82,6 +82,13 @@ This mechanic loops through the locations returned by a targeter and executes th
 - chestgui{contents=; title=; slots=;}
 ```
 
+### OnSignalMechanic (Aura)
+
+```
+- onsignal{skill=; signal=; duration=;} When the player receives a signal if the aura is active for said
+ player the skill will execute with them being the caster
+```
+
 ## Targeters
 
 ### GroundLevelTargeter
@@ -100,6 +107,12 @@ This mechanic loops through the locations returned by a targeter and executes th
 
 ```
 @TCB{loc=; locOffset=; exclude=; depth=;}
+```
+
+### EntityInSightTargeter
+
+```
+@TEIS{maxDistance=;}
 ```
 
 ## Conditions
