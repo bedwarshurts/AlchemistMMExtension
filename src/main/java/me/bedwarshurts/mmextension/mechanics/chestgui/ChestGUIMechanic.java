@@ -43,6 +43,8 @@ public class ChestGUIMechanic implements INoTargetSkill {
 
     @Override
     public SkillResult cast(SkillMetadata data) {
+        String[] items = rawContents.split("],");
+
         for (AbstractEntity abstractEntity : data.getEntityTargets()) {
             if (!abstractEntity.isPlayer()) continue;
             Player player = (Player) abstractEntity.getBukkitEntity();
@@ -54,7 +56,6 @@ public class ChestGUIMechanic implements INoTargetSkill {
             INVENTORY_METADATA.put(inv, data);
             ChestGUISlot[] slotArray = new ChestGUISlot[slots];
 
-            String[] items = rawContents.split("],");
             for (String itemString : items) {
                 itemString = itemString.trim();
                 if (!itemString.contains("[")) continue;
@@ -86,8 +87,9 @@ public class ChestGUIMechanic implements INoTargetSkill {
                 if (!loreComponents.isEmpty()) {
                     meta.lore(loreComponents);
                 }
-                if ("true".equalsIgnoreCase(infoMap.get("enchanted"))) {
+                if (infoMap.get("enchanted").equalsIgnoreCase("true")) {
                     meta.addEnchant(Enchantment.UNBREAKING, 1, true);
+                    meta.setHideTooltip(true);
                 }
                 stack.setItemMeta(meta);
 

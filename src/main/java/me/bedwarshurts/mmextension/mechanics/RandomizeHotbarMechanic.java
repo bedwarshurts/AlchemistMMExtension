@@ -14,9 +14,6 @@ import java.util.List;
 @MythicMechanic(author = "bedwarshurts", name = "randomizehotbar", aliases = {}, description = "Randomizes each targeted player's hotbar.")
 public class RandomizeHotbarMechanic implements INoTargetSkill {
 
-    public RandomizeHotbarMechanic() {
-    }
-
     @Override
     public SkillResult cast(SkillMetadata data) {
         boolean affectedAnyPlayer = false;
