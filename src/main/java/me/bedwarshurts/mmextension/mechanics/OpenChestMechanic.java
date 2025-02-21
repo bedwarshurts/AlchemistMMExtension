@@ -39,11 +39,11 @@ public class OpenChestMechanic implements INoTargetSkill {
 
             return switch (action) {
                 case "open" -> {
-                    SkillUtils.setChestOpened(block, true, players);
+                    SkillUtils.openChest(block, true, players);
                     yield SkillResult.SUCCESS;
                 }
                 case "close" -> {
-                    SkillUtils.setChestOpened(block, false, players);
+                    SkillUtils.openChest(block, false, players);
                     yield SkillResult.SUCCESS;
                 }
                 default -> {

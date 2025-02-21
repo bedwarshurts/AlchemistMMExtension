@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class SkillUtils {
 
-    public static void setChestOpened(Block block, boolean open, List<Player> players) {
+    public static void openChest(Block block, boolean open, List<Player> players) {
         PacketContainer libPacket = new PacketContainer(PacketType.Play.Server.BLOCK_ACTION);
         libPacket.getBlockPositionModifier().write(0, new BlockPosition(block.getX(), block.getY(), block.getZ()));
         libPacket.getIntegers().write(0, 1);
