@@ -12,9 +12,11 @@ import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.ForEachMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.LoopMechanic;
 import me.bedwarshurts.mmextension.mechanics.mmocore.SetMMOCooldownMechanic;
+import me.bedwarshurts.mmextension.mechanics.OnSignalMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.RingShapeMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.SphereShapeMechanic;
 import me.bedwarshurts.mmextension.targeters.ConnectedBlocksTargeter;
+import me.bedwarshurts.mmextension.targeters.EntityInSightTargeter;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.LocationPredictingTargeter;
 import org.bukkit.event.EventHandler;
@@ -67,6 +69,9 @@ public class MythicMobsHook implements Listener {
                 break;
             case "chestgui":
                 event.register(new ChestGUIMechanic(event.getConfig()));
+            case "onsignal":
+                event.register(new OnSignalMechanic(event.getConfig()));
+                break;
             default: break;
         }
     }
@@ -87,6 +92,10 @@ public class MythicMobsHook implements Listener {
             case "targetconnectedblocks":
             case "tcb":
                 event.register(new ConnectedBlocksTargeter(event.getConfig()));
+                break;
+            case "targetentityinsight":
+            case "teis":
+                event.register(new EntityInSightTargeter(event.getConfig()));
                 break;
             default: break;
         }
