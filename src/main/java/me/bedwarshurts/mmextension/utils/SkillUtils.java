@@ -39,24 +39,24 @@ public class SkillUtils {
     }
 
     public static void castSkill(SkillExecutor manager, SkillMetadata data, String skillName) {
-        if (!skillName.isEmpty()) {
-            Optional<Skill> skillOptional = manager.getSkill(skillName);
-            if (skillOptional.isEmpty()) return;
+        if (skillName.isEmpty()) return;
 
-            skillOptional.ifPresent(skill -> skill.execute(data));
-        }
+        Optional<Skill> skillOptional = manager.getSkill(skillName);
+        if (skillOptional.isEmpty()) return;
+
+        skillOptional.ifPresent(skill -> skill.execute(data));
     }
 
-    public static void castSkillAtPoint(SkillMetadata data, Location pointLocation, PlaceholderString skillName, SkillExecutor manager) {
-        if (!skillName.get(data).isEmpty()) {
-            Optional<Skill> skillOptional = manager.getSkill(skillName.get(data));
-            if (skillOptional.isEmpty()) return;
+    public static void castSkillAtPoint(SkillMetadata data, Location location, String skillName, SkillExecutor manager) {
+        if (skillName.isEmpty()) return;
 
-            Skill skill = skillOptional.get();
-            skill.execute(data.deepClone().setLocationTarget(
-                    new AbstractLocation(pointLocation.getWorld().getName(), pointLocation.getX(), pointLocation.getY(), pointLocation.getZ()))
-            );
-        }
+        Optional<Skill> skillOptional = manager.getSkill(skillName);
+        if (skillOptional.isEmpty()) return;
+
+        Skill skill = skillOptional.get();
+        skill.execute(data.deepClone().setLocationTarget(
+                new AbstractLocation(location.getWorld().getName(), location.getX(), location.getY(), location.getZ()))
+        );
     }
 
     public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, double speed ) {

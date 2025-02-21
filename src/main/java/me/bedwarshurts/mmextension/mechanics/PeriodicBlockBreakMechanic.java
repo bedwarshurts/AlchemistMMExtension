@@ -72,7 +72,7 @@ public class PeriodicBlockBreakMechanic implements INoTargetSkill {
                         Block block = location.getBlock();
                         if (block.getType() != blockType) {
                             block.setType(blockType, false);
-                            SkillUtils.castSkillAtPoint(data, location, skillName, manager);
+                            SkillUtils.castSkillAtPoint(data, location, skillName.get(data), manager);
                         }
                     }, ((long) delayMs.get(data) * i / 50)
             );

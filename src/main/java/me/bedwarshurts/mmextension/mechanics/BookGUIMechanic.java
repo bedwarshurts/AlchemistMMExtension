@@ -28,31 +28,31 @@ public class BookGUIMechanic implements INoTargetSkill {
     }
 
     @Override
-    public SkillResult cast(SkillMetadata skillMetadata) {
-        String parsedContents = PlaceholderUtils.parseStringPlaceholders(contents, skillMetadata);
+    public SkillResult cast(SkillMetadata data) {
+        String parsedContents = PlaceholderUtils.parseStringPlaceholders(contents, data);
         parsedContents = PlaceholderUtils.parseMythicTags(parsedContents);
         MiniMessage miniMessage = MiniMessage.miniMessage();
         ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
         BookMeta meta = (BookMeta) book.getItemMeta();
 
-        for (AbstractEntity target : skillMetadata.getEntityTargets()) {
-            if (target.isPlayer()) {
-                Player player = (Player) target.getBukkitEntity();
-                parsedContents = PlaceholderAPI.setPlaceholders(player, parsedContents);
-                String[] pages = parsedContents.split("\\n");
-                Component[] components = new Component[pages.length];
+        for (AbstractEntity target : data.getEntityTargets()) {
+            if (!target.isPlayer()) continue;
 
-                for (int i = 0; i < pages.length; i++) {
-                    components[i] = miniMessage.deserialize(pages[i]);
-                }
+            Player player = (Player) target.getBukkitEntity();
+            parsedContents = PlaceholderAPI.setPlaceholders(player, parsedContents);
+            String[] pages = parsedContents.split("\\n");
+            Component[] components = new Component[pages.length];
 
-                meta.addPages(components);
-                meta.setTitle(title);
-                meta.setAuthor(author);
-
-                book.setItemMeta(meta);
-                player.openBook(book);
+            for (int i = 0; i < pages.length; i++) {
+                components[i] = miniMessage.deserialize(pages[i]);
             }
+
+            meta.addPages(components);
+            meta.setTitle(title);
+            meta.setAuthor(author);
+
+            book.setItemMeta(meta);
+            player.openBook(book);
         }
 
         return SkillResult.SUCCESS;
