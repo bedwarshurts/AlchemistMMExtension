@@ -134,7 +134,13 @@ This mechanic loops through the locations returned by a targeter and executes th
 ### SkillCastSignal
 
 ```
-~onSkillCast, the variable <caster.var.skillname> will return the internal name of the skill used
+~onSkillCast, the variable <caster.var.skillname> will return the internal name of the skill used. @trigger returns the player who triggered the event.
+```
+
+### PlayerChangeSlotSignal
+
+```
+~onPlayerChangeSlot, the variableS <previousSlot> and <nextSlot> can be used @trigger returns the player who triggered the event.
 ```
 
 ## Factions
