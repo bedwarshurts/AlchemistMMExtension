@@ -35,7 +35,8 @@ public class EntityInSightTargeter implements IEntityTargeter {
 
     private Entity getEntityPlayerIsLookingAt(LivingEntity entity, double maxDistance) {
         Location eyeLocation = entity.getEyeLocation();
-        RayTraceResult result = entity.getWorld().rayTraceEntities(eyeLocation, eyeLocation.getDirection(), maxDistance, 0.5, tracedEntity -> !tracedEntity.equals(entity));
+        RayTraceResult result = entity.getWorld().rayTraceEntities(eyeLocation, eyeLocation.getDirection(), maxDistance,
+                0.5, tracedEntity -> !tracedEntity.equals(entity));
         return result != null ? result.getHitEntity() : null;
     }
 }

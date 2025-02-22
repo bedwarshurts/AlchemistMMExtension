@@ -5,6 +5,7 @@ import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.ChestGUIListener;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
 import me.bedwarshurts.mmextension.listeners.OnSignalListener;
+import me.bedwarshurts.mmextension.listeners.PlayerChangeSlotListener;
 import me.bedwarshurts.mmextension.listeners.PlayerSkillCastListener;
 import me.bedwarshurts.mmextension.listeners.TnTExplosionListener;
 import org.bukkit.Bukkit;
@@ -34,6 +35,7 @@ public class AlchemistMMExtension extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerSkillCastListener(), this);
         Bukkit.getPluginManager().registerEvents(new ChestGUIListener(), this);
         Bukkit.getPluginManager().registerEvents(new OnSignalListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerChangeSlotListener(), this);
 
         new PlaceholderAPIHook().register();
 
