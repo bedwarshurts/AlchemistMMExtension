@@ -18,15 +18,15 @@ public class PlayerSkillCastListener implements Listener {
     public void onSkillCast(PlayerCastSkillEvent event) {
         Player player = event.getPlayer();
         String skillName = event.getMetadata().getCast().getHandler().getId();
-        double radius = 30.0; // Radius of nearby mobs to send signal
+        double radius = 30.0;
         List<Entity> nearbyEntities = player.getNearbyEntities(radius, radius, radius);
         for (Entity entity : nearbyEntities) {
-            if (MythicBukkit.inst().getAPIHelper().isMythicMob(entity)) {
-                ActiveMob activeMob = MythicBukkit.inst().getAPIHelper().getMythicMobInstance(entity);
-                if (activeMob != null) {
-                    activeMob.getVariables().put("skillname", new StringVariable(skillName));
-                    activeMob.signalMob(BukkitAdapter.adapt(player), "onSkillCast");
-                }
+            if (!MythicBukkit.inst().getAPIHelper().isMythicMob(entity)) continue;
+
+            ActiveMob activeMob = MythicBukkit.inst().getAPIHelper().getMythicMobInstance(entity);
+            if (activeMob != null) {
+                activeMob.getVariables().put("skillname", new StringVariable(skillName));
+                activeMob.signalMob(BukkitAdapter.adapt(player), "onSkillCast");
             }
         }
     }
