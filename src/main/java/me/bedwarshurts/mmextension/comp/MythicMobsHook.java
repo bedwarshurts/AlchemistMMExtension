@@ -72,6 +72,9 @@ public class MythicMobsHook implements Listener {
             case "onsignal":
                 event.register(new OnSignalMechanic(event.getConfig()));
                 break;
+            case "hotbarsnapshot":
+                event.register(new HotbarSnapshotMechanic(event.getConfig()));
+                break;
             default: break;
         }
     }
