@@ -5,14 +5,12 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.events.MythicPlayerSignalEvent;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.core.players.PlayerData;
-import io.lumine.mythic.core.skills.variables.VariableManager;
-import io.lumine.mythic.core.skills.variables.VariableScope;
 import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
-import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 
@@ -21,7 +19,7 @@ import java.util.Optional;
 
 public class PlayerChangeSlotListener implements Listener {
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         Optional<PlayerData> optionalMythicPlayer = MythicBukkit.inst().getPlayerManager().getProfile(player.getUniqueId());
