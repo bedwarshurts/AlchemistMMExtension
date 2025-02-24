@@ -1,4 +1,4 @@
-package me.bedwarshurts.mmextension.mechanics;
+package me.bedwarshurts.mmextension.mechanics.inventory;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.skills.INoTargetSkill;

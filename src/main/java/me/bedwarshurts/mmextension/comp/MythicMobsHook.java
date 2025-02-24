@@ -8,6 +8,8 @@ import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.mechanics.*;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
+import me.bedwarshurts.mmextension.mechanics.inventory.HotbarSnapshotMechanic;
+import me.bedwarshurts.mmextension.mechanics.inventory.RandomizeHotbarMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.ForEachMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.LoopMechanic;
