@@ -19,8 +19,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Optional;
-
 public class HotbarSnapshotListener implements Listener {
 
     @EventHandler
@@ -56,6 +54,8 @@ public class HotbarSnapshotListener implements Listener {
 
         int slot = player.getInventory().getHeldItemSlot();
         if (slot < 0 || slot > 8) return;
+
+        event.setCancelled(true);
 
         SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, new GenericCaster(BukkitAdapter.adapt(player)), BukkitAdapter.adapt(player));
         SkillUtils.castSkill(MythicBukkit.inst().getSkillManager(), data, HotbarSnapshotMechanic.activeTemporaryItems.get(player)[slot].getSkill());
