@@ -4,6 +4,7 @@ import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.ChestGUIListener;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
+import me.bedwarshurts.mmextension.listeners.HotbarSnapshotListener;
 import me.bedwarshurts.mmextension.listeners.OnSignalListener;
 import me.bedwarshurts.mmextension.listeners.PlayerChangeSlotListener;
 import me.bedwarshurts.mmextension.listeners.PlayerSkillCastListener;
@@ -27,6 +28,23 @@ public class AlchemistMMExtension extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+
+        if (Bukkit.getPluginManager().getPlugin("MMOItems") == null) {
+            getLogger().warning("MMOItems is not installed! Some features may not work.");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            getLogger().warning("PlaceholderAPI is not installed! Placeholder features will not work.");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("MythicLib") == null) {
+            getLogger().warning("MythicLib is not installed! Some features may not work.");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("MMOCore") == null) {
+            getLogger().warning("MMOCore is not installed! Some features may not work.");
+        }
+
         AlchemistMMExtension = this;
 
         Bukkit.getPluginManager().registerEvents(new MythicMobsHook(), this);
@@ -36,6 +54,7 @@ public class AlchemistMMExtension extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ChestGUIListener(), this);
         Bukkit.getPluginManager().registerEvents(new OnSignalListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerChangeSlotListener(), this);
+        Bukkit.getPluginManager().registerEvents(new HotbarSnapshotListener(), this);
 
         new PlaceholderAPIHook().register();
 
