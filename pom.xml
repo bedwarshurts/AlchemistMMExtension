@@ -6,7 +6,7 @@
 
     <groupId>me.bedwarshurs</groupId>
     <artifactId>alchemistmmextension</artifactId>
-    <version>2.5.2-SNAPSHOT</version>
+    <version>2.6.0-SNAPSHOT</version>
 
     <distributionManagement>
         <repository>
@@ -33,31 +33,6 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <relocations>
-                                <relocation>
-                                    <pattern>org.mariuszgromada.math</pattern>
-                                    <shadedPattern>me.bedwarshurts.shaded.math</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
 
     </build>
 
