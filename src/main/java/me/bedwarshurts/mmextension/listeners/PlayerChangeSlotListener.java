@@ -6,6 +6,7 @@ import io.lumine.mythic.bukkit.events.MythicPlayerSignalEvent;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.core.players.PlayerData;
 import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
+import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,17 +16,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 
 import java.util.List;
-import java.util.Optional;
 
 public class PlayerChangeSlotListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        Optional<PlayerData> optionalMythicPlayer = MythicBukkit.inst().getPlayerManager().getProfile(player.getUniqueId());
-        if (optionalMythicPlayer.isEmpty()) return;
 
-        PlayerData mythicPlayer = optionalMythicPlayer.get();
+        PlayerData mythicPlayer = SkillUtils.getMythicPlayer(player);
+        if (mythicPlayer == null) return;
+
         mythicPlayer.getVariables().put("previousSlot", new IntegerVariable(event.getPreviousSlot()));
         mythicPlayer.getVariables().put("nextSlot", new IntegerVariable(event.getNewSlot()));
 

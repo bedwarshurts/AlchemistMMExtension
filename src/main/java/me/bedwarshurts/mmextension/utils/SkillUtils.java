@@ -9,6 +9,9 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.skills.Skill;
 import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.players.PlayerData;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import org.bukkit.Location;
@@ -123,6 +126,13 @@ public class SkillUtils {
         y = vector.getY() * cosPitch - vector.getZ() * sinPitch;
         z = vector.getY() * sinPitch + vector.getZ() * cosPitch;
         vector.setY(y).setZ(z);
+
+    }
+
+    public static PlayerData getMythicPlayer (Player player) {
+        Optional<PlayerData> optionalMythicPlayer = MythicBukkit.inst().getPlayerManager().getProfile(player.getUniqueId());
+
+        return optionalMythicPlayer.orElse(null);
 
     }
 }
