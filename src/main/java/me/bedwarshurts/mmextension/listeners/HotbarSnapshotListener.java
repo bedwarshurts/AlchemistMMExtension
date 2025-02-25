@@ -30,10 +30,8 @@ public class HotbarSnapshotListener implements Listener {
         Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()), () -> {
             if (!player.isOnline()) return;
 
-            Optional<PlayerData> optionalMythicPlayer = MythicBukkit.inst().getPlayerManager().getProfile(player.getUniqueId());
-            if (optionalMythicPlayer.isEmpty()) return;
-
-            PlayerData mythicPlayer = optionalMythicPlayer.get();
+            PlayerData mythicPlayer = SkillUtils.getMythicPlayer(player);
+            if (mythicPlayer == null) return;
 
             if (!mythicPlayer.getVariables().has("originalHotbar")) return;
 
@@ -42,12 +40,11 @@ public class HotbarSnapshotListener implements Listener {
 
                 for (int slot = 0; slot < 9; slot++) {
                     player.getInventory().setItem(slot, originalHotbar[slot]);
-                    HotbarSnapshotMechanic.skillItems.remove(originalHotbar[slot]);
+                    HotbarSnapshotMechanic.activeTemporaryItems.remove(player);
                 }
 
                 mythicPlayer.getVariables().remove("originalHotbar");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } catch (Exception ignored) {
             }
         }, 20);
     }
@@ -55,10 +52,12 @@ public class HotbarSnapshotListener implements Listener {
     @EventHandler
     public void onInteractWithItem(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        ItemStack item = player.getInventory().getItemInMainHand();
-        if (!HotbarSnapshotMechanic.skillItems.containsKey(item)) return;
+        if (!HotbarSnapshotMechanic.activeTemporaryItems.containsKey(player)) return;
+
+        int slot = player.getInventory().getHeldItemSlot();
+        if (slot < 0 || slot > 8) return;
 
         SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, new GenericCaster(BukkitAdapter.adapt(player)), BukkitAdapter.adapt(player));
-        SkillUtils.castSkill(MythicBukkit.inst().getSkillManager(), data, HotbarSnapshotMechanic.skillItems.get(item));
+        SkillUtils.castSkill(MythicBukkit.inst().getSkillManager(), data, HotbarSnapshotMechanic.activeTemporaryItems.get(player)[slot].getSkill());
     }
 }

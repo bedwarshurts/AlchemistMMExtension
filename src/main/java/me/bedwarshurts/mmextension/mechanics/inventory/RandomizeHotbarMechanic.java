@@ -7,6 +7,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,26 +17,35 @@ public class RandomizeHotbarMechanic implements INoTargetSkill {
 
     @Override
     public SkillResult cast(SkillMetadata data) {
-        boolean affectedAnyPlayer = false;
+        boolean success = false;
 
         for (AbstractEntity target : data.getEntityTargets()) {
-            if (target.isPlayer()) {
-                affectedAnyPlayer = true;
-                Player player = (Player) target.getBukkitEntity();
-                List<ItemStack> hotbarItems = new ArrayList<>();
+            if (!target.isPlayer()) continue;
+            Player player = (Player) target.getBukkitEntity();
+            success = true;
 
+            List<Integer> slots = new ArrayList<>();
+            for (int i = 0; i < 9; i++) slots.add(i);
+            Collections.shuffle(slots);
+
+            ItemStack[] contents = player.getInventory().getContents();
+            ItemStack[] shuffledHotbar = new ItemStack[9];
+            for (int i = 0; i < 9; i++) {
+                shuffledHotbar[i] = contents[slots.get(i)];
+            }
+            System.arraycopy(shuffledHotbar, 0, contents, 0, 9);
+            player.getInventory().setContents(contents);
+
+            // Shuffle temporary items if available to support HotbarSnapshotMechanic
+            if (HotbarSnapshotMechanic.activeTemporaryItems.containsKey(player)) {
+                TemporaryInventoryItem[] tempItems = HotbarSnapshotMechanic.activeTemporaryItems.get(player);
+                TemporaryInventoryItem[] shuffledTemp = new TemporaryInventoryItem[9];
                 for (int i = 0; i < 9; i++) {
-                    hotbarItems.add(player.getInventory().getItem(i));
+                    shuffledTemp[i] = tempItems[slots.get(i)];
                 }
-
-                Collections.shuffle(hotbarItems);
-
-                for (int i = 0; i < 9; i++) {
-                    player.getInventory().setItem(i, hotbarItems.get(i));
-                }
+                HotbarSnapshotMechanic.activeTemporaryItems.put(player, shuffledTemp);
             }
         }
-
-        return affectedAnyPlayer ? SkillResult.SUCCESS : SkillResult.CONDITION_FAILED;
+        return success ? SkillResult.SUCCESS : SkillResult.INVALID_TARGET;
     }
 }

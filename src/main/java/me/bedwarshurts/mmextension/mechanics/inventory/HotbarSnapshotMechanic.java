@@ -6,10 +6,10 @@ import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.bukkit.BukkitAdapter;
-import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.players.PlayerData;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,22 +19,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MythicMechanic(author = "bedwarshurts", name = "hotbarsnapshot", aliases = {}, description = "Saves and replaces a player's hotbar for a duration")
 public class HotbarSnapshotMechanic implements INoTargetSkill {
 
-    private final ItemStack[] replacementItems;
+    private final TemporaryInventoryItem[] replacementItems;
     private final int durationTicks;
     private final String itemsArg;
 
-    public static final Map<ItemStack, String> skillItems = new HashMap<>();
+    public static final Map<Player, TemporaryInventoryItem[]> activeTemporaryItems = new HashMap<>();
 
     public HotbarSnapshotMechanic(MythicLineConfig mlc) {
         this.itemsArg = mlc.getString("items", "air");
-        this.replacementItems = new ItemStack[9];
+        this.replacementItems = new TemporaryInventoryItem[9];
         this.durationTicks = mlc.getInteger("duration", 60);
     }
 
@@ -54,13 +53,13 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
                 }
 
                 Material mat = Material.matchMaterial(itemName.toUpperCase());
-                replacementItems[i] = mat != null ? new ItemStack(mat) : new ItemStack(Material.AIR);
+                replacementItems[i] = mat != null ? new TemporaryInventoryItem(new ItemStack(mat)) :  new TemporaryInventoryItem(new ItemStack(Material.AIR));
 
                 if (skillName != null) {
-                    skillItems.put(replacementItems[i], skillName);
+                   replacementItems[i].setSkill(skillName);
                 }
             } else {
-                replacementItems[i] = new ItemStack(Material.AIR);
+                replacementItems[i] = new TemporaryInventoryItem(new ItemStack(Material.AIR));
             }
         }
 
@@ -71,20 +70,19 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
 
             Player player = BukkitAdapter.adapt(target.asPlayer());
 
-            Optional<PlayerData> optionalMythicPlayer = MythicBukkit.inst().getPlayerManager().getProfile(player.getUniqueId());
-            if (optionalMythicPlayer.isEmpty()) continue;
-
-            PlayerData mythicPlayer = optionalMythicPlayer.get();
+            PlayerData mythicPlayer = SkillUtils.getMythicPlayer(player);
+            if (mythicPlayer == null) continue;
 
             try {
                 mythicPlayer.getVariables().put("originalHotbar", new StringVariable(InventorySerializer.toBase64(player.getInventory().getContents())));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException ignored) {
             }
 
             for (int slot = 0; slot < 9; slot++) {
-                player.getInventory().setItem(slot, replacementItems[slot]);
+                player.getInventory().setItem(slot, replacementItems[slot].getItem());
             }
+
+            activeTemporaryItems.put(player, replacementItems);
 
             Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()), () -> {
                 try {
@@ -93,11 +91,10 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
                     ItemStack[] originalHotbar = InventorySerializer.fromBase64(mythicPlayer.getVariables().get("originalHotbar").toString());
                     for (int slot = 0; slot < 9; slot++) {
                         player.getInventory().setItem(slot, originalHotbar[slot]);
-                        skillItems.remove(originalHotbar[slot]);
+                        activeTemporaryItems.remove(player);
                     }
                     mythicPlayer.getVariables().remove("originalHotbar");
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                } catch (Exception ignored) {
                 }
             }, durationTicks);
         }
