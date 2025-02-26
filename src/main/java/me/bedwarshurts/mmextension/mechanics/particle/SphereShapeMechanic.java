@@ -38,11 +38,7 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
 
         final Vector offset;
         if (dirOverride != null) {
-            offset = new Vector(
-                    dirOverride.get(0).get(data),
-                    dirOverride.get(1).get(data),
-                    dirOverride.get(2).get(data)
-            ).subtract(origin.toVector());
+            offset = new Vector(dirOverride.get(0).get(data), dirOverride.get(1).get(data), dirOverride.get(2).get(data)).subtract(origin.toVector());
         } else {
             offset = null;
         }
@@ -80,11 +76,7 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
                     directionVector = particleLocation.toVector().subtract(origin.toVector()).normalize();
                 }
 
-                directionVector.multiply(new Vector(
-                        newDirection.get(0),
-                        newDirection.get(1),
-                        newDirection.get(2)
-                ));
+                directionVector.multiply(new Vector(newDirection.get(0), newDirection.get(1), newDirection.get(2)));
 
                 dx = directionVector.getX() * dirMultiplier.get(data);
                 dy = directionVector.getY() * dirMultiplier.get(data);

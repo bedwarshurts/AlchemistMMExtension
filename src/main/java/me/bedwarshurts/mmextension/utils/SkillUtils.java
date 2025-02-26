@@ -9,11 +9,11 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.skills.Skill;
 import io.lumine.mythic.api.skills.SkillMetadata;
-import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.players.PlayerData;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
@@ -56,18 +56,18 @@ public class SkillUtils {
         if (skillOptional.isEmpty()) return;
 
         Skill skill = skillOptional.get();
-        skill.execute(data.deepClone().setLocationTarget(
-                new AbstractLocation(location.getWorld().getName(), location.getX(), location.getY(), location.getZ()))
-        );
+        skill.execute(data.deepClone().setLocationTarget(new AbstractLocation(location.getWorld().getName(), location.getX(), location.getY(), location.getZ())));
     }
 
-    public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, double speed ) {
-        if (audience != null) {
-            for (Player player : audience) {
-                player.spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed);
-            }
-        } else {
+    public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, double speed) {
+        if (Bukkit.getWorld(particleLocation.getWorld().getKey()) == null) return;
+
+        if (audience == null) {
             particleLocation.getWorld().spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed);
+            return;
+        }
+        for (Player player : audience) {
+            player.spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed);
         }
     }
 
@@ -90,12 +90,7 @@ public class SkillUtils {
 
     public static Set<Player> getAudienceTargets(SkillMetadata data, TargeterAudience audienceTargeter) {
         if (audienceTargeter != null) {
-            return audienceTargeter.get(data, data.getCaster().getEntity()).stream()
-                    .filter(Objects::nonNull)
-                    .map(AbstractEntity::getBukkitEntity)
-                    .filter(e -> e instanceof Player)
-                    .map(e -> (Player) e)
-                    .collect(Collectors.toSet());
+            return audienceTargeter.get(data, data.getCaster().getEntity()).stream().filter(Objects::nonNull).map(AbstractEntity::getBukkitEntity).filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toSet());
         }
         return null;
     }
@@ -129,7 +124,7 @@ public class SkillUtils {
 
     }
 
-    public static PlayerData getMythicPlayer (Player player) {
+    public static PlayerData getMythicPlayer(Player player) {
         Optional<PlayerData> optionalMythicPlayer = MythicBukkit.inst().getPlayerManager().getProfile(player.getUniqueId());
 
         return optionalMythicPlayer.orElse(null);
