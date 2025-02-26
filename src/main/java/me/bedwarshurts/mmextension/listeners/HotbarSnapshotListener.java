@@ -3,7 +3,6 @@ package me.bedwarshurts.mmextension.listeners;
 import io.lumine.mythic.api.mobs.GenericCaster;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.BukkitAdapter;
-import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.players.PlayerData;
 import io.lumine.mythic.core.skills.SkillMetadataImpl;
 import io.lumine.mythic.core.skills.SkillTriggers;
@@ -11,9 +10,12 @@ import me.bedwarshurts.mmextension.mechanics.inventory.HotbarSnapshotMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.InventorySerializer;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -38,9 +40,9 @@ public class HotbarSnapshotListener implements Listener {
 
                 for (int slot = 0; slot < 9; slot++) {
                     player.getInventory().setItem(slot, originalHotbar[slot]);
-                    HotbarSnapshotMechanic.activeTemporaryItems.remove(player);
                 }
 
+                HotbarSnapshotMechanic.activeTemporaryItems.remove(player);
                 mythicPlayer.getVariables().remove("originalHotbar");
             } catch (Exception ignored) {
             }
@@ -54,10 +56,27 @@ public class HotbarSnapshotListener implements Listener {
 
         int slot = player.getInventory().getHeldItemSlot();
         if (slot < 0 || slot > 8) return;
+        if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR) return;
 
         event.setCancelled(true);
 
         SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, new GenericCaster(BukkitAdapter.adapt(player)), BukkitAdapter.adapt(player));
-        SkillUtils.castSkill(MythicBukkit.inst().getSkillManager(), data, HotbarSnapshotMechanic.activeTemporaryItems.get(player)[slot].getSkill());
+        SkillUtils.castSkill(data, HotbarSnapshotMechanic.activeTemporaryItems.get(player)[slot].getSkill());
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        if (!HotbarSnapshotMechanic.activeTemporaryItems.containsKey(player)) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onDropItem(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        if (!HotbarSnapshotMechanic.activeTemporaryItems.containsKey(player)) return;
+
+        event.setCancelled(true);
     }
 }

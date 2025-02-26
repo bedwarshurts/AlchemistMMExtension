@@ -89,8 +89,8 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
                     ItemStack[] originalHotbar = InventorySerializer.fromBase64(mythicPlayer.getVariables().get("originalHotbar").toString());
                     for (int slot = 0; slot < 9; slot++) {
                         player.getInventory().setItem(slot, originalHotbar[slot]);
-                        activeTemporaryItems.remove(player);
                     }
+                    activeTemporaryItems.remove(player);
                     mythicPlayer.getVariables().remove("originalHotbar");
                 } catch (Exception ignored) {
                 }
