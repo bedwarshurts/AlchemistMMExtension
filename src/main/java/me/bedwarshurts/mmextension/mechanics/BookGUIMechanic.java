@@ -40,7 +40,7 @@ public class BookGUIMechanic implements INoTargetSkill {
 
             Player player = (Player) target.getBukkitEntity();
             parsedContents = PlaceholderAPI.setPlaceholders(player, parsedContents);
-            String[] pages = parsedContents.split("\\n");
+            String[] pages = parsedContents.split("\\\\n");
             Component[] components = new Component[pages.length];
 
             for (int i = 0; i < pages.length; i++) {
