@@ -1,27 +1,21 @@
 package me.bedwarshurts.mmextension.mechanics.loop;
 
-import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
-@MythicMechanic(author = "bedwarshurts", name = "break", aliases = {}, description = "Breaks the loop in LoopMechanic")
-public class BreakMechanic implements INoTargetSkill {
-    private final String loopID;
+import java.util.Optional;
+import java.util.UUID;
 
-    public BreakMechanic(MythicLineConfig mlc) {
-        this.loopID = mlc.getString("loopID", "");
-    }
+@MythicMechanic(author = "bedwarshurts", name = "break", aliases = {}, description = "Breaks a loop")
+public class BreakMechanic implements INoTargetSkill {
 
     @Override
     public SkillResult cast(SkillMetadata data) {
-        LoopHandler loopHandler = LoopMechanic.getLoopHandler(loopID);
-        if (loopHandler != null) {
-            loopHandler.setShouldBreak(true);
-            LoopMechanic.removeLoopHandler(loopID);
-            return SkillResult.SUCCESS;
-        }
-        return SkillResult.INVALID_TARGET;
+        Optional<Object> loopIdObj = data.getMetadata("whileLoopId");
+
+        loopIdObj.ifPresent(uuid1 -> WhileLoopMechanic.stopLoop((UUID) uuid1));
+        return SkillResult.SUCCESS;
     }
 }
