@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-@MythicMechanic(author = "bedwarshurts", name = "whileloop", aliases = {}, description = "Execute a skill in a loop")
+@MythicMechanic(author = "bedwarshurts", name = "whileloop", aliases = {"while"}, description = "Execute a skill in a loop")
 public class WhileLoopMechanic implements INoTargetSkill {
 
     private static final Map<UUID, BukkitTask> activeLoops = new ConcurrentHashMap<>();

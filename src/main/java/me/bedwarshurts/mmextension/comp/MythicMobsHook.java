@@ -13,7 +13,7 @@ import me.bedwarshurts.mmextension.mechanics.inventory.RandomizeHotbarMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.RestoreHotbarMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.ForEachMechanic;
-import me.bedwarshurts.mmextension.mechanics.loop.LoopMechanic;
+import me.bedwarshurts.mmextension.mechanics.loop.WhileLoopMechanic;
 import me.bedwarshurts.mmextension.mechanics.mmocore.SetMMOCooldownMechanic;
 import me.bedwarshurts.mmextension.mechanics.OnSignalMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.RingShapeMechanic;
@@ -36,22 +36,23 @@ public class MythicMobsHook implements Listener {
                 event.register(new BookGUIMechanic(event.getConfig()));
                 break;
             case "sphereshape":
-                event.register(new SphereShapeMechanic(event.getContainer().getManager(), event.getConfig()));
+                event.register(new SphereShapeMechanic(event.getConfig()));
                 break;
             case "ringshape":
-                event.register(new RingShapeMechanic(event.getContainer().getManager(), event.getConfig()));
+                event.register(new RingShapeMechanic(event.getConfig()));
                 break;
             case "cancelplayerdeath":
-                event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getConfig()));
+                event.register(new CancelPlayerDeathMechanic(event.getConfig()));
                 break;
             case "openchest":
                 event.register(new OpenChestMechanic(event.getConfig()));
                 break;
-            case "loop":
-                event.register(new LoopMechanic(event.getContainer().getManager(), event.getConfig()));
+            case "whileloop":
+            case "while":
+                event.register(new WhileLoopMechanic(event.getConfig()));
                 break;
             case "break":
-                event.register(new BreakMechanic(event.getConfig()));
+                event.register(new BreakMechanic());
                 break;
             case "primedtnt":
                 event.register(new PrimedTnTMechanic(event.getConfig()));
@@ -62,23 +63,24 @@ public class MythicMobsHook implements Listener {
                 break;
             case "periodicblockbreak":
             case "periodicbreak":
-                event.register(new PeriodicBlockBreakMechanic(event.getContainer().getManager(), event.getConfig()));
+                event.register(new PeriodicBlockBreakMechanic(event.getConfig()));
                 break;
             case "foreach":
-                event.register(new ForEachMechanic(event.getContainer().getManager(), event.getConfig()));
+                event.register(new ForEachMechanic(event.getConfig()));
                 break;
             case "randomizehotbar":
                 event.register(new RandomizeHotbarMechanic());
                 break;
             case "chestgui":
                 event.register(new ChestGUIMechanic(event.getConfig()));
+                break;
             case "onsignal":
                 event.register(new OnSignalMechanic(event.getConfig()));
                 break;
             case "hotbarsnapshot":
                 event.register(new HotbarSnapshotMechanic(event.getConfig()));
                 break;
-            case "restorehotbarmechanic":
+            case "restorehotbar":
                 event.register(new RestoreHotbarMechanic());
                 break;
             default: break;
