@@ -53,11 +53,7 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
                 }
 
                 Material mat = Material.matchMaterial(itemName.toUpperCase());
-                replacementItems[i] = mat != null ? new TemporaryInventoryItem(new ItemStack(mat)) :  new TemporaryInventoryItem(new ItemStack(Material.AIR));
-
-                if (skillName != null) {
-                   replacementItems[i].setSkill(skillName);
-                }
+                replacementItems[i] = mat != null ? new TemporaryInventoryItem(new ItemStack(mat), skillName) : new TemporaryInventoryItem(new ItemStack(Material.AIR));
             } else {
                 replacementItems[i] = new TemporaryInventoryItem(new ItemStack(Material.AIR));
             }
@@ -87,6 +83,8 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
             Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()), () -> {
                 try {
                     if (!player.isOnline()) return;
+                    if (!mythicPlayer.getVariables().has("originalHotbar")) return;
+                    if (!activeTemporaryItems.containsKey(player)) return;
 
                     ItemStack[] originalHotbar = InventorySerializer.fromBase64(mythicPlayer.getVariables().get("originalHotbar").toString());
                     for (int slot = 0; slot < 9; slot++) {
