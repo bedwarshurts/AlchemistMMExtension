@@ -42,7 +42,15 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 ### LoopMechanic
 
 ```
-- loop{condition=; skill=; interval=; loopID=; onStart=; onEnd=;}
+- loop{condition=; skill=; interval=; onStart=; onEnd=;}
+```
+
+### BreakMechanic
+
+Only works inside the loop mechanic and stops it the moment its called.
+
+```
+- break
 ```
 
 ### RingShapeMechanic
