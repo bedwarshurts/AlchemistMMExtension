@@ -7,7 +7,6 @@ import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
-import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
@@ -28,8 +27,8 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
     private final PlaceholderInt density;
     private final boolean matchRotation;
 
-    public RingShapeMechanic(SkillExecutor manager, MythicLineConfig mlc) {
-        super(manager, mlc);
+    public RingShapeMechanic(MythicLineConfig mlc) {
+        super(mlc);
         String[] rotationArgs = mlc.getString(new String[]{"rotation", "rot"}, "0,0,0").split(",");
         this.rotation = List.of(
                 PlaceholderDouble.of(rotationArgs[0]),
@@ -124,7 +123,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
 
                     SkillUtils.spawnParticle(audience, particleType, particleLocation, dx, dy, dz, speed.get(data));
 
-                    SkillUtils.castSkillAtPoint(data, particleLocation, skillName.get(data), manager);
+                    SkillUtils.castSkillAtPoint(data, particleLocation, skillName.get(data));
                 }
             }, (long) (delayMs.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
         }

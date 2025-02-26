@@ -1,7 +1,6 @@
 package me.bedwarshurts.mmextension.listeners;
 
 import io.lumine.mythic.api.skills.SkillMetadata;
-import io.lumine.mythic.bukkit.MythicBukkit;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUISlot;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
@@ -59,7 +58,7 @@ public class ChestGUIListener implements Listener {
             ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
             Bukkit.dispatchCommand(console, execute);
         } else if ("skill".equalsIgnoreCase(type)) {
-            SkillUtils.castSkill(MythicBukkit.inst().getSkillManager(), data, execute);
+            SkillUtils.castSkill(data, execute);
         } else {
             player.sendMessage(NamedTextColor.GRAY + "[SYS] " + NamedTextColor.WHITE
                     + "Invalid action, please contact the Alchemist admin team if you see this " + type);

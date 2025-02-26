@@ -4,7 +4,6 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
-import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import org.bukkit.Particle;
 
@@ -20,12 +19,11 @@ public abstract class ParticleMechanic {
     protected final List<PlaceholderDouble> direction;
     protected final PlaceholderDouble speed;
     protected final PlaceholderString skillName;
-    protected final SkillExecutor manager;
     protected final PlaceholderDouble delayMs;
     protected final TargeterAudience audienceTargeter;
     protected final List<PlaceholderDouble> dirOverride;
 
-    public ParticleMechanic(SkillExecutor manager, MythicLineConfig mlc) {
+    public ParticleMechanic(MythicLineConfig mlc) {
         this.particleType = Particle.valueOf(mlc.getString(new String[]{"particle", "p"}, "FLAME").toUpperCase());
         this.radius = PlaceholderDouble.of(mlc.getString(new String[]{"radius","r"}, "1.0"));
         this.particleCount = PlaceholderInt.of(mlc.getString(new String[]{"count", "c", "a"}, "100"));
@@ -41,7 +39,6 @@ public abstract class ParticleMechanic {
                 PlaceholderDouble.of(directionArgs[1]),
                 PlaceholderDouble.of(directionArgs[2])
         );
-        this.manager = manager;
         String audienceTargeterString = mlc.getString("audience", null);
         this.audienceTargeter = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
         String[] dirOverrideArgs = mlc.getString(new String[]{"dirOverride", "dirO"}, "null").split(",");

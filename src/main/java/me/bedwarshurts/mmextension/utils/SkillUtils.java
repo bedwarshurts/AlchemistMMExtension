@@ -40,6 +40,10 @@ public class SkillUtils {
         }
     }
 
+    public static void castSkill(SkillMetadata data, String skillName) {
+       castSkill(MythicBukkit.inst().getSkillManager(), data, skillName);
+    }
+
     public static void castSkill(SkillExecutor manager, SkillMetadata data, String skillName) {
         if (skillName.isEmpty()) return;
 
@@ -49,7 +53,8 @@ public class SkillUtils {
         skillOptional.ifPresent(skill -> skill.execute(data));
     }
 
-    public static void castSkillAtPoint(SkillMetadata data, Location location, String skillName, SkillExecutor manager) {
+    public static void castSkillAtPoint(SkillMetadata data, Location location, String skillName) {
+        SkillExecutor manager = MythicBukkit.inst().getSkillManager();
         if (skillName.isEmpty()) return;
 
         Optional<Skill> skillOptional = manager.getSkill(skillName);

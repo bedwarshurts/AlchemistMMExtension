@@ -4,7 +4,7 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.*;
 import io.lumine.mythic.bukkit.BukkitAdapter;
-import io.lumine.mythic.core.skills.SkillExecutor;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -28,13 +28,11 @@ public class CancelPlayerDeathMechanic implements ITargetedEntitySkill, Listener
     private final Set<UUID> playersWithCancelDeath = new HashSet<>();
     private final double healthPercentage;
     private final String skillName;
-    private final SkillExecutor skillExecutor;
     private SkillMetadata data;
 
-    public CancelPlayerDeathMechanic(SkillExecutor manager, MythicLineConfig mlc) {
+    public CancelPlayerDeathMechanic(MythicLineConfig mlc) {
         this.healthPercentage = mlc.getDouble("healthPercentage", 100.0);
         this.skillName = mlc.getString("skill", "");
-        this.skillExecutor = manager;
 
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getProvidingPlugin(getClass()));
     }
@@ -63,7 +61,7 @@ public class CancelPlayerDeathMechanic implements ITargetedEntitySkill, Listener
             player.setHealth(Math.min(newHealth, Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue()));
 
             if (!skillName.isEmpty()) {
-                Optional<Skill> skillOptional = skillExecutor.getSkill(skillName);
+                Optional<Skill> skillOptional = MythicBukkit.inst().getSkillManager().getSkill(skillName);
                 if (skillOptional.isPresent()) {
                     Skill skill = skillOptional.get();
                     skill.execute(data.deepClone().setEntityTarget(BukkitAdapter.adapt(player)));

@@ -1,7 +1,6 @@
 package me.bedwarshurts.mmextension.listeners;
 
 import io.lumine.mythic.bukkit.BukkitAdapter;
-import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.events.MythicPlayerSignalEvent;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.core.skills.SkillMetadataImpl;
@@ -30,7 +29,7 @@ public class OnSignalListener implements Listener {
             if (data.getEntityTargets() == null) {
                 data.setEntityTarget(event.getProfile().getEntity());
             }
-            SkillUtils.castSkill(MythicBukkit.inst().getSkillManager(), data, skillName);
+            SkillUtils.castSkill(data, skillName);
         }
     }
 }

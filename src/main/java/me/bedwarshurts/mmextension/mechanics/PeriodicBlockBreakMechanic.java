@@ -9,7 +9,6 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.bukkit.BukkitAdapter;
-import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
@@ -30,9 +29,8 @@ public class PeriodicBlockBreakMechanic implements INoTargetSkill {
     private final PlaceholderDouble startY;
     private final PlaceholderDouble startZ;
     private final PlaceholderString skillName;
-    private final SkillExecutor manager;
 
-    public PeriodicBlockBreakMechanic(SkillExecutor manager, MythicLineConfig mlc) {
+    public PeriodicBlockBreakMechanic(MythicLineConfig mlc) {
         this.delayMs = PlaceholderInt.of(mlc.getString(new String[]{"interval", "i"}, "0"));
 
         PlaceholderString block = PlaceholderString.of(mlc.getString("block", "AIR"));
@@ -44,7 +42,6 @@ public class PeriodicBlockBreakMechanic implements INoTargetSkill {
         this.startZ = PlaceholderDouble.of(coords[2]);
 
         this.skillName = PlaceholderString.of(mlc.getString(new String[]{"skill","onBlockBreak","oBB"}, ""));
-        this.manager = manager;
     }
 
     @Override
@@ -72,7 +69,7 @@ public class PeriodicBlockBreakMechanic implements INoTargetSkill {
                         Block block = location.getBlock();
                         if (block.getType() != blockType) {
                             block.setType(blockType, false);
-                            SkillUtils.castSkillAtPoint(data, location, skillName.get(data), manager);
+                            SkillUtils.castSkillAtPoint(data, location, skillName.get(data));
                         }
                     }, ((long) delayMs.get(data) * i / 50)
             );
