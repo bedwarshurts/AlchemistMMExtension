@@ -1,5 +1,6 @@
 package me.bedwarshurts.mmextension.mechanics.loop;
 
+import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
@@ -14,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 
-@MythicMechanic(author = "bedwarshurts", name = "foreachloop", aliases = {"foreach"}, description = "Execute a skill for each location target")
+@MythicMechanic(author = "bedwarshurts", name = "foreachloop", aliases = {"foreach"}, description = "Execute a skill for each location or entity target")
 public class ForEachMechanic implements INoTargetSkill {
     private final String skillName;
     private final PlaceholderInt delayMs;
@@ -27,6 +28,7 @@ public class ForEachMechanic implements INoTargetSkill {
     @Override
     public SkillResult cast(SkillMetadata data) {
         Collection<AbstractLocation> locations = data.getLocationTargets();
+        Collection<AbstractEntity> entities = data.getEntityTargets();
         int delayInMs = delayMs.get(data);
         int i = 0;
         for (AbstractLocation loc : locations) {
@@ -35,6 +37,14 @@ public class ForEachMechanic implements INoTargetSkill {
                     () -> SkillUtils.castSkillAtPoint(data, BukkitAdapter.adapt(loc), skillName),
                     (long) delayInMs * index / 50
             );
+        }
+
+        int y = 0;
+        for (AbstractEntity entity : entities) {
+            final int index = y++;
+            Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()),
+                    () -> SkillUtils.castSkillAtEntity(data, BukkitAdapter.adapt(entity), skillName),
+                    (long) delayInMs * index / 50);
         }
         return SkillResult.SUCCESS;
     }

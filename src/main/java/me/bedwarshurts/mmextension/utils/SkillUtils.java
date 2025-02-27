@@ -9,6 +9,7 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.skills.Skill;
 import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.players.PlayerData;
 import io.lumine.mythic.core.skills.SkillExecutor;
@@ -17,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -62,6 +64,17 @@ public class SkillUtils {
 
         Skill skill = skillOptional.get();
         skill.execute(data.deepClone().setLocationTarget(new AbstractLocation(location.getWorld().getName(), location.getX(), location.getY(), location.getZ())));
+    }
+
+    public static void castSkillAtEntity(SkillMetadata data, Entity Entity, String skillName) {
+        SkillExecutor manager = MythicBukkit.inst().getSkillManager();
+        if (skillName.isEmpty()) return;
+
+        Optional<Skill> skillOptional = manager.getSkill(skillName);
+        if (skillOptional.isEmpty()) return;
+
+        Skill skill = skillOptional.get();
+        skill.execute(data.deepClone().setEntityTarget(BukkitAdapter.adapt(Entity)));
     }
 
     public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, double speed) {

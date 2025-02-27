@@ -8,7 +8,7 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import java.util.Optional;
 import java.util.UUID;
 
-@MythicMechanic(author = "bedwarshurts", name = "break", aliases = {}, description = "Breaks a loop")
+@MythicMechanic(author = "bedwarshurts", name = "break", aliases = {}, description = "Breaks a while loop")
 public class BreakMechanic implements INoTargetSkill {
 
     @Override
