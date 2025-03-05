@@ -6,7 +6,6 @@ import io.lumine.mythic.api.skills.conditions.IEntityCondition;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.core.utils.annotations.MythicCondition;
-import org.bukkit.entity.Entity;
 
 @MythicCondition(author = "bedwarshurts", name = "isinfaction", aliases = {}, description = "Check if the entity is in any of the specified factions")
 public class IsInFactionCondition implements IEntityCondition {
@@ -18,11 +17,9 @@ public class IsInFactionCondition implements IEntityCondition {
 
     @Override
     public boolean check(AbstractEntity abstractEntity) {
-        Entity entity = abstractEntity.getBukkitEntity();
-        ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
-        if (mob == null || !mob.hasFaction()) {
-            return false;
-        }
+
+        ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(abstractEntity.getBukkitEntity());
+        if (mob == null || !mob.hasFaction()) return false;
 
         String[] mobFactions = mob.getFaction().toLowerCase().split(",");
         for (String mobFaction : mobFactions) {

@@ -1,6 +1,5 @@
 package me.bedwarshurts.mmextension.listeners;
 
-import io.lumine.mythic.api.mobs.GenericCaster;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.players.PlayerData;
@@ -60,7 +59,7 @@ public class HotbarSnapshotListener implements Listener {
 
         event.setCancelled(true);
 
-        SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, new GenericCaster(BukkitAdapter.adapt(player)), BukkitAdapter.adapt(player));
+        SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, SkillUtils.getMythicPlayer(player), BukkitAdapter.adapt(player));
         SkillUtils.castSkill(data, HotbarSnapshotMechanic.activeTemporaryItems.get(player)[slot].getSkill());
     }
 

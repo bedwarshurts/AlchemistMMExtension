@@ -42,6 +42,14 @@ public class SkillUtils {
         }
     }
 
+    public static Skill getSkill(String skillName) {
+        SkillExecutor manager = MythicBukkit.inst().getSkillManager();
+        if (skillName.isEmpty()) return null;
+
+        Optional<Skill> skillOptional = manager.getSkill(skillName);
+        return skillOptional.orElse(null);
+    }
+
     public static void castSkill(SkillMetadata data, String skillName) {
        castSkill(MythicBukkit.inst().getSkillManager(), data, skillName);
     }

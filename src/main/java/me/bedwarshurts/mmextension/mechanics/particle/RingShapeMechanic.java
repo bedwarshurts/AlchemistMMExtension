@@ -49,7 +49,6 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
     public SkillResult castAtLocation(SkillMetadata data, AbstractLocation targetLocation) {
         Location origin = targetLocation.toPosition().toLocation();
         Random random = new Random();
-
         double currentRadius = radius.get(data);
         List<Double> currentDirection = direction.stream().map(d -> d.get(data)).collect(Collectors.toList());
         List<Double> currentRotation = rotation.stream().map(r -> Math.toRadians(r.get(data))).collect(Collectors.toList());

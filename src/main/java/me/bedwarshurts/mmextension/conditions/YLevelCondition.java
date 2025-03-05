@@ -15,7 +15,7 @@ public class YLevelCondition implements ISkillMetaCondition {
     }
 
     @Override
-    public boolean check(SkillMetadata skillMetadata) {
-        return skillMetadata.getOrigin().getBlockY() == yLevel.get(skillMetadata);
+    public boolean check(SkillMetadata data) {
+        return data.getOrigin().getBlockY() == yLevel.get(data);
     }
 }
