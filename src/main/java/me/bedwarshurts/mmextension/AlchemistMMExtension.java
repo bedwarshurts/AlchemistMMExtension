@@ -1,5 +1,6 @@
 package me.bedwarshurts.mmextension;
 
+import io.lumine.mythic.api.mobs.MythicMob;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.ChestGUIListener;
@@ -14,7 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mariuszgromada.math.mxparser.License;
 
 public class AlchemistMMExtension extends JavaPlugin {
-
     public static AlchemistMMExtension AlchemistMMExtension;
 
     static {

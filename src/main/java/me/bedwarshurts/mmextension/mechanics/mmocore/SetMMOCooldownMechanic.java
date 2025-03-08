@@ -5,6 +5,8 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
+import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
+import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import net.Indyuce.mmocore.MMOCore;
@@ -13,12 +15,12 @@ import org.bukkit.entity.Player;
 
 @MythicMechanic(author = "bedwarshurts", name = "setmmocooldown", aliases = {"setmmocd"}, description = "Sets the cooldown for a specified mmo ability")
 public class SetMMOCooldownMechanic implements INoTargetSkill {
-    private final String ability;
-    private final double cooldown;
+    private final PlaceholderString ability;
+    private final PlaceholderDouble cooldown;
 
     public SetMMOCooldownMechanic(MythicLineConfig config) {
-        this.ability = config.getString(new String[]{"ability", "a"}, "");
-        this.cooldown = config.getDouble(new String[]{"cooldown", "cd"}, 0);
+        this.ability = PlaceholderString.of(config.getString(new String[]{"ability", "a"}, ""));
+        this.cooldown = PlaceholderDouble.of(String.valueOf(config.getDouble(new String[]{"cooldown", "cd"}, 0)));
     }
 
     @Override
@@ -29,8 +31,8 @@ public class SetMMOCooldownMechanic implements INoTargetSkill {
             if (entity.getBukkitEntity() instanceof Player player) {
                 PlayerData playerData = PlayerData.get(player);
                 try {
-                    playerData.getCooldownMap().resetCooldown(playerData.getProfess().getSkill(MMOCore.plugin.skillManager.getSkill(ability)));
-                    playerData.getCooldownMap().applyCooldown(playerData.getProfess().getSkill(MMOCore.plugin.skillManager.getSkill(ability)), cooldown);
+                    playerData.getCooldownMap().resetCooldown(playerData.getProfess().getSkill(MMOCore.plugin.skillManager.getSkill(ability.get(data))));
+                    playerData.getCooldownMap().applyCooldown(playerData.getProfess().getSkill(MMOCore.plugin.skillManager.getSkill(ability.get(data))), cooldown.get(data));
                 }
                 catch (Exception e) {
                     AlchemistMMExtension.AlchemistMMExtension.getLogger().info("Failed to apply cooldown for " + ability + " to " + player.getName());
