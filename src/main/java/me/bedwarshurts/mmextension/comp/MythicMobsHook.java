@@ -11,6 +11,13 @@ import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.HotbarSnapshotMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.RandomizeHotbarMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.RestoreHotbarMechanic;
+import me.bedwarshurts.mmextension.mechanics.list.AddMechanic;
+import me.bedwarshurts.mmextension.mechanics.list.GetMechanic;
+import me.bedwarshurts.mmextension.mechanics.list.IndexMechanic;
+import me.bedwarshurts.mmextension.mechanics.list.ListMechanic;
+import me.bedwarshurts.mmextension.mechanics.list.RemoveMechanic;
+import me.bedwarshurts.mmextension.mechanics.list.ReplaceMechanic;
+import me.bedwarshurts.mmextension.mechanics.list.SizeMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.ForEachMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.WhileLoopMechanic;
@@ -83,6 +90,24 @@ public class MythicMobsHook implements Listener {
             case "restorehotbar":
                 event.register(new RestoreHotbarMechanic());
                 break;
+            case "list":
+                event.register(new ListMechanic(event.getConfig()));
+                break;
+            case "list.add":
+                event.register(new AddMechanic(event.getConfig()));
+                break;
+            case "list.remove":
+                event.register(new RemoveMechanic(event.getConfig()));
+                break;
+            case "list.replace":
+                event.register(new ReplaceMechanic(event.getConfig()));
+                break;
+            case "list.size":
+                event.register(new SizeMechanic(event.getConfig()));
+            case "list.get":
+                event.register(new GetMechanic(event.getConfig()));
+            case "list.index":
+                event.register(new IndexMechanic(event.getConfig()));
             default: break;
         }
     }

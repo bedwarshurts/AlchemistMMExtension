@@ -5,6 +5,7 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
+
 import java.util.*;
 
 public class OnSignalMechanic implements INoTargetSkill {
