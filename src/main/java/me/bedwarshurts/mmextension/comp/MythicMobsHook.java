@@ -93,21 +93,24 @@ public class MythicMobsHook implements Listener {
             case "list":
                 event.register(new ListMechanic(event.getConfig()));
                 break;
-            case "list.add":
+            case "list:add":
                 event.register(new AddMechanic(event.getConfig()));
                 break;
-            case "list.remove":
+            case "list:remove":
                 event.register(new RemoveMechanic(event.getConfig()));
                 break;
-            case "list.replace":
+            case "list:replace":
                 event.register(new ReplaceMechanic(event.getConfig()));
                 break;
-            case "list.size":
+            case "list:size":
                 event.register(new SizeMechanic(event.getConfig()));
-            case "list.get":
+                break;
+            case "list:get":
                 event.register(new GetMechanic(event.getConfig()));
-            case "list.index":
+                break;
+            case "list:index":
                 event.register(new IndexMechanic(event.getConfig()));
+                break;
             default: break;
         }
     }
