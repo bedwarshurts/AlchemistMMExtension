@@ -97,6 +97,20 @@ This mechanic loops through the locations returned by a targeter and executes th
  player the skill will execute with them being the caster
 ```
 
+### ListMechanic
+
+This introduces a new variable type a list, currently the types supported are STRING, INTERGER and DOUBLE
+
+```
+- list{name=;type=;}
+- list:add{name=;value=;}
+- list:get{name=;index=;} The result will be placed in the skill scoped <returnResult> variable
+- list:index{name=;value=;last=;} The result will be placed in the skill scoped <returnResult> variable
+- list:remove{name=;index=;}
+- list:replace{name=;index=;value=;}
+- list:size{name=;} The result will be placed in the skill scoped <returnResult> variable
+```
+
 ## Targeters
 
 ### GroundLevelTargeter
