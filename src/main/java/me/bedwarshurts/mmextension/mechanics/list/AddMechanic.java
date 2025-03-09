@@ -28,6 +28,9 @@ public class AddMechanic implements INoTargetSkill {
             case INTEGER:
                 listHandler.register(Integer.parseInt(value));
                 break;
+            case DOUBLE:
+                listHandler.register(Double.parseDouble(value));
+                break;
             default:
                 return SkillResult.INVALID_CONFIG;
         }

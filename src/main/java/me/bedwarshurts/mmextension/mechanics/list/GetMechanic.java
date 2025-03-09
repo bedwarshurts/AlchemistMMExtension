@@ -5,6 +5,7 @@ import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.skills.variables.VariableRegistry;
+import io.lumine.mythic.core.skills.variables.types.DoubleVariable;
 import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
@@ -32,6 +33,9 @@ public class GetMechanic implements INoTargetSkill {
                 break;
             case VariableTypes.INTEGER:
                 registry.put("returnValue", new IntegerVariable((int) listHandler.get(index)));
+                break;
+            case VariableTypes.DOUBLE:
+                registry.put("returnValue", new DoubleVariable((double) listHandler.get(index)));
                 break;
             default:
                 return SkillResult.INVALID_CONFIG;

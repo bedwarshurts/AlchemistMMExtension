@@ -24,6 +24,9 @@ public class ListMechanic implements INoTargetSkill {
             case "integer":
                 ListHandler.createListHandler(name, VariableTypes.INTEGER);
                 break;
+            case "double":
+                ListHandler.createListHandler(name, VariableTypes.DOUBLE);
+                break;
             default:
                 return SkillResult.INVALID_CONFIG;
         }

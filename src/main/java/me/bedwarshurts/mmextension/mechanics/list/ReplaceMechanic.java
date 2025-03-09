@@ -30,6 +30,9 @@ public class ReplaceMechanic implements INoTargetSkill {
             case VariableTypes.INTEGER:
                 listHandler.replace(index, Integer.parseInt(value));
                 break;
+            case VariableTypes.DOUBLE:
+                listHandler.replace(index, Double.parseDouble(value));
+                break;
             default:
                 return SkillResult.INVALID_CONFIG;
         }

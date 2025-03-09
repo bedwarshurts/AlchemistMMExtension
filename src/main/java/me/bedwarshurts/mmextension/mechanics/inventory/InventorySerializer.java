@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 
+@SuppressWarnings("deprecation")
 public class InventorySerializer {
 
     public static String toBase64(ItemStack[] items) throws IOException {
