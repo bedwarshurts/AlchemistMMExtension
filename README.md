@@ -99,7 +99,7 @@ This mechanic loops through the locations returned by a targeter and executes th
 
 ### ListMechanic
 
-This introduces a new variable type a list, currently the types supported are STRING, INTERGER and DOUBLE
+This introduces a new variable type a list, currently the types supported are STRING, INTEGER and DOUBLE
 
 ```
 - list{name=;type=;}
