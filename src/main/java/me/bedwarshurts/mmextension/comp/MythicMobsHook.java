@@ -23,6 +23,7 @@ import me.bedwarshurts.mmextension.mechanics.loop.ForEachMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.WhileLoopMechanic;
 import me.bedwarshurts.mmextension.mechanics.mmocore.SetMMOCooldownMechanic;
 import me.bedwarshurts.mmextension.mechanics.OnSignalMechanic;
+import me.bedwarshurts.mmextension.mechanics.particle.VerticalSlashMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.RingShapeMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.SphereShapeMechanic;
 import me.bedwarshurts.mmextension.targeters.ConnectedBlocksTargeter;
@@ -110,6 +111,9 @@ public class MythicMobsHook implements Listener {
                 break;
             case "list:index":
                 event.register(new IndexMechanic(event.getConfig()));
+                break;
+            case "verticalslash":
+                event.register(new VerticalSlashMechanic(event.getConfig()));
                 break;
             default: break;
         }
