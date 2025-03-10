@@ -86,6 +86,10 @@ public class SkillUtils {
     }
 
     public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, double speed) {
+        spawnParticle(audience, particleType, particleLocation, dx, dy, dz, speed, 0);
+    }
+
+    public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, double speed, int count) {
         if (Bukkit.getWorld(particleLocation.getWorld().getKey()) == null) return;
 
         if (audience == null) {
@@ -93,7 +97,7 @@ public class SkillUtils {
             return;
         }
         for (Player player : audience) {
-            player.spawnParticle(particleType, particleLocation, 0, dx, dy, dz, speed);
+            player.spawnParticle(particleType, particleLocation, count, dx, dy, dz, speed);
         }
     }
 

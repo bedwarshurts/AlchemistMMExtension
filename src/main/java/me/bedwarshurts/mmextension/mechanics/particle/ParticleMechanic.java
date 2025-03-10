@@ -30,10 +30,10 @@ public abstract class ParticleMechanic {
         this.dirMultiplier = PlaceholderDouble.of(mlc.getString(new String[]{"dirMultiplier", "dirMult"}, "1.0"));
         this.shiftRadius = PlaceholderDouble.of(mlc.getString(new String[]{"shiftRadius", "shift"}, "0.0"));
         this.variance = PlaceholderDouble.of(mlc.getString(new String[]{"variance", "v"}, "0.0"));
-        String[] directionArgs = mlc.getString(new String[]{"direction", "dir"}, "1,1,1").split(",");
-        this.speed = PlaceholderDouble.of(mlc.getString(new String[]{"speed", "s"}, "0.1"));
+        this.speed = PlaceholderDouble.of(mlc.getString(new String[]{"speed", "s"}, "1"));
         this.skillName = PlaceholderString.of(mlc.getString(new String[]{"skill", "onPoint", "oP"}, ""));
         this.delayMs = PlaceholderDouble.of(mlc.getString(new String[]{"interval", "i"}, "0"));
+        String[] directionArgs = mlc.getString(new String[]{"direction", "dir"}, "0,0,0").split(",");
         this.direction = List.of(
                 PlaceholderDouble.of(directionArgs[0]),
                 PlaceholderDouble.of(directionArgs[1]),
