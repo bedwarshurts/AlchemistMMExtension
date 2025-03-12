@@ -23,10 +23,10 @@ public class ChestGUIListener implements Listener {
         SkillMetadata data = ChestGUIMechanic.INVENTORY_METADATA.get(inv);
         if (event.getRawSlot() < 0 || event.getCurrentItem() == null) return;
 
-        ChestGUISlot[] slotsArray = ChestGUIMechanic.INVENTORY_SLOTS.get(inv);
-        if (event.getRawSlot() >= slotsArray.length) return;
+        ChestGUISlot[] slots = ChestGUIMechanic.INVENTORY_SLOTS.get(inv);
+        if (event.getRawSlot() >= slots.length) return;
 
-        ChestGUISlot guiSlot = slotsArray[event.getRawSlot()];
+        ChestGUISlot guiSlot = slots[event.getRawSlot()];
         if (guiSlot == null) return;
 
         if (!guiSlot.canInteract()) {
