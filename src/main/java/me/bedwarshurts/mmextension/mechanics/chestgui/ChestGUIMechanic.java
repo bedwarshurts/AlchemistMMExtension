@@ -32,8 +32,8 @@ public class ChestGUIMechanic implements INoTargetSkill {
     private final int slots;
     private final String rawContents;
 
-    public static final Map<Inventory, ChestGUISlot[]> INVENTORY_SLOTS = new HashMap<>();
-    public static final Map<Inventory, SkillMetadata> INVENTORY_METADATA = new HashMap<>();
+    public static final Map<Inventory, ChestGUISlot[]> INVENTORY_SLOTS = new WeakHashMap<>();
+    public static final Map<Inventory, SkillMetadata> INVENTORY_METADATA = new WeakHashMap<>();
 
     public ChestGUIMechanic(MythicLineConfig mlc) {
         this.title = mlc.getString("title", "Alchemist Chest GUI");

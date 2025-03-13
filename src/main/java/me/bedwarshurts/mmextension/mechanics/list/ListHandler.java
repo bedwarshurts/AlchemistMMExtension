@@ -1,15 +1,15 @@
 package me.bedwarshurts.mmextension.mechanics.list;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 public class ListHandler<T> {
     private final String name;
     private final ArrayList<T> registry = new ArrayList<>();
     private final VariableTypes type;
 
-    private static final Map<String, ListHandler<?>> HANDLERS = new HashMap<>();
+    private static final Map<String, ListHandler<?>> HANDLERS = new WeakHashMap<>();
 
     public ListHandler(String name, VariableTypes type) {
         this.name = name;
