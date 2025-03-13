@@ -7,6 +7,7 @@ import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.mechanics.*;
+import me.bedwarshurts.mmextension.mechanics.canceldeath.CancelPlayerDeathMechanic;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.HotbarSnapshotMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.RandomizeHotbarMechanic;
