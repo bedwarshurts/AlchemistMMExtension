@@ -19,14 +19,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @MythicMechanic(author = "bedwarshurts", name = "whileloop", aliases = {"while"}, description = "Executes a skill sequence in a while loop")
 public class WhileLoopMechanic implements INoTargetSkill {
-
-    private static final Map<UUID, BukkitTask> activeLoops = new ConcurrentHashMap<>();
     private final String condition;
     private final String skillName;
     private final PlaceholderDouble delayMs;
     private final String onStart;
     private final String onEnd;
     private final UUID loopId = UUID.randomUUID();
+
+    private static final Map<UUID, BukkitTask> activeLoops = new ConcurrentHashMap<>();
 
     public WhileLoopMechanic(MythicLineConfig mlc) {
         this.condition = mlc.getString("condition", "");
@@ -43,7 +43,6 @@ public class WhileLoopMechanic implements INoTargetSkill {
         SkillUtils.castSkill(data, onStart);
 
         long tickInterval = Math.max(1, (long) (delayMs.get(data) / 50));
-
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
