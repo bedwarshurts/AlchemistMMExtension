@@ -1,6 +1,5 @@
 package me.bedwarshurts.mmextension;
 
-import io.lumine.mythic.api.mobs.MythicMob;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.ChestGUIListener;
@@ -8,6 +7,7 @@ import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
 import me.bedwarshurts.mmextension.listeners.HotbarSnapshotListener;
 import me.bedwarshurts.mmextension.listeners.OnSignalListener;
 import me.bedwarshurts.mmextension.listeners.PlayerChangeSlotListener;
+import me.bedwarshurts.mmextension.listeners.PlayerDeathListener;
 import me.bedwarshurts.mmextension.listeners.PlayerSkillCastListener;
 import me.bedwarshurts.mmextension.listeners.TnTExplosionListener;
 import org.bukkit.Bukkit;
@@ -55,6 +55,7 @@ public class AlchemistMMExtension extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new OnSignalListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerChangeSlotListener(), this);
         Bukkit.getPluginManager().registerEvents(new HotbarSnapshotListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(), this);
 
         new PlaceholderAPIHook().register();
 
