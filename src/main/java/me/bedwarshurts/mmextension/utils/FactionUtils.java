@@ -11,7 +11,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class FactionUtils {
 
-
     private static String getFaction(Entity entity) {
         ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
         return mob != null && mob.hasFaction() ? mob.getFaction() : null;
