@@ -13,6 +13,7 @@ import me.bedwarshurts.mmextension.mechanics.inventory.HotbarSnapshotMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.RandomizeHotbarMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.RestoreHotbarMechanic;
 import me.bedwarshurts.mmextension.mechanics.list.AddMechanic;
+import me.bedwarshurts.mmextension.mechanics.list.CreateVariablesMechanic;
 import me.bedwarshurts.mmextension.mechanics.list.GetMechanic;
 import me.bedwarshurts.mmextension.mechanics.list.IndexMechanic;
 import me.bedwarshurts.mmextension.mechanics.list.ListMechanic;
@@ -112,6 +113,9 @@ public class MythicMobsHook implements Listener {
                 break;
             case "list:index":
                 event.register(new IndexMechanic(event.getConfig()));
+                break;
+            case "list:createvariables":
+                event.register(new CreateVariablesMechanic(event.getConfig()));
                 break;
             case "verticalslash":
                 event.register(new VerticalSlashMechanic(event.getConfig()));
