@@ -25,20 +25,12 @@ public class IndexMechanic implements INoTargetSkill {
         ListHandler<?> listHandler = ListHandler.getListHandler(name);
         if (listHandler == null) return SkillResult.INVALID_CONFIG;
 
-        Object parsedValue;
-        switch (listHandler.getType()) {
-            case STRING:
-                parsedValue = value;
-                break;
-            case INTEGER:
-                parsedValue = Integer.parseInt(value);
-                break;
-            case DOUBLE:
-                parsedValue = Double.parseDouble(value);
-                break;
-            default:
-                return SkillResult.INVALID_CONFIG;
-        }
+        Object parsedValue = switch (listHandler.getType()) {
+            case STRING -> value;
+            case INTEGER -> Integer.parseInt(value);
+            case DOUBLE -> Double.parseDouble(value);
+        };
+        if (parsedValue == null) return SkillResult.INVALID_CONFIG;
 
         int index = last
                 ? listHandler.getRegistry().lastIndexOf(parsedValue)
