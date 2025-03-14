@@ -21,7 +21,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,8 +35,8 @@ public class ChestGUIMechanic implements INoTargetSkill {
     private final int slots;
     private final String rawContents;
 
-    public static final Map<Inventory, ChestGUISlot[]> INVENTORY_SLOTS = new WeakHashMap<>();
-    public static final Map<Inventory, SkillMetadata> INVENTORY_METADATA = new WeakHashMap<>();
+    public static final Map<Inventory, ChestGUISlot[]> INVENTORY_SLOTS = new HashMap<>();
+    public static final Map<Inventory, SkillMetadata> INVENTORY_METADATA = new HashMap<>();
 
     public ChestGUIMechanic(MythicLineConfig mlc) {
         this.title = mlc.getString("title", "Alchemist Chest GUI");
