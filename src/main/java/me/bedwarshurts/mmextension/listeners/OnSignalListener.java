@@ -26,9 +26,9 @@ public class OnSignalListener implements Listener {
         SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, event.getProfile(), BukkitAdapter.adapt(eventPlayer));
 
         for (String skillName : skills) {
-            if (data.getEntityTargets() == null) {
-                data.setEntityTarget(event.getProfile().getEntity());
-            }
+            if (!(data.getEntityTargets() == null)) continue;
+
+            data.setEntityTarget(event.getProfile().getEntity());
             SkillUtils.castSkill(data, skillName);
         }
     }
