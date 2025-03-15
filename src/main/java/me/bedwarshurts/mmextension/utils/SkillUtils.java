@@ -9,6 +9,7 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.skills.Skill;
 import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.bukkit.adapters.BukkitParticle;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.players.PlayerData;
@@ -97,7 +98,7 @@ public class SkillUtils {
             return;
         }
         for (Player player : audience) {
-            player.spawnParticle(particleType, particleLocation, count, dx, dy, dz, speed);
+            player.spawnParticle(particleType, particleLocation, count, dx, dy, dz, speed, null, true);
         }
     }
 
