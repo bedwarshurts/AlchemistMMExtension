@@ -1,5 +1,6 @@
 package me.bedwarshurts.mmextension;
 
+import me.bedwarshurts.mmextension.commands.PlayerSpawnMythicMobCommand;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.ChestGUIListener;
@@ -10,9 +11,12 @@ import me.bedwarshurts.mmextension.listeners.PlayerChangeSlotListener;
 import me.bedwarshurts.mmextension.listeners.PlayerDeathListener;
 import me.bedwarshurts.mmextension.listeners.PlayerSkillCastListener;
 import me.bedwarshurts.mmextension.listeners.TnTExplosionListener;
+import me.bedwarshurts.mmextension.listeners.UnknownCommandListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mariuszgromada.math.mxparser.License;
+
+import java.util.Objects;
 
 public class AlchemistMMExtension extends JavaPlugin {
     public static AlchemistMMExtension AlchemistMMExtension;
@@ -56,6 +60,9 @@ public class AlchemistMMExtension extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerChangeSlotListener(), this);
         Bukkit.getPluginManager().registerEvents(new HotbarSnapshotListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new UnknownCommandListener(), this);
+
+        Objects.requireNonNull(this.getCommand("playerspawnmythicmob")).setExecutor(new PlayerSpawnMythicMobCommand());
 
         new PlaceholderAPIHook().register();
 
