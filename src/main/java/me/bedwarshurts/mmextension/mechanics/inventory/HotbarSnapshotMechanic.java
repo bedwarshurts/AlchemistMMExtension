@@ -81,19 +81,8 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
             activeTemporaryItems.put(player, replacementItems);
 
             Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()), () -> {
-                try {
-                    if (!player.isOnline()) return;
-                    if (!mythicPlayer.getVariables().has("originalHotbar")) return;
-                    if (!activeTemporaryItems.containsKey(player)) return;
-
-                    ItemStack[] originalHotbar = InventorySerializer.fromBase64(mythicPlayer.getVariables().get("originalHotbar").toString());
-                    for (int slot = 0; slot < 9; slot++) {
-                        player.getInventory().setItem(slot, originalHotbar[slot]);
-                    }
-                    activeTemporaryItems.remove(player);
-                    mythicPlayer.getVariables().remove("originalHotbar");
-                } catch (Exception ignored) {
-                }
+                if (!player.isOnline()) return;
+                RestoreHotbarMechanic.restoreHotbar(player);
             }, durationTicks);
         }
         return success ? SkillResult.SUCCESS : SkillResult.INVALID_TARGET;

@@ -7,6 +7,7 @@ import io.lumine.mythic.core.skills.SkillMetadataImpl;
 import io.lumine.mythic.core.skills.SkillTriggers;
 import me.bedwarshurts.mmextension.mechanics.inventory.HotbarSnapshotMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.InventorySerializer;
+import me.bedwarshurts.mmextension.mechanics.inventory.RestoreHotbarMechanic;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -29,22 +30,7 @@ public class HotbarSnapshotListener implements Listener {
         Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()), () -> {
             if (!player.isOnline()) return;
 
-            PlayerData mythicPlayer = SkillUtils.getMythicPlayer(player);
-            if (mythicPlayer == null) return;
-
-            if (!mythicPlayer.getVariables().has("originalHotbar")) return;
-
-            try {
-                ItemStack[] originalHotbar = InventorySerializer.fromBase64(mythicPlayer.getVariables().get("originalHotbar").toString());
-
-                for (int slot = 0; slot < 9; slot++) {
-                    player.getInventory().setItem(slot, originalHotbar[slot]);
-                }
-
-                HotbarSnapshotMechanic.activeTemporaryItems.remove(player);
-                mythicPlayer.getVariables().remove("originalHotbar");
-            } catch (Exception ignored) {
-            }
+            RestoreHotbarMechanic.restoreHotbar(player);
         }, 20);
     }
 
