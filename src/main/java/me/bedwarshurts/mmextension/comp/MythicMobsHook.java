@@ -3,6 +3,7 @@ package me.bedwarshurts.mmextension.comp;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
+import me.bedwarshurts.mmextension.conditions.OxygenLevelCondition;
 import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
@@ -162,6 +163,9 @@ public class MythicMobsHook implements Listener {
                 break;
             case "isinfaction":
                 event.register(new IsInFactionCondition(event.getConfig()));
+                break;
+            case "oxygenlevel":
+                event.register(new OxygenLevelCondition(event.getConfig()));
                 break;
             default: break;
         }
