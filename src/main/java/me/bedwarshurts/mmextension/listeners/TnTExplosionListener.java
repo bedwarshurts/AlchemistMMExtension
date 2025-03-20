@@ -14,9 +14,10 @@ public class TnTExplosionListener implements Listener {
     public void onEntityExplode(EntityExplodeEvent event) {
         if (!(event.getEntity() instanceof TNTPrimed tnt && tnt.hasMetadata("noBreak"))) return;
         for (MetadataValue value : tnt.getMetadata("noBreak")) {
-            if (!value.asBoolean()) continue;
-            event.setCancelled(true);
-            break;
+            if (value.asBoolean()) {
+                event.setCancelled(true);
+                break;
+            }
         }
     }
 
@@ -25,9 +26,10 @@ public class TnTExplosionListener implements Listener {
         Entity damager = event.getDamager();
         if (!(damager instanceof TNTPrimed tnt && tnt.hasMetadata("noDamage"))) return;
         for (MetadataValue value : tnt.getMetadata("noDamage")) {
-            if (!value.asBoolean()) continue;
-            event.setCancelled(true);
-            break;
+            if (value.asBoolean()) {
+                event.setCancelled(true);
+                break;
+            }
         }
     }
 }
