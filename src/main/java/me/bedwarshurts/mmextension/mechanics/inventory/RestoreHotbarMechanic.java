@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 @MythicMechanic(author = "bedwarshurts", name = "restorehotbar", aliases = {}, description = "Restores a player's hotbar to its original state")
-public class RestoreHotbarMechanic implements INoTargetSkill {
+public final class RestoreHotbarMechanic implements INoTargetSkill {
 
     @Override
     public SkillResult cast(SkillMetadata data) {

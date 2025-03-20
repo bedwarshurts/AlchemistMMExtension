@@ -13,7 +13,7 @@ import java.util.Base64;
 public class InventorySerializer {
 
     private InventorySerializer() {
-        throw new RuntimeException("You really shouldnt initialise this class");
+        throw new UnsupportedOperationException("You really shouldnt initialise this class");
     }
 
     public static String toBase64(ItemStack[] items) throws IOException {

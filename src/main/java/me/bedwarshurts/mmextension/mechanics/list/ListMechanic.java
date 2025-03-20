@@ -7,7 +7,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 @MythicMechanic(author = "bedwarshurts", name = "list", aliases = {}, description = "Creates a list")
-public class ListMechanic implements INoTargetSkill {
+public final class ListMechanic implements INoTargetSkill {
     private final String name;
     private final String type;
 

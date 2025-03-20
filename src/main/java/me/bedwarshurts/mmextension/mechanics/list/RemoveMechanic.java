@@ -7,7 +7,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 @MythicMechanic(author = "bedwarshurts", name = "remove", aliases = {}, description = "Removes a value from a list")
-public class RemoveMechanic implements INoTargetSkill {
+public final class RemoveMechanic implements INoTargetSkill {
     private final String name;
     private final int index;
 

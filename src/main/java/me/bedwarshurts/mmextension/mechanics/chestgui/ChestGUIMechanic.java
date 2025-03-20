@@ -29,7 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MythicMechanic(author = "bedwarshurts", name = "chestgui", aliases = {}, description = "Opens a custom Chest GUI for target players")
-public class ChestGUIMechanic implements INoTargetSkill {
+public final class ChestGUIMechanic implements INoTargetSkill {
 
     private final String title;
     private final int slots;

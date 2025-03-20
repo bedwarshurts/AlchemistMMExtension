@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class SkillUtils {
 
     private SkillUtils() {
-        throw new RuntimeException("You really shouldnt initialise this class");
+        throw new UnsupportedOperationException("You really shouldnt initialise this class");
     }
 
     public static void openChest(Block block, boolean open, List<Player> players) {
