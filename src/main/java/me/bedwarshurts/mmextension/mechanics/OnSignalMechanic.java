@@ -8,7 +8,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 
 import java.util.*;
 
-public class OnSignalMechanic implements INoTargetSkill {
+public final class OnSignalMechanic implements INoTargetSkill {
     private static final Map<String, Long> ACTIVE_SIGNALS = new HashMap<>();
     private final String skill;
     private final String signal;

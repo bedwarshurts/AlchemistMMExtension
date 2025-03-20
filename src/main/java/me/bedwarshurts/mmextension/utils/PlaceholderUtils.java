@@ -12,6 +12,10 @@ import java.util.regex.Pattern;
 public class PlaceholderUtils {
     private static final Pattern placeholderPattern = Pattern.compile("<(world|caster|target|skill)(\\.var)?\\.[a-zA-Z0-9]+>");
 
+    private PlaceholderUtils() {
+        throw new RuntimeException("You really shouldnt initialise this class");
+    }
+
     public static String parseStringPlaceholders(String text, SkillMetadata skillMetadata) {
         boolean found;
         do {

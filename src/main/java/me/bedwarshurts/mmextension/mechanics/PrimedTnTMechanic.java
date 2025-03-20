@@ -12,7 +12,7 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "primedtnt", aliases = {}, description = "Spawns a primed TNT at a specific location with break and damage options")
-public class PrimedTnTMechanic implements ITargetedLocationSkill {
+public final class PrimedTnTMechanic implements ITargetedLocationSkill {
 
     private final boolean breakBlocks;
     private final int fuseTicks;

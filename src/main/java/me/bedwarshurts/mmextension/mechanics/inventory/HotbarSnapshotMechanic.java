@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @MythicMechanic(author = "bedwarshurts", name = "hotbarsnapshot", aliases = {}, description = "Saves and replaces a player's hotbar for a duration")
-public class HotbarSnapshotMechanic implements INoTargetSkill {
+public final class HotbarSnapshotMechanic implements INoTargetSkill {
 
     private final TemporaryInventoryItem[] replacementItems;
     private final int durationTicks;

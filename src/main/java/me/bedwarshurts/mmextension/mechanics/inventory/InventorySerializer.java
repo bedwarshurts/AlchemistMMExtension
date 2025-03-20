@@ -12,6 +12,10 @@ import java.util.Base64;
 @SuppressWarnings("deprecation")
 public class InventorySerializer {
 
+    private InventorySerializer() {
+        throw new RuntimeException("You really shouldnt initialise this class");
+    }
+
     public static String toBase64(ItemStack[] items) throws IOException {
         ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
         try (BukkitObjectOutputStream out = new BukkitObjectOutputStream(bytesOut)) {

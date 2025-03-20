@@ -8,7 +8,7 @@ import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.core.utils.annotations.MythicCondition;
 
 @MythicCondition(author = "bedwarshurts", name = "isinfaction", aliases = {}, description = "Check if the entity is in any of the specified factions")
-public class IsInFactionCondition implements IEntityCondition {
+public final class IsInFactionCondition implements IEntityCondition {
     private final String[] factions;
 
     public IsInFactionCondition(MythicLineConfig mlc) {

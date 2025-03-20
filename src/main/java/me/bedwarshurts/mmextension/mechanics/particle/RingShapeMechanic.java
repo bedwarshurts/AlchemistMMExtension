@@ -5,6 +5,7 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillResult;
+import io.lumine.mythic.api.skills.ThreadSafetyLevel;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
@@ -21,7 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @MythicMechanic(author = "bedwarshurts", name = "ringshape", aliases = {}, description = "Spawns particles in a ring shape and casts a skill at each particle location")
-public class RingShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill {
+public final class RingShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill {
     private final List<PlaceholderDouble> rotation;
     private final List<PlaceholderDouble> rotMultiplier;
     private final PlaceholderInt density;

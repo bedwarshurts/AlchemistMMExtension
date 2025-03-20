@@ -23,7 +23,7 @@ import java.util.UUID;
 import java.util.Objects;
 
 @MythicTargeter(author = "bedwarshurts", name = "targetpredictedlocation", aliases = {"TPL"}, description = "Predicts the location of the target")
-public class LocationPredictingTargeter implements ILocationTargeter {
+public final class LocationPredictingTargeter implements ILocationTargeter {
 
     private final PlaceholderDouble predictionTimeSeconds;
     private final double yOffset;

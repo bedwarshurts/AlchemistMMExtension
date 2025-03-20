@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import static me.bedwarshurts.mmextension.AlchemistMMExtension.AlchemistMMExtension;
 
 @MythicMechanic(author = "bedwarshurts", name = "openchest", aliases = {}, description = "Opens a chest by mimicking a player opening it")
-public class OpenChestMechanic implements INoTargetSkill {
+public final class OpenChestMechanic implements INoTargetSkill {
     private final String action;
 
     public OpenChestMechanic(MythicLineConfig mlc) {

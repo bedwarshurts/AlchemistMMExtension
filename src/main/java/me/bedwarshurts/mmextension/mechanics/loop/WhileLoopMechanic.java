@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @MythicMechanic(author = "bedwarshurts", name = "whileloop", aliases = {"while"}, description = "Executes a skill sequence in a while loop")
-public class WhileLoopMechanic implements INoTargetSkill {
+public final class WhileLoopMechanic implements INoTargetSkill {
     private final String condition;
     private final String skillName;
     private final PlaceholderDouble delayMs;

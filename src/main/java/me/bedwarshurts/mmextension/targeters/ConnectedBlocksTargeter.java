@@ -22,7 +22,7 @@ import java.util.Queue;
 import java.util.Set;
 
 @MythicTargeter(author = "bedwarshurts", name = "targetconnectedblocks", aliases = {"TCB"}, description = "Targets all connected blocks to a location, use with extreme caution")
-public class ConnectedBlocksTargeter implements ILocationTargeter {
+public final class ConnectedBlocksTargeter implements ILocationTargeter {
 
     private final Set<Material> excludedMaterials;
     private final List<PlaceholderDouble> location;

@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @MythicMechanic(author = "bedwarshurts", name = "break", aliases = {}, description = "Breaks a while loop")
-public class BreakMechanic implements INoTargetSkill {
+public final class BreakMechanic implements INoTargetSkill {
 
     @Override
     public SkillResult cast(SkillMetadata data) {

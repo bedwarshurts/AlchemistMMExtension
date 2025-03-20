@@ -8,7 +8,7 @@ import io.lumine.mythic.core.utils.annotations.MythicCondition;
 import org.bukkit.entity.LivingEntity;
 
 @MythicCondition(author = "bedwarshurts", name = "oxygenlevel", aliases = {}, description = "Check the oxygen level of the caster")
-public class OxygenLevelCondition implements ISkillMetaCondition {
+public final class OxygenLevelCondition implements ISkillMetaCondition {
     private final PlaceholderString airTicks;
 
     public OxygenLevelCondition(MythicLineConfig mlc) {
