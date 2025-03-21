@@ -87,7 +87,7 @@ This mechanic loops through the locations returned by a targeter and executes th
 ### ChestGUIMechanic
 
 ```
-- chestgui{contents=; title=; slots=;}
+- chestgui{contents=stone[name=,lore=,slot=,enchanted=,interact=,right_click_action=skill:skillName],mmoitem:ITEM_CATEGORY:ITEM_NAME[]; title=; slots=;}
 ```
 
 ### OnSignalMechanic (Aura)
@@ -143,6 +143,12 @@ This introduces a new variable type a list, currently the types supported are ST
 
 ```
 ?stringcontains{s=;c=;}
+```
+
+### OxygenLevelCondition
+
+```
+?stringcontains{air=;}
 ```
 
 ### YLevelCondition
