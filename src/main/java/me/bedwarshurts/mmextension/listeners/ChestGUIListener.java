@@ -1,6 +1,7 @@
 package me.bedwarshurts.mmextension.listeners;
 
 import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUISlot;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
@@ -58,6 +59,7 @@ public class ChestGUIListener implements Listener {
             ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
             Bukkit.dispatchCommand(console, execute);
         } else if ("skill".equalsIgnoreCase(type)) {
+            data.setTrigger(BukkitAdapter.adapt(player));
             SkillUtils.castSkill(data, execute);
         } else {
             player.sendMessage(NamedTextColor.GRAY + "[SYS] " + NamedTextColor.WHITE
