@@ -5,7 +5,6 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillResult;
-import io.lumine.mythic.api.skills.ThreadSafetyLevel;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
@@ -56,7 +55,7 @@ public final class RingShapeMechanic extends ParticleMechanic implements ITarget
         List<Double> currentRotMultiplier = rotMultiplier.stream().map(r -> Math.toRadians(r.get(data))).toList();
         final int densityValue = density.get(data);
 
-        final Set<Player> audience = SkillUtils.getAudienceTargets(data, audienceTargeter);
+        final Set<Player> audience = SkillUtils.getAudienceTargets(data, this.audience);
 
         final Vector offset;
         if (dirOverride != null) {

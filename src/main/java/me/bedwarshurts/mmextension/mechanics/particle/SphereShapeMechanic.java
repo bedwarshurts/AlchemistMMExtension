@@ -33,7 +33,7 @@ public final class SphereShapeMechanic extends ParticleMechanic implements ITarg
         final double[] newRadius = {radius.get(data)};
         List<Double> newDirection = direction.stream().map(d -> d.get(data)).collect(Collectors.toList());
 
-        final Set<Player> audience = SkillUtils.getAudienceTargets(data, audienceTargeter);
+        final Set<Player> audience = SkillUtils.getAudienceTargets(data, this.audience);
 
         final Vector offset;
         if (dirOverride != null) {

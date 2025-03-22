@@ -47,7 +47,7 @@ public final class VerticalSlashMechanic extends ParticleMechanic implements ITa
                                 .add(arcUp.clone().multiply(sin * radius));
                         Location particleLocation = center.clone().add(offset);
 
-                        SkillUtils.spawnParticle(SkillUtils.getAudienceTargets(data, audienceTargeter), particleType,
+                        SkillUtils.spawnParticle(SkillUtils.getAudienceTargets(data, audience), particleType,
                                 particleLocation, 0, 0, 0, speed.get(data), particleCount.get(data));
                         SkillUtils.castSkillAtPoint(data, particleLocation, skillName.get(data));
                     },

@@ -20,7 +20,7 @@ public abstract class ParticleMechanic {
     protected final PlaceholderDouble speed;
     protected final PlaceholderString skillName;
     protected final PlaceholderDouble delayMs;
-    protected final TargeterAudience audienceTargeter;
+    protected final TargeterAudience audience;
     protected final List<PlaceholderDouble> dirOverride;
 
     public ParticleMechanic(MythicLineConfig mlc) {
@@ -40,7 +40,7 @@ public abstract class ParticleMechanic {
                 PlaceholderDouble.of(directionArgs[2])
         );
         String audienceTargeterString = mlc.getString("audience", null);
-        this.audienceTargeter = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
+        this.audience = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
         String[] dirOverrideArgs = mlc.getString(new String[]{"dirOverride", "dirO"}, "null").split(",");
         this.dirOverride = dirOverrideArgs.length == 3 ? List.of(
                 PlaceholderDouble.of(dirOverrideArgs[0]),

@@ -9,7 +9,6 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.skills.Skill;
 import io.lumine.mythic.api.skills.SkillMetadata;
-import io.lumine.mythic.bukkit.adapters.BukkitParticle;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.players.PlayerData;
@@ -56,7 +55,7 @@ public class SkillUtils {
     }
 
     public static void castSkill(SkillMetadata data, String skillName) {
-       castSkill(MythicBukkit.inst().getSkillManager(), data, skillName);
+        castSkill(MythicBukkit.inst().getSkillManager(), data, skillName);
     }
 
     public static void castSkill(SkillExecutor manager, SkillMetadata data, String skillName) {
@@ -111,7 +110,6 @@ public class SkillUtils {
         double y = vector.getY() * Math.cos(xRotation) - vector.getZ() * Math.sin(xRotation);
         double z = vector.getY() * Math.sin(xRotation) + vector.getZ() * Math.cos(xRotation);
         vector.setY(y).setZ(z);
-
         // Rotate around y-axis
         double x = vector.getX() * Math.cos(yRotation) + vector.getZ() * Math.sin(yRotation);
         z = vector.getZ() * Math.cos(yRotation) - vector.getX() * Math.sin(yRotation);
@@ -124,10 +122,13 @@ public class SkillUtils {
     }
 
     public static Set<Player> getAudienceTargets(SkillMetadata data, TargeterAudience audienceTargeter) {
-        if (audienceTargeter != null) {
-            return audienceTargeter.get(data, data.getCaster().getEntity()).stream().filter(Objects::nonNull).map(AbstractEntity::getBukkitEntity).filter(e -> e instanceof Player).map(e -> (Player) e).collect(Collectors.toSet());
-        }
-        return null;
+        if (audienceTargeter == null) return null;
+
+        return audienceTargeter.get(data, data.getCaster().getEntity()).stream()
+                .filter(Objects::nonNull).map(AbstractEntity::getBukkitEntity)
+                .filter(e -> e instanceof Player)
+                .map(e -> (Player) e)
+                .collect(Collectors.toSet());
     }
 
     public static void rotateVectorToDirection(Vector vector, Vector direction) {

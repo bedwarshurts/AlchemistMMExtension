@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@MythicMechanic(author = "bedwarshurts", name = "cancelplayerdeath", aliases = {}, description = "Cancels the player's next death if activated")
+@MythicMechanic(author = "bedwarshurts", name = "cancelplayerdeath", aliases = {}, description = "Cancels the player's next death")
 public final class CancelPlayerDeathMechanic implements ITargetedEntitySkill {
     private final double healthPercentage;
     private final String skillName;
