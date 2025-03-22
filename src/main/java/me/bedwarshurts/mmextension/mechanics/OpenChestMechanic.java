@@ -36,11 +36,7 @@ public final class OpenChestMechanic implements ITargetedLocationSkill {
         Block block = location.getBlock();
 
         if (block.getType() == Material.CHEST) {
-            List<Player> players = SkillUtils.getAudienceTargets(data, audience).stream()
-                    .map(BukkitAdapter::adapt)
-                    .filter(entity -> entity instanceof Player)
-                    .map(entity -> (Player) entity)
-                    .collect(Collectors.toList());
+            List<Player> players = SkillUtils.getAudienceTargets(data, audience).stream().toList();
 
             return switch (action) {
                 case "open" -> {
