@@ -121,6 +121,9 @@ public class MythicMobsHook implements Listener {
             case "verticalslash":
                 event.register(new VerticalSlashMechanic(event.getConfig()));
                 break;
+            case "hidechat":
+                event.register(new HideChatMechanic(event.getConfig()));
+                break;
             default: break;
         }
     }

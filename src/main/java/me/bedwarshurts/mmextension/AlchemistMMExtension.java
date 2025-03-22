@@ -3,6 +3,7 @@ package me.bedwarshurts.mmextension;
 import me.bedwarshurts.mmextension.commands.PlayerSpawnMythicMobCommand;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
+import me.bedwarshurts.mmextension.listeners.ChatListener;
 import me.bedwarshurts.mmextension.listeners.ChestGUIListener;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
 import me.bedwarshurts.mmextension.listeners.HotbarSnapshotListener;
@@ -59,6 +60,7 @@ public class AlchemistMMExtension extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerChangeSlotListener(), this);
         Bukkit.getPluginManager().registerEvents(new HotbarSnapshotListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
 
         Objects.requireNonNull(this.getCommand("playerspawnmythicmob")).setExecutor(new PlayerSpawnMythicMobCommand());
 
