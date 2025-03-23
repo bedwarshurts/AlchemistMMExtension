@@ -6,6 +6,7 @@ import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.utils.ItemUtils;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.Indyuce.mmoitems.MMOItems;
@@ -67,14 +68,14 @@ public final class ChestGUIMechanic implements INoTargetSkill {
                 String bracketContent = itemString
                         .substring(itemString.indexOf('[') + 1)
                         .replace("]", "");
-                Map<String, String> infoMap = parseBracketContent(bracketContent);
+                Map<String, String> infoMap = ItemUtils.parse(bracketContent);
 
                 String parsedName = PlaceholderAPI.setPlaceholders(player,
                         PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("name", ""), data));
                 String parsedLore = PlaceholderAPI.setPlaceholders(player,
                         PlaceholderUtils.parseStringPlaceholders(infoMap.getOrDefault("lore", ""), data));
 
-                ItemStack stack = getItemFromConfig(itemName);
+                ItemStack stack = ItemUtils.getItemStack(itemName);
                 ItemMeta meta = stack.getItemMeta();
 
                 if (!parsedName.isEmpty()) {
@@ -108,18 +109,6 @@ public final class ChestGUIMechanic implements INoTargetSkill {
         return SkillResult.SUCCESS;
     }
 
-    private Map<String, String> parseBracketContent(String content) {
-        Map<String, String> map = new HashMap<>();
-        Pattern pattern = Pattern.compile("(\\w+)=([^,\\]]*)");
-        Matcher matcher = pattern.matcher(content);
-        while (matcher.find()) {
-            String key = matcher.group(1).trim();
-            String value = matcher.group(2).trim().replaceAll("^\"|\"$", "");
-            map.put(key.toLowerCase(), value);
-        }
-        return map;
-    }
-
     private Map<String, String> extractActions(Map<String, String> infoMap) {
         Map<String, String> actions = new HashMap<>();
         if (infoMap.containsKey("right_click_action")) {
@@ -132,19 +121,5 @@ public final class ChestGUIMechanic implements INoTargetSkill {
             actions.put("interact", infoMap.get("interact"));
         }
         return actions;
-    }
-
-    private ItemStack getItemFromConfig(String itemString) {
-        if (itemString.toLowerCase().startsWith("mmoitem:")) {
-            String[] parts = itemString.split(":");
-            if (parts.length == 3) {
-                MMOItem mmoItem = MMOItems.plugin.getMMOItem(Type.get(parts[1]), parts[2]);
-                if (mmoItem != null) {
-                    return mmoItem.newBuilder().build();
-                }
-            }
-        }
-        Material mat = Material.matchMaterial(itemString);
-        return new ItemStack(mat != null ? mat : Material.BARRIER);
     }
 }
