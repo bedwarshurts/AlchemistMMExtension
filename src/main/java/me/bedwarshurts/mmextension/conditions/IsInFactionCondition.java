@@ -16,8 +16,8 @@ public final class IsInFactionCondition implements IEntityCondition {
     }
 
     @Override
-    public boolean check(AbstractEntity abstractEntity) {
-        ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(abstractEntity.getBukkitEntity());
+    public boolean check(AbstractEntity target) {
+        ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(target.getBukkitEntity());
         if (mob == null || !mob.hasFaction()) return false;
 
         String[] mobFactions = mob.getFaction().toLowerCase().split(",");
