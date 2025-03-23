@@ -7,10 +7,12 @@ import me.bedwarshurts.mmextension.conditions.OxygenLevelCondition;
 import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
+import me.bedwarshurts.mmextension.conditions.mythicdungeon.IsInDungeonCondition;
 import me.bedwarshurts.mmextension.mechanics.*;
 import me.bedwarshurts.mmextension.mechanics.canceldeath.CancelPlayerDeathMechanic;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.HotbarSnapshotMechanic;
+import me.bedwarshurts.mmextension.mechanics.inventory.PlaceToInventoryMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.RandomizeHotbarMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.RestoreHotbarMechanic;
 import me.bedwarshurts.mmextension.mechanics.list.AddMechanic;
@@ -124,6 +126,9 @@ public class MythicMobsHook implements Listener {
             case "hidechat":
                 event.register(new HideChatMechanic(event.getConfig()));
                 break;
+            case "placetoinventory":
+                event.register(new PlaceToInventoryMechanic(event.getConfig()));
+                break;
             default: break;
         }
     }
@@ -169,6 +174,9 @@ public class MythicMobsHook implements Listener {
                 break;
             case "oxygenlevel":
                 event.register(new OxygenLevelCondition(event.getConfig()));
+                break;
+            case "isindungeon":
+                event.register(new IsInDungeonCondition());
                 break;
             default: break;
         }
