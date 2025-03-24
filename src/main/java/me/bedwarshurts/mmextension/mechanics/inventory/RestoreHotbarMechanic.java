@@ -28,8 +28,6 @@ public final class RestoreHotbarMechanic implements INoTargetSkill {
     }
 
     public static boolean restoreHotbar(Player player) {
-        if (!HotbarSnapshotMechanic.activeTemporaryItems.containsKey(player)) return false;
-
         PlayerData mythicPlayer = SkillUtils.getMythicPlayer(player);
         if (mythicPlayer == null) return false;
         if (!mythicPlayer.getVariables().has("originalHotbar")) return false;
@@ -39,7 +37,6 @@ public final class RestoreHotbarMechanic implements INoTargetSkill {
             for (int slot = 0; slot < 9; slot++) {
                 player.getInventory().setItem(slot, originalHotbar[slot]);
             }
-            HotbarSnapshotMechanic.activeTemporaryItems.remove(player);
             mythicPlayer.getVariables().remove("originalHotbar");
             return true;
         } catch (Exception ignored) {

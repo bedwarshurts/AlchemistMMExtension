@@ -35,16 +35,6 @@ public final class RandomizeHotbarMechanic implements INoTargetSkill {
             }
             System.arraycopy(shuffledHotbar, 0, contents, 0, 9);
             player.getInventory().setContents(contents);
-
-            // Shuffle temporary items if available to support HotbarSnapshotMechanic
-            if (HotbarSnapshotMechanic.activeTemporaryItems.containsKey(player)) {
-                TemporaryInventoryItem[] tempItems = HotbarSnapshotMechanic.activeTemporaryItems.get(player);
-                TemporaryInventoryItem[] shuffledTemp = new TemporaryInventoryItem[9];
-                for (int i = 0; i < 9; i++) {
-                    shuffledTemp[i] = tempItems[slots.get(i)];
-                }
-                HotbarSnapshotMechanic.activeTemporaryItems.put(player, shuffledTemp);
-            }
         }
         return success ? SkillResult.SUCCESS : SkillResult.INVALID_TARGET;
     }
