@@ -9,11 +9,15 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.players.PlayerData;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.utils.ItemUtils;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -25,37 +29,41 @@ import java.util.regex.Pattern;
 @MythicMechanic(author = "bedwarshurts", name = "hotbarsnapshot", aliases = {}, description = "Saves and replaces a player's hotbar for a duration")
 public final class HotbarSnapshotMechanic implements INoTargetSkill {
 
-    private final TemporaryInventoryItem[] replacementItems;
+    private final ItemStack[] replacementItems;
     private final int durationTicks;
     private final String itemsArg;
 
-    public static final Map<Player, TemporaryInventoryItem[]> activeTemporaryItems = new HashMap<>();
-
     public HotbarSnapshotMechanic(MythicLineConfig mlc) {
         this.itemsArg = mlc.getString("items", "air");
-        this.replacementItems = new TemporaryInventoryItem[9];
+        this.replacementItems = new ItemStack[9];
         this.durationTicks = mlc.getInteger("duration", 60);
     }
 
     @Override
     public SkillResult cast(SkillMetadata data) {
-        String[] parts = itemsArg.split(",");
+        String[] items = itemsArg.split("],");
         for (int i = 0; i < 9; i++) {
-            if (i < parts.length) {
-                String itemName = parts[i].trim();
-                String skillName = null;
-
-                Pattern pattern = Pattern.compile("(\\w+)\\[(\\w+)]");
-                Matcher matcher = pattern.matcher(parts[i]);
-                if (matcher.find()) {
-                    itemName = matcher.group(1);
-                    skillName = matcher.group(2);
+            if (i < items.length) {
+                if (!items[i].contains("[")) continue;
+                ItemStack item = ItemUtils.buildItem(items[i]);
+                if (item == null) {
+                    replacementItems[i] = new ItemStack(Material.AIR);
+                    continue;
                 }
-
-                Material mat = Material.matchMaterial(itemName.toUpperCase());
-                replacementItems[i] = mat != null ? new TemporaryInventoryItem(new ItemStack(mat), skillName) : new TemporaryInventoryItem(new ItemStack(Material.AIR));
+                ItemMeta meta = item.getItemMeta();
+                meta.getPersistentDataContainer().set(
+                        new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "caster"),
+                        PersistentDataType.STRING,
+                        data.getCaster().getEntity().getUniqueId().toString()
+                );
+                meta.getPersistentDataContainer().set(
+                        new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "hotbarsnapshot"),
+                        PersistentDataType.STRING,
+                        "true"
+                );
+                replacementItems[i] = item;
             } else {
-                replacementItems[i] = new TemporaryInventoryItem(new ItemStack(Material.AIR));
+                replacementItems[i] = new ItemStack(Material.AIR);
             }
         }
 
@@ -75,10 +83,8 @@ public final class HotbarSnapshotMechanic implements INoTargetSkill {
             }
 
             for (int slot = 0; slot < 9; slot++) {
-                player.getInventory().setItem(slot, replacementItems[slot].getItem());
+                player.getInventory().setItem(slot, replacementItems[slot]);
             }
-
-            activeTemporaryItems.put(player, replacementItems);
 
             Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()), () -> {
                 if (!player.isOnline()) return;

@@ -1,5 +1,7 @@
 package me.bedwarshurts.mmextension.listeners;
 
+import io.lumine.mythic.api.mobs.GenericCaster;
+import io.lumine.mythic.api.skills.SkillCaster;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.players.PlayerData;
@@ -11,6 +13,7 @@ import me.bedwarshurts.mmextension.mechanics.inventory.RestoreHotbarMechanic;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,9 +22,17 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.UUID;
+
 public class HotbarSnapshotListener implements Listener {
+    private final NamespacedKey skillKey = new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "skill");
+    private final NamespacedKey casterKey = new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "caster");
+    private final NamespacedKey key = new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "hotbarsnapshot");
+
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -36,32 +47,39 @@ public class HotbarSnapshotListener implements Listener {
 
     @EventHandler
     public void onInteractWithItem(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        if (!HotbarSnapshotMechanic.activeTemporaryItems.containsKey(player)) return;
+        if (event.getItem() == null) return;
+        ItemMeta meta = event.getItem().getItemMeta();
+        if (meta == null) return;
 
-        int slot = player.getInventory().getHeldItemSlot();
-        if (slot < 0 || slot > 8) return;
-        if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.AIR) return;
+        if (!(meta.getPersistentDataContainer().has(skillKey, PersistentDataType.STRING) && meta.getPersistentDataContainer().has(casterKey, PersistentDataType.STRING)))
+            return;
 
-        event.setCancelled(true);
+        String skillName = meta.getPersistentDataContainer().get(skillKey, PersistentDataType.STRING);
+        String casterUUID = meta.getPersistentDataContainer().get(casterKey, PersistentDataType.STRING);
+        SkillCaster caster = new GenericCaster(BukkitAdapter.adapt(Bukkit.getEntity(UUID.fromString(casterUUID))));
+        SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, caster, BukkitAdapter.adapt(event.getPlayer()));
 
-        SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, SkillUtils.getMythicPlayer(player), BukkitAdapter.adapt(player));
-        SkillUtils.castSkill(data, HotbarSnapshotMechanic.activeTemporaryItems.get(player)[slot].getSkill());
+        SkillUtils.castSkill(data, skillName);
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        if (!HotbarSnapshotMechanic.activeTemporaryItems.containsKey(player)) return;
+        if (event.getCurrentItem() == null) return;
+        ItemMeta meta = event.getCurrentItem().getItemMeta();
+        if (meta == null) return;
 
-        event.setCancelled(true);
+        if (meta.getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onDropItem(PlayerDropItemEvent event) {
-        Player player = event.getPlayer();
-        if (!HotbarSnapshotMechanic.activeTemporaryItems.containsKey(player)) return;
+        ItemMeta meta = event.getItemDrop().getItemStack().getItemMeta();
+        if (meta == null) return;
 
-        event.setCancelled(true);
+        if (meta.getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
+            event.setCancelled(true);
+        }
     }
 }
