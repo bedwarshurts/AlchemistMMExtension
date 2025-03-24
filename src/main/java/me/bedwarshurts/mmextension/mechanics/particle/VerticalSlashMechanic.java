@@ -49,7 +49,7 @@ public final class VerticalSlashMechanic extends ParticleMechanic implements ITa
 
                         SkillUtils.spawnParticle(SkillUtils.getAudienceTargets(data, audience), particleType,
                                 particleLocation, 0, 0, 0, speed.get(data), particleCount.get(data));
-                        SkillUtils.castSkillAtPoint(data, particleLocation, skillName.get(data));
+                        skill.castAtPoint(data, particleLocation);
                     },
                     (long) (delayMs.get(data) * i / 50)
             );

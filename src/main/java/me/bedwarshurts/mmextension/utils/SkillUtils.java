@@ -46,49 +46,6 @@ public class SkillUtils {
         }
     }
 
-    public static Skill getSkill(String skillName) {
-        SkillExecutor manager = MythicBukkit.inst().getSkillManager();
-        if (skillName.isEmpty()) return null;
-
-        Optional<Skill> skillOptional = manager.getSkill(skillName);
-        return skillOptional.orElse(null);
-    }
-
-    public static void castSkill(SkillMetadata data, String skillName) {
-        castSkill(MythicBukkit.inst().getSkillManager(), data, skillName);
-    }
-
-    public static void castSkill(SkillExecutor manager, SkillMetadata data, String skillName) {
-        if (skillName.isEmpty()) return;
-
-        Optional<Skill> skillOptional = manager.getSkill(skillName);
-        if (skillOptional.isEmpty()) return;
-
-        skillOptional.ifPresent(skill -> skill.execute(data));
-    }
-
-    public static void castSkillAtPoint(SkillMetadata data, Location location, String skillName) {
-        SkillExecutor manager = MythicBukkit.inst().getSkillManager();
-        if (skillName.isEmpty()) return;
-
-        Optional<Skill> skillOptional = manager.getSkill(skillName);
-        if (skillOptional.isEmpty()) return;
-
-        Skill skill = skillOptional.get();
-        skill.execute(data.deepClone().setLocationTarget(new AbstractLocation(location.getWorld().getName(), location.getX(), location.getY(), location.getZ())));
-    }
-
-    public static void castSkillAtEntity(SkillMetadata data, Entity Entity, String skillName) {
-        SkillExecutor manager = MythicBukkit.inst().getSkillManager();
-        if (skillName.isEmpty()) return;
-
-        Optional<Skill> skillOptional = manager.getSkill(skillName);
-        if (skillOptional.isEmpty()) return;
-
-        Skill skill = skillOptional.get();
-        skill.execute(data.deepClone().setEntityTarget(BukkitAdapter.adapt(Entity)));
-    }
-
     public static void spawnParticle(Set<Player> audience, Particle particleType, Location particleLocation, double dx, double dy, double dz, double speed) {
         spawnParticle(audience, particleType, particleLocation, dx, dy, dz, speed, 0);
     }

@@ -6,6 +6,7 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.utils.MythicSkill;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,39 +21,39 @@ import java.util.concurrent.ConcurrentHashMap;
 @MythicMechanic(author = "bedwarshurts", name = "whileloop", aliases = {"while"}, description = "Executes a skill sequence in a while loop")
 public final class WhileLoopMechanic implements INoTargetSkill {
     private final String condition;
-    private final String skillName;
+    private final MythicSkill skill;
     private final PlaceholderDouble delayMs;
-    private final String onStart;
-    private final String onEnd;
+    private final MythicSkill onStart;
+    private final MythicSkill onEnd;
     private final UUID loopId = UUID.randomUUID();
 
     private static final Map<UUID, BukkitTask> activeLoops = new ConcurrentHashMap<>();
 
     public WhileLoopMechanic(MythicLineConfig mlc) {
         this.condition = mlc.getString("condition", "");
-        this.skillName = mlc.getString("skill", "");
+        this.skill = new MythicSkill(mlc.getString("skill", ""));
         this.delayMs = PlaceholderDouble.of(mlc.getString(new String[]{"interval", "i"}, "0"));
-        this.onStart = mlc.getString("onStart", "");
-        this.onEnd = mlc.getString("onEnd", "");
+        this.onStart = new MythicSkill(mlc.getString("onStart", ""));
+        this.onEnd = new MythicSkill(mlc.getString("onEnd", ""));
     }
 
     @Override
     public SkillResult cast(SkillMetadata data) {
         data.setMetadata("whileLoopId", loopId);
 
-        SkillUtils.castSkill(data, onStart);
+        onStart.cast(data);
 
         long tickInterval = Math.max(1, (long) (delayMs.get(data) / 50));
         BukkitTask task = new BukkitRunnable() {
             @Override
             public void run() {
                 if (!checkCondition(data)) {
-                    SkillUtils.castSkill(data, onEnd);
+                    onEnd.cast(data);
                     cancel();
                     activeLoops.remove(loopId);
                     return;
                 }
-                SkillUtils.castSkill(data, skillName);
+                skill.cast(data);
             }
         }.runTaskTimer(JavaPlugin.getProvidingPlugin(getClass()), 0L, tickInterval);
 

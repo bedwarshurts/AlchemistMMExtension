@@ -83,7 +83,7 @@ public final class SphereShapeMechanic extends ParticleMechanic implements ITarg
 
                 SkillUtils.spawnParticle(audience, particleType, particleLocation, dx, dy, dz, speed.get(data));
 
-                SkillUtils.castSkillAtPoint(data, particleLocation, skillName.get(data));
+                skill.castAtPoint(data, particleLocation);
             }, (long) (delayMs.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
         }
 

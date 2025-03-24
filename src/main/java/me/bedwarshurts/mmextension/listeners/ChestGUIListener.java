@@ -4,6 +4,7 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUISlot;
+import me.bedwarshurts.mmextension.utils.MythicSkill;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -60,7 +61,8 @@ public class ChestGUIListener implements Listener {
             Bukkit.dispatchCommand(console, execute);
         } else if ("skill".equalsIgnoreCase(type)) {
             data.setTrigger(BukkitAdapter.adapt(player));
-            SkillUtils.castSkill(data, execute);
+            MythicSkill skill = new MythicSkill(execute);
+            skill.cast(data);
         } else {
             player.sendMessage(NamedTextColor.GRAY + "[SYS] " + NamedTextColor.WHITE
                     + "Invalid action, please contact the Alchemist admin team if you see this " + type);

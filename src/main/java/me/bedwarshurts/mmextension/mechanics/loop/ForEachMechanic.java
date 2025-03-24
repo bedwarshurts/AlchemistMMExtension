@@ -9,6 +9,7 @@ import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
+import me.bedwarshurts.mmextension.utils.MythicSkill;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,7 +35,7 @@ public final class ForEachMechanic implements INoTargetSkill {
         for (AbstractLocation loc : locations) {
             final int index = i++;
             Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()),
-                    () -> SkillUtils.castSkillAtPoint(data, BukkitAdapter.adapt(loc), skillName),
+                    () -> new MythicSkill(skillName).castAtPoint(data, BukkitAdapter.adapt(loc)),
                     (long) delayInMs * index / 50
             );
         }
@@ -43,7 +44,7 @@ public final class ForEachMechanic implements INoTargetSkill {
         for (AbstractEntity entity : entities) {
             final int index = y++;
             Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()),
-                    () -> SkillUtils.castSkillAtEntity(data, BukkitAdapter.adapt(entity), skillName),
+                    () -> new MythicSkill(skillName).castAtEntity(data, BukkitAdapter.adapt(entity)),
                     (long) delayInMs * index / 50);
         }
         return SkillResult.SUCCESS;

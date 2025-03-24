@@ -10,6 +10,7 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.utils.MythicSkill;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -69,7 +70,7 @@ public final class PeriodicBlockBreakMechanic implements INoTargetSkill {
                         Block block = location.getBlock();
                         if (block.getType() != blockType) {
                             block.setType(blockType, false);
-                            SkillUtils.castSkillAtPoint(data, location, skillName.get(data));
+                            new MythicSkill(skillName.get(data)).castAtPoint(data, location);
                         }
                     }, ((long) delayMs.get(data) * i / 50)
             );

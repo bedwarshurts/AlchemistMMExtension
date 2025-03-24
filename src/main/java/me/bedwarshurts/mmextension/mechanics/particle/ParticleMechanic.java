@@ -5,6 +5,7 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
+import me.bedwarshurts.mmextension.utils.MythicSkill;
 import org.bukkit.Particle;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public abstract class ParticleMechanic {
     protected final PlaceholderDouble shiftRadius;
     protected final List<PlaceholderDouble> direction;
     protected final PlaceholderDouble speed;
-    protected final PlaceholderString skillName;
+    protected final MythicSkill skill;
     protected final PlaceholderDouble delayMs;
     protected final TargeterAudience audience;
     protected final List<PlaceholderDouble> dirOverride;
@@ -31,7 +32,7 @@ public abstract class ParticleMechanic {
         this.shiftRadius = PlaceholderDouble.of(mlc.getString(new String[]{"shiftRadius", "shift"}, "0.0"));
         this.variance = PlaceholderDouble.of(mlc.getString(new String[]{"variance", "v"}, "0.0"));
         this.speed = PlaceholderDouble.of(mlc.getString(new String[]{"speed", "s"}, "1"));
-        this.skillName = PlaceholderString.of(mlc.getString(new String[]{"skill", "onPoint", "oP"}, ""));
+        this.skill = new MythicSkill(mlc.getString(new String[]{"skill", "onPoint", "oP"}, ""));
         this.delayMs = PlaceholderDouble.of(mlc.getString(new String[]{"interval", "i"}, "0"));
         String[] directionArgs = mlc.getString(new String[]{"direction", "dir"}, "0,0,0").split(",");
         this.direction = List.of(

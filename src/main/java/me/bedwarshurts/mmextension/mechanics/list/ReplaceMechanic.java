@@ -19,7 +19,7 @@ public final class ReplaceMechanic implements INoTargetSkill {
     }
 
     @Override
-    public SkillResult cast(SkillMetadata skillMetadata) {
+    public SkillResult cast(SkillMetadata data) {
         ListHandler<Object> listHandler = ListHandler.getListHandler(name);
         if (listHandler == null) return SkillResult.INVALID_CONFIG;
 

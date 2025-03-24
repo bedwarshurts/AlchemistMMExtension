@@ -4,6 +4,7 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import me.bedwarshurts.mmextension.mechanics.canceldeath.CancelPlayerDeathMechanic;
 import me.bedwarshurts.mmextension.mechanics.canceldeath.PlayerDeathData;
+import me.bedwarshurts.mmextension.utils.MythicSkill;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -31,7 +32,9 @@ public class PlayerDeathListener implements Listener {
 
         SkillMetadata data = deathData.getData();
         data.setTrigger(BukkitAdapter.adapt(player));
-        SkillUtils.castSkill(data, deathData.getSkill());
+
+        MythicSkill skill = new MythicSkill(deathData.getSkill());
+        skill.cast(data);
     }
 
     @EventHandler

@@ -6,6 +6,7 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.skills.SkillMetadataImpl;
 import io.lumine.mythic.core.skills.SkillTriggers;
+import me.bedwarshurts.mmextension.utils.MythicSkill;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -36,6 +37,7 @@ public class InventoryItemListener implements Listener {
         SkillCaster caster = new GenericCaster(BukkitAdapter.adapt(Bukkit.getEntity(UUID.fromString(casterUUID))));
         SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, caster, BukkitAdapter.adapt(event.getPlayer()));
 
-        SkillUtils.castSkill(data, skillName);
+        MythicSkill skill = new MythicSkill(skillName);
+        skill.cast(data);
     }
 }

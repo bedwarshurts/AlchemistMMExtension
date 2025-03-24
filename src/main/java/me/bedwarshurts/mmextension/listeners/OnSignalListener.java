@@ -5,6 +5,7 @@ import io.lumine.mythic.bukkit.events.MythicPlayerSignalEvent;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.core.skills.SkillMetadataImpl;
 import io.lumine.mythic.core.skills.SkillTriggers;
+import me.bedwarshurts.mmextension.utils.MythicSkill;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +30,7 @@ public class OnSignalListener implements Listener {
             if (data.getEntityTargets() != null) continue;
 
             data.setEntityTarget(event.getProfile().getEntity());
-            SkillUtils.castSkill(data, skillName);
+            new MythicSkill(skillName).cast(data);
         }
     }
 }
