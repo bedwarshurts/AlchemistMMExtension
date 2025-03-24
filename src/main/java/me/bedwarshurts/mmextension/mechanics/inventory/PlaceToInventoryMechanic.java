@@ -33,7 +33,7 @@ public class PlaceToInventoryMechanic implements ITargetedEntitySkill {
         if (!target.isPlayer()) return SkillResult.CONDITION_FAILED;
 
         Player player = (Player) target.getBukkitEntity();
-        ItemStack stack = createItem(itemString);
+        ItemStack stack = ItemUtils.buildItem(itemString);
         if (stack == null) return SkillResult.ERROR;
 
         ItemMeta meta = stack.getItemMeta();
@@ -42,68 +42,5 @@ public class PlaceToInventoryMechanic implements ITargetedEntitySkill {
 
         player.getInventory().setItem(inventorySlot, stack);
         return SkillResult.SUCCESS;
-    }
-
-    private ItemStack createItem(String input) {
-        String materialPart = input.contains("[") ? input.substring(0, input.indexOf("[")).trim() : input.trim();
-        String bracketContent = input.contains("[") ? input.substring(input.indexOf("[") + 1, input.lastIndexOf("]")) : "";
-        Map<String, String> infoMap = ItemUtils.parse(bracketContent);
-
-        Material material = Material.matchMaterial(materialPart.toUpperCase());
-        if (material == null) material = Material.BARRIER;
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) return null;
-
-        // Name
-        String nameValue = infoMap.getOrDefault("name", "");
-        if (!nameValue.isEmpty()) {
-            meta.displayName(MiniMessage.miniMessage().deserialize(nameValue));
-        }
-
-        // Lore
-        String loreValue = infoMap.getOrDefault("lore", "");
-        if (!loreValue.isEmpty()) {
-            List<Component> loreComponents = new ArrayList<>();
-            for (String line : loreValue.split("\\\\n")) {
-                if (!line.isEmpty()) {
-                    loreComponents.add(MiniMessage.miniMessage().deserialize(line));
-                }
-            }
-            meta.lore(loreComponents);
-        }
-
-        // Custom model data
-        String cmdValue = infoMap.getOrDefault("customModelData", "");
-        if (!cmdValue.isEmpty()) {
-            try {
-                meta.setCustomModelData(Integer.parseInt(cmdValue));
-            } catch (NumberFormatException ignored) { }
-        }
-
-        // Enchants
-        String enchantsValue = infoMap.getOrDefault("enchants", "");
-        if (!enchantsValue.isEmpty()) {
-            String[] pairs = enchantsValue.split(",");
-            for (String pair : pairs) {
-                String[] parts = pair.split(":");
-                if (parts.length == 2) {
-                    Enchantment enchant = Enchantment.getByKey(org.bukkit.NamespacedKey.minecraft(parts[0].toLowerCase()));
-                    int level = Integer.parseInt(parts[1]);
-                    if (enchant != null) {
-                        meta.addEnchant(enchant, level, true);
-                    }
-                }
-            }
-        }
-
-        // Skills
-        String skillValue = infoMap.getOrDefault("skill", "");
-        if (!skillValue.isEmpty()) {
-            NamespacedKey key = new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "skill");
-            meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, skillValue);
-        }
-        item.setItemMeta(meta);
-        return item;
     }
 }
