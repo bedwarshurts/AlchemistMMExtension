@@ -31,15 +31,21 @@ public class MythicSkill {
     }
 
     public void cast(SkillMetadata data) {
+        if (skill == null) return;
+
         skill.execute(data);
     }
 
     public void castAtPoint(SkillMetadata data, Location location) {
+        if (skill == null) return;
+
         data.setLocationTarget(BukkitAdapter.adapt(location));
         skill.execute(data);
     }
 
     public void castAtEntity(SkillMetadata data, Entity entity) {
+        if (skill == null) return;
+
         data.setEntityTarget(BukkitAdapter.adapt(entity));
         skill.execute(data);
     }
