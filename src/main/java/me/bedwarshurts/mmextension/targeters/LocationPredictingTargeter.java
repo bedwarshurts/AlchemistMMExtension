@@ -25,17 +25,17 @@ import java.util.Objects;
 @MythicTargeter(author = "bedwarshurts", name = "targetpredictedlocation", aliases = {"TPL"}, description = "Predicts the location of the target")
 public final class LocationPredictingTargeter implements ILocationTargeter {
 
-    private final PlaceholderDouble predictionTimeSeconds;
+    private final PlaceholderDouble predictionTimeTicks;
     private final double yOffset;
     private final boolean ignoreY;
     private final boolean ignoreIfStill;
     private final Map<UUID, Location> previousLocations = new HashMap<>();
 
     public LocationPredictingTargeter(MythicLineConfig mlc) {
-        this.predictionTimeSeconds = PlaceholderDouble.of(mlc.getString("time", String.valueOf(1.0)));
+        this.predictionTimeTicks = PlaceholderDouble.of(mlc.getString("time", String.valueOf(1.0)));
         this.yOffset = mlc.getDouble("y", 0.0);
-        this.ignoreY = mlc.getBoolean(new String[]{"ignoreY","iy"}, false);
-        this.ignoreIfStill = mlc.getBoolean(new String[]{"ignoreStill","is"}, false);
+        this.ignoreY = mlc.getBoolean(new String[]{"ignoreY", "iy"}, false);
+        this.ignoreIfStill = mlc.getBoolean(new String[]{"ignoreStill", "is"}, false);
     }
 
     @Override
@@ -50,35 +50,28 @@ public final class LocationPredictingTargeter implements ILocationTargeter {
 
             Vector direction = currentLocation.toVector().subtract(previousLocation.toVector()).normalize();
 
-            // Always update the previous location
             previousLocations.put(entityId, currentLocation);
 
             if (ignoreY) {
                 direction.setY(0);
             }
 
-            double speedBps = 4.317; // Default speed
+            double speedBpt = 4.317; // Default speed
             if (bukkitEntity instanceof Player player) {
-                speedBps = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue() * 20; // Convert to blocks per second
+                speedBpt = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue();
             }
 
-            Location targetLocation;
             if (Double.isNaN(direction.length())) { // direction.length() returns NaN if the player isn't moving
                 if (ignoreIfStill) {
                     continue;
-                } else {
-                    targetLocation = currentLocation.clone();
                 }
-            } else {
-                Vector predictedMovement = direction.multiply(speedBps * predictionTimeSeconds.get(data));
-                targetLocation = currentLocation.clone().add(predictedMovement);
-                targetLocation.setY(targetLocation.getY() + yOffset);
             }
 
-            Position position = Position.of(targetLocation);
-            locations.add(new AbstractLocation(position));
+            Vector predictedMovement = direction.multiply(speedBpt * predictionTimeTicks.get(data));
+            Location targetLocation = currentLocation.clone().add(predictedMovement);
+            targetLocation.setY(targetLocation.getY() + yOffset);
 
-            previousLocations.put(entityId, currentLocation);
+            locations.add(new AbstractLocation(Position.of(targetLocation)));
         }
 
         return locations;
