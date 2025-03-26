@@ -1,6 +1,6 @@
 name: AlchemistMMExtension
 main: me.bedwarshurts.mmextension.AlchemistMMExtension
-version: 2.7.6
+version: 2.8.0
 api-version: 1.21
 description: An extension for MythicMobs
 author: bedwarshurts
