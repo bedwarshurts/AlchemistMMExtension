@@ -6,19 +6,25 @@ import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.listeners.TnTExplosionListener;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
+
 @MythicMechanic(author = "bedwarshurts", name = "primedtnt", aliases = {}, description = "Spawns a primed TNT at a specific location with break and damage options")
-public final class PrimedTnTMechanic implements ITargetedLocationSkill {
+public class PrimedTnTMechanic implements ITargetedLocationSkill {
 
     private final boolean breakBlocks;
     private final int fuseTicks;
     private final boolean damage;
 
     public PrimedTnTMechanic(MythicLineConfig mlc) {
+        Bukkit.getPluginManager().registerEvents(new TnTExplosionListener(), plugin);
+
         this.breakBlocks = mlc.getBoolean("break", false);
         this.fuseTicks = mlc.getInteger("fuse", 80);
         this.damage = mlc.getBoolean("damage", false);

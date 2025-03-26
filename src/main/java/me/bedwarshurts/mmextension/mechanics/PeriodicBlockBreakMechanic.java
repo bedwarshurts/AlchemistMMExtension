@@ -10,8 +10,7 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
-import me.bedwarshurts.mmextension.utils.MythicSkill;
-import me.bedwarshurts.mmextension.utils.SkillUtils;
+import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,7 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @MythicMechanic(author = "bedwarshurts", name = "periodicblockbreak", aliases = {"periodicbreak"}, description = "Breaks blocks in a list of locations over time")
-public final class PeriodicBlockBreakMechanic implements INoTargetSkill {
+public class PeriodicBlockBreakMechanic implements INoTargetSkill {
     private final PlaceholderInt delayMs;
     private final Material blockType;
     private final PlaceholderDouble startX;

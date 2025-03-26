@@ -14,7 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 @MythicMechanic(author = "bedwarshurts", name = "verticalslash", aliases = {}, description = "Spawns particles in a half circle shape")
-public final class VerticalSlashMechanic extends ParticleMechanic implements ITargetedLocationSkill {
+public class VerticalSlashMechanic extends ParticleMechanic implements ITargetedLocationSkill {
 
     public VerticalSlashMechanic(MythicLineConfig mlc) {
         super(mlc);

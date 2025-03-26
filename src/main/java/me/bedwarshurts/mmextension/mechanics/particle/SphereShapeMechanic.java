@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @MythicMechanic(author = "bedwarshurts", name = "sphereshape", aliases = {}, description = "Spawns particles in a sphere shape and casts a skill at each particle location")
-public final class SphereShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill {
+public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill {
 
     public SphereShapeMechanic(MythicLineConfig mlc) {
         super(mlc);
