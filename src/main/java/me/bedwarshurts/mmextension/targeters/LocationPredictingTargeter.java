@@ -6,6 +6,7 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.targeters.ILocationTargeter;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.utils.annotations.MythicTargeter;
 import io.lumine.mythic.bukkit.utils.serialize.Position;
 import org.bukkit.Location;
@@ -15,23 +16,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Objects;
 
 @MythicTargeter(author = "bedwarshurts", name = "targetpredictedlocation", aliases = {"TPL"}, description = "Predicts the location of the target")
-public final class LocationPredictingTargeter implements ILocationTargeter {
+public class LocationPredictingTargeter implements ILocationTargeter {
 
     private final PlaceholderDouble predictionTimeTicks;
     private final double yOffset;
     private final boolean ignoreY;
     private final boolean ignoreIfStill;
-    private final Map<UUID, Location> previousLocations = new HashMap<>();
 
     public LocationPredictingTargeter(MythicLineConfig mlc) {
+        MythicBukkit.inst().getPlayerManager().trackPlayerMovement();
+
         this.predictionTimeTicks = PlaceholderDouble.of(mlc.getString("time", String.valueOf(1.0)));
         this.yOffset = mlc.getDouble("y", 0.0);
         this.ignoreY = mlc.getBoolean(new String[]{"ignoreY", "iy"}, false);
@@ -43,14 +43,14 @@ public final class LocationPredictingTargeter implements ILocationTargeter {
         Set<AbstractLocation> locations = new HashSet<>();
 
         for (AbstractEntity targetEntity : data.getEntityTargets()) {
+            if (!targetEntity.isPlayer()) continue;
+
             Entity bukkitEntity = targetEntity.getBukkitEntity();
             UUID entityId = bukkitEntity.getUniqueId();
-            Location currentLocation = bukkitEntity.getLocation();
-            Location previousLocation = previousLocations.getOrDefault(entityId, currentLocation);
+            Location currentLocation = MythicBukkit.inst().getPlayerManager().getPlayerPositions().get(entityId).getTo();
+            Location previousLocation = MythicBukkit.inst().getPlayerManager().getPlayerPositions().get(entityId).getFrom();
 
             Vector direction = currentLocation.toVector().subtract(previousLocation.toVector()).normalize();
-
-            previousLocations.put(entityId, currentLocation);
 
             if (ignoreY) {
                 direction.setY(0);
