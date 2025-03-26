@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 
-public class FactionUtils {
+public final class FactionUtils {
 
     private FactionUtils() {
         throw new UnsupportedOperationException("You really shouldnt initialise this class");

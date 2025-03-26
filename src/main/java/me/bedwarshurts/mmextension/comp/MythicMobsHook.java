@@ -38,7 +38,7 @@ import me.bedwarshurts.mmextension.targeters.LocationPredictingTargeter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class MythicMobsHook implements Listener {
+public final class MythicMobsHook implements Listener {
 
     @EventHandler
     public void loadMechanics(MythicMechanicLoadEvent event) {

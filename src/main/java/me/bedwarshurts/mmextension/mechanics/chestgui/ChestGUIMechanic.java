@@ -6,6 +6,7 @@ import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.listeners.ChestGUIListener;
 import me.bedwarshurts.mmextension.utils.ItemUtils;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -29,8 +30,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
+
 @MythicMechanic(author = "bedwarshurts", name = "chestgui", aliases = {}, description = "Opens a custom Chest GUI for target players")
-public final class ChestGUIMechanic implements INoTargetSkill {
+public class ChestGUIMechanic implements INoTargetSkill {
 
     private final String title;
     private final int slots;
@@ -40,6 +43,8 @@ public final class ChestGUIMechanic implements INoTargetSkill {
     public static final Map<Inventory, SkillMetadata> INVENTORY_METADATA = new HashMap<>();
 
     public ChestGUIMechanic(MythicLineConfig mlc) {
+        Bukkit.getPluginManager().registerEvents(new ChestGUIListener(), plugin);
+
         this.title = mlc.getString("title", "Alchemist Chest GUI");
         this.slots = Math.max(9, mlc.getInteger("slots", 9));
         this.rawContents = mlc.getString("contents", "");

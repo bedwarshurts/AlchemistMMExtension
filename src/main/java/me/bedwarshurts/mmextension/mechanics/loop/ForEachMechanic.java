@@ -9,15 +9,14 @@ import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
-import me.bedwarshurts.mmextension.utils.MythicSkill;
-import me.bedwarshurts.mmextension.utils.SkillUtils;
+import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 
 @MythicMechanic(author = "bedwarshurts", name = "foreachloop", aliases = {"foreach"}, description = "Execute a skill for each location or entity target")
-public final class ForEachMechanic implements INoTargetSkill {
+public class ForEachMechanic implements INoTargetSkill {
     private final String skillName;
     private final PlaceholderInt delayMs;
 

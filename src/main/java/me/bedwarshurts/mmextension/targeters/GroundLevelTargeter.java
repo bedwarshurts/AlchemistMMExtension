@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @MythicTargeter(author = "bedwarshurts", name = "targetgroundlocation", aliases = {"TGL"}, description = "Targets the block location the target is standing on")
-public final class GroundLevelTargeter implements ILocationTargeter {
+public class GroundLevelTargeter implements ILocationTargeter {
 
     private final int yOffset;
 

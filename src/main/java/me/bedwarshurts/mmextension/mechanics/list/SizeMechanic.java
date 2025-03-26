@@ -9,7 +9,7 @@ import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 @MythicMechanic(author = "bedwarshurts", name = "size", aliases = {}, description = "Gets the size of a list")
-public final class SizeMechanic implements INoTargetSkill {
+public class SizeMechanic implements INoTargetSkill {
     private final String name;
 
     public SizeMechanic(MythicLineConfig mlc) {

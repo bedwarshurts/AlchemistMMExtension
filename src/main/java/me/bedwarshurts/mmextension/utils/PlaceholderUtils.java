@@ -4,12 +4,12 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.AlchemistMMExtension;
+import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PlaceholderUtils {
+public final class PlaceholderUtils {
     private static final Pattern placeholderPattern = Pattern.compile("<(world|caster|target|skill)(\\.var)?\\.[a-zA-Z0-9]+>");
 
     private PlaceholderUtils() {
@@ -64,7 +64,7 @@ public class PlaceholderUtils {
         try {
             return Double.parseDouble(placeholder);
         } catch (NumberFormatException e) {
-            AlchemistMMExtension.getLogger().warning("Invalid placeholder value for " + placeholder);
+            plugin.getLogger().warning("Invalid placeholder value for " + placeholder);
             return 0;
         }
     }

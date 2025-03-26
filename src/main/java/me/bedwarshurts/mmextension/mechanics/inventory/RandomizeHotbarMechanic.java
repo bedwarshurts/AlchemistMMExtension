@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 @MythicMechanic(author = "bedwarshurts", name = "randomizehotbar", aliases = {}, description = "Randomizes each targeted player's hotbar.")
-public final class RandomizeHotbarMechanic implements INoTargetSkill {
+public class RandomizeHotbarMechanic implements INoTargetSkill {
 
     @Override
     public SkillResult cast(SkillMetadata data) {

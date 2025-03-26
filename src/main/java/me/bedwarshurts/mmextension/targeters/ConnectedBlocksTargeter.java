@@ -22,7 +22,7 @@ import java.util.Queue;
 import java.util.Set;
 
 @MythicTargeter(author = "bedwarshurts", name = "targetconnectedblocks", aliases = {"TCB"}, description = "Targets all connected blocks to a location, use with extreme caution")
-public final class ConnectedBlocksTargeter implements ILocationTargeter {
+public class ConnectedBlocksTargeter implements ILocationTargeter {
 
     private final Set<Material> excludedMaterials;
     private final List<PlaceholderDouble> location;
@@ -36,7 +36,7 @@ public final class ConnectedBlocksTargeter implements ILocationTargeter {
             try {
                 this.excludedMaterials.add(Material.valueOf(material.toUpperCase()));
             } catch (IllegalArgumentException e) {
-                AlchemistMMExtension.AlchemistMMExtension.getLogger().warning("Invalid material: " + material);
+                AlchemistMMExtension.plugin.getLogger().warning("Invalid material: " + material);
             }
         }
         String[] locationArgs = mlc.getString(new String[]{"loc","location"}, "").split(",");

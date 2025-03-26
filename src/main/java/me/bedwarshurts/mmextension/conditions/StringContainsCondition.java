@@ -8,7 +8,7 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import org.jetbrains.annotations.Nullable;
 
 @MythicCondition(author = "bedwarshurts", name = "stringcontains", aliases = {}, description = "Check if one string is contained within another")
-public final class StringContainsCondition implements ISkillMetaCondition {
+public class StringContainsCondition implements ISkillMetaCondition {
     private final PlaceholderString string;
     private final PlaceholderString contains;
 

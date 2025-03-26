@@ -7,7 +7,7 @@ import io.lumine.mythic.core.utils.annotations.MythicCondition;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 
 @MythicCondition(author = "bedwarshurts", name = "isylevel", aliases = {}, description = "Check if the origin is at a certain Y level")
-public final class YLevelCondition implements ISkillMetaCondition {
+public class YLevelCondition implements ISkillMetaCondition {
     private final PlaceholderInt yLevel;
 
     public YLevelCondition(MythicLineConfig mlc) {

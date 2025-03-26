@@ -16,10 +16,10 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.AlchemistMMExtension;
+import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "openchest", aliases = {}, description = "Opens a chest by mimicking a player opening it")
-public final class OpenChestMechanic implements ITargetedLocationSkill {
+public class OpenChestMechanic implements ITargetedLocationSkill {
     private final String action;
     private final TargeterAudience audience;
 
@@ -47,7 +47,7 @@ public final class OpenChestMechanic implements ITargetedLocationSkill {
                     yield SkillResult.SUCCESS;
                 }
                 default -> {
-                    AlchemistMMExtension.getLogger().warning("Invalid action for openchest mechanic: " + action + " (valid actions: open, close)");
+                    plugin.getLogger().warning("Invalid action for openchest mechanic: " + action + " (valid actions: open, close)");
                     yield SkillResult.INVALID_CONFIG;
                 }
             };

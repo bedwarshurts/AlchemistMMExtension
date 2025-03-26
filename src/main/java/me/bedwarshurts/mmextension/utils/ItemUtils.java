@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ItemUtils {
+public final class ItemUtils {
 
     private ItemUtils() {
         throw new UnsupportedOperationException("You really shouldnt initialise this class");

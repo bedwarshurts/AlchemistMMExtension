@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SkillUtils {
+public final class SkillUtils {
 
     private SkillUtils() {
         throw new UnsupportedOperationException("You really shouldnt initialise this class");

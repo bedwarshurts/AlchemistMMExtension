@@ -3,15 +3,9 @@ package me.bedwarshurts.mmextension;
 import me.bedwarshurts.mmextension.commands.PlayerSpawnMythicMobCommand;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
-import me.bedwarshurts.mmextension.listeners.ChatListener;
-import me.bedwarshurts.mmextension.listeners.ChestGUIListener;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
-import me.bedwarshurts.mmextension.listeners.HotbarSnapshotListener;
-import me.bedwarshurts.mmextension.listeners.OnSignalListener;
 import me.bedwarshurts.mmextension.listeners.PlayerChangeSlotListener;
-import me.bedwarshurts.mmextension.listeners.PlayerDeathListener;
 import me.bedwarshurts.mmextension.listeners.PlayerSkillCastListener;
-import me.bedwarshurts.mmextension.listeners.TnTExplosionListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mariuszgromada.math.mxparser.License;
@@ -19,7 +13,7 @@ import org.mariuszgromada.math.mxparser.License;
 import java.util.Objects;
 
 public class AlchemistMMExtension extends JavaPlugin {
-    public static AlchemistMMExtension AlchemistMMExtension;
+    public static AlchemistMMExtension plugin;
 
     static {
         License.iConfirmCommercialUse("bedwarshurts@alchemistnetwork.org");
@@ -49,18 +43,12 @@ public class AlchemistMMExtension extends JavaPlugin {
             getLogger().warning("MMOCore is not installed! Some features may not work.");
         }
 
-        AlchemistMMExtension = this;
+        plugin = this;
 
         Bukkit.getPluginManager().registerEvents(new MythicMobsHook(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
-        Bukkit.getPluginManager().registerEvents(new TnTExplosionListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerSkillCastListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ChestGUIListener(), this);
-        Bukkit.getPluginManager().registerEvents(new OnSignalListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerChangeSlotListener(), this);
-        Bukkit.getPluginManager().registerEvents(new HotbarSnapshotListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(), this);
-        Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
 
         Objects.requireNonNull(this.getCommand("playerspawnmythicmob")).setExecutor(new PlayerSpawnMythicMobCommand());
 

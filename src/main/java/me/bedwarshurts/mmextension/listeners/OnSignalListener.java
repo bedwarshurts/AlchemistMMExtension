@@ -5,12 +5,11 @@ import io.lumine.mythic.bukkit.events.MythicPlayerSignalEvent;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.core.skills.SkillMetadataImpl;
 import io.lumine.mythic.core.skills.SkillTriggers;
-import me.bedwarshurts.mmextension.utils.MythicSkill;
+import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import me.bedwarshurts.mmextension.mechanics.OnSignalMechanic;
-import me.bedwarshurts.mmextension.utils.SkillUtils;
 
 import java.util.List;
 

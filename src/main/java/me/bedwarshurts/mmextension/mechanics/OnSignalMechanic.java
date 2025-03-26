@@ -5,16 +5,22 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
+import me.bedwarshurts.mmextension.listeners.OnSignalListener;
+import org.bukkit.Bukkit;
 
 import java.util.*;
 
-public final class OnSignalMechanic implements INoTargetSkill {
+import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
+
+public class OnSignalMechanic implements INoTargetSkill {
     private static final Map<String, Long> ACTIVE_SIGNALS = new HashMap<>();
     private final String skill;
     private final String signal;
     private final long durationTicks;
 
     public OnSignalMechanic(MythicLineConfig mlc) {
+        Bukkit.getPluginManager().registerEvents(new OnSignalListener(), plugin);
+
         this.skill = mlc.getString(new String[]{"skill"}, "");
         this.signal = mlc.getString(new String[]{"signal"}, "");
         this.durationTicks = (long) mlc.getDouble(new String[]{"duration", "d"}, 0);

@@ -16,7 +16,7 @@ import org.bukkit.Material;
 import me.clip.placeholderapi.PlaceholderAPI;
 
 @MythicMechanic(author = "bedwarshurts", name = "bookgui", aliases = {}, description = "Opens a book GUI for the target players with specified contents")
-public final class BookGUIMechanic implements INoTargetSkill {
+public class BookGUIMechanic implements INoTargetSkill {
     private final String contents;
     private final String title;
     private final String author;

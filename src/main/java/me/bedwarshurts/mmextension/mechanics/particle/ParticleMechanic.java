@@ -3,9 +3,8 @@ package me.bedwarshurts.mmextension.mechanics.particle;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
-import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
-import me.bedwarshurts.mmextension.utils.MythicSkill;
+import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import org.bukkit.Particle;
 
 import java.util.List;

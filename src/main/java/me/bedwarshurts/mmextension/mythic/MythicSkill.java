@@ -1,4 +1,4 @@
-package me.bedwarshurts.mmextension.utils;
+package me.bedwarshurts.mmextension.mythic;
 
 import io.lumine.mythic.api.skills.Skill;
 import io.lumine.mythic.api.skills.SkillMetadata;

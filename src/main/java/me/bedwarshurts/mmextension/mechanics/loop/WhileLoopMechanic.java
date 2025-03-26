@@ -6,9 +6,8 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
-import me.bedwarshurts.mmextension.utils.MythicSkill;
+import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
-import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -19,7 +18,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @MythicMechanic(author = "bedwarshurts", name = "whileloop", aliases = {"while"}, description = "Executes a skill sequence in a while loop")
-public final class WhileLoopMechanic implements INoTargetSkill {
+public class WhileLoopMechanic implements INoTargetSkill {
     private final String condition;
     private final MythicSkill skill;
     private final PlaceholderDouble delayMs;

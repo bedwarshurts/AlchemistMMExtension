@@ -4,7 +4,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class PlaceholderAPIHook extends PlaceholderExpansion {
+public final class PlaceholderAPIHook extends PlaceholderExpansion {
 
     @Override
     public boolean canRegister() {

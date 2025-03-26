@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @MythicMechanic(author = "bedwarshurts", name = "ringshape", aliases = {}, description = "Spawns particles in a ring shape and casts a skill at each particle location")
-public final class RingShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill {
+public class RingShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill {
     private final List<PlaceholderDouble> rotation;
     private final List<PlaceholderDouble> rotMultiplier;
     private final PlaceholderInt density;

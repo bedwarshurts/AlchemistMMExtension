@@ -14,7 +14,7 @@ import net.Indyuce.mmocore.api.player.PlayerData;
 import org.bukkit.entity.Player;
 
 @MythicMechanic(author = "bedwarshurts", name = "setmmocooldown", aliases = {"setmmocd"}, description = "Sets the cooldown for a specified mmo ability")
-public final class SetMMOCooldownMechanic implements INoTargetSkill {
+public class SetMMOCooldownMechanic implements INoTargetSkill {
     private final PlaceholderString ability;
     private final PlaceholderDouble cooldown;
 
@@ -35,7 +35,7 @@ public final class SetMMOCooldownMechanic implements INoTargetSkill {
                     playerData.getCooldownMap().applyCooldown(playerData.getProfess().getSkill(MMOCore.plugin.skillManager.getSkill(ability.get(data))), cooldown.get(data));
                 }
                 catch (Exception e) {
-                    AlchemistMMExtension.AlchemistMMExtension.getLogger().info("Failed to apply cooldown for " + ability + " to " + player.getName());
+                    AlchemistMMExtension.plugin.getLogger().info("Failed to apply cooldown for " + ability + " to " + player.getName());
                     throw e;
                 }
                 success = true;
