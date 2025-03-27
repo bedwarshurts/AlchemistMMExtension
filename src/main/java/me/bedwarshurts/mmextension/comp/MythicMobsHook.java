@@ -35,6 +35,7 @@ import me.bedwarshurts.mmextension.targeters.ConnectedBlocksTargeter;
 import me.bedwarshurts.mmextension.targeters.EntityInSightTargeter;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.LocationPredictingTargeter;
+import me.bedwarshurts.mmextension.targeters.EntityByClassTargeter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -153,6 +154,10 @@ public final class MythicMobsHook implements Listener {
             case "targetentityinsight":
             case "teis":
                 event.register(new EntityInSightTargeter(event.getConfig()));
+                break;
+            case "targetentitiesinradius":
+            case "teir":
+                event.register(new EntityByClassTargeter(event.getConfig()));
                 break;
             default: break;
         }
