@@ -137,6 +137,14 @@ This introduces a new variable type a list, currently the types supported are ST
 @TEIS{maxDistance=;}
 ```
 
+### EntityByClassInRadiusTargeter
+
+This allows you to return any entities in radius that match a bukkit interface, the interface MUST extend the bukkit's Entity interface
+
+```
+@TEIR{class=;radius=;}
+```
+
 ## Conditions
 
 ### StringContainsCondition
