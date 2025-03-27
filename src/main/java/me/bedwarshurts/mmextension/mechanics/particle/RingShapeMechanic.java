@@ -1,7 +1,9 @@
 package me.bedwarshurts.mmextension.mechanics.particle;
 
+import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.config.MythicLineConfig;
+import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillResult;
@@ -21,7 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @MythicMechanic(author = "bedwarshurts", name = "ringshape", aliases = {}, description = "Spawns particles in a ring shape and casts a skill at each particle location")
-public class RingShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill {
+public class RingShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill, ITargetedEntitySkill {
     private final List<PlaceholderDouble> rotation;
     private final List<PlaceholderDouble> rotMultiplier;
     private final PlaceholderInt density;
@@ -43,6 +45,11 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
         );
         this.density = PlaceholderInt.of(mlc.getString(new String[]{"density","d"}, "1"));
         this.matchRotation = mlc.getBoolean(new String[]{"matchRotation", "mp"}, false);
+    }
+
+    @Override
+    public SkillResult castAtEntity(SkillMetadata data, AbstractEntity target) {
+        return this.castAtLocation(data, target.getLocation());
     }
 
     @Override
