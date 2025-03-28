@@ -3,7 +3,7 @@
         "plugin": "AlchemistExtension",
         "class": "AlchemistCancelPlayerDeathMechanic",
         "extends": "SkillMechanic",
-        "implements": [],
+        "implements": ["ITargetedEntitySkill"],
         "name": [
             "cancelplayerdeath"
         ],
@@ -33,7 +33,7 @@
         "plugin": "AlchemistExtension",
         "class": "AlchemistChestGUIMechanic",
         "extends": "SkillMechanic",
-        "implements": [],
+        "implements": ["ITargetedEntitySkill"],
         "name": [
             "chestgui"
         ],
@@ -70,7 +70,7 @@
         "plugin": "AlchemistExtension",
         "class": "AlchemistHotbarSnapshotMechanic",
         "extends": "SkillMechanic",
-        "implements": [],
+        "implements": ["ITargetedEntitySkill"],
         "name": [
             "hotbarsnapshot"
         ],
@@ -99,7 +99,7 @@
         "plugin": "AlchemistExtension",
         "class": "AlchemistPlaceToInventoryMechanic",
         "extends": "SkillMechanic",
-        "implements": [],
+        "implements": ["ITargetedEntitySkill"],
         "name": [
             "placetoinventory"
         ],
@@ -128,7 +128,7 @@
         "plugin": "AlchemistExtension",
         "class": "AlchemistRandomizeHotbarMechanic",
         "extends": "SkillMechanic",
-        "implements": [],
+        "implements": ["ITargetedEntitySkill"],
         "name": [
             "randomizehotbar"
         ],
@@ -140,7 +140,7 @@
         "plugin": "AlchemistExtension",
         "class": "AlchemistRestoreHotbarMechanic",
         "extends": "SkillMechanic",
-        "implements": [],
+        "implements": ["ITargetedEntitySkill"],
         "name": [
             "restorehotbar"
         ],
