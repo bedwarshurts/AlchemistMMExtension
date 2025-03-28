@@ -1013,7 +1013,8 @@
                 ],
                 "type": "String",
                 "description": "The audience to mimic the chest opening or closing for.",
-                "default_value": ""
+                "default_value": "",
+                "enum": "Audience"
             }
         ]
     },
