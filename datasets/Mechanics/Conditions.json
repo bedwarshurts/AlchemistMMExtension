@@ -1,0 +1,109 @@
+[
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistIsInDungeonCondition",
+        "extends": "SkillCondition",
+        "implements": [],
+        "name": [
+            "isindungeon"
+        ],
+        "description": "Check if the entity is in a dungeon",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": []
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistIsInFactionCondition",
+        "extends": "SkillCondition",
+        "implements": [],
+        "name": [
+            "isinfaction"
+        ],
+        "description": "Check if the entity is in any of the specified factions",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "factions"
+                ],
+                "type": "String",
+                "default_value": "default",
+                "description": "Comma-separated list of factions to check against"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistOxygenLevelCondition",
+        "extends": "SkillCondition",
+        "implements": [],
+        "name": [
+            "oxygenlevel"
+        ],
+        "description": "Check the oxygen level of the caster",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "air",
+                    "a"
+                ],
+                "type": "String",
+                "default_value": "<0",
+                "description": "Condition to check the remaining air level (e.g., '<10', '>5', '20')"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "StringContainsCondition",
+        "extends": "SkillCondition",
+        "implements": [],
+        "name": [
+            "stringcontains"
+        ],
+        "description": "Check if one string is contained within another",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "string",
+                    "s"
+                ],
+                "type": "String",
+                "default_value": "anexampleword",
+                "description": "The main string to check"
+            },
+            {
+                "name": [
+                    "contains",
+                    "c"
+                ],
+                "type": "String",
+                "default_value": "example",
+                "description": "The substring to check for"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistYLevelCondition",
+        "extends": "SkillCondition",
+        "implements": [],
+        "name": [
+            "isylevel"
+        ],
+        "description": "Check if the origin is at a certain Y level",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "y"
+                ],
+                "type": "Integer",
+                "default_value": "0",
+                "description": "The Y level to check against"
+            }
+        ]
+    }
+]

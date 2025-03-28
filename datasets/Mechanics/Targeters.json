@@ -1,0 +1,173 @@
+[
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistConnectedBlocksTargeter",
+        "extends": "ILocationSelector",
+        "implements": [],
+        "name": [
+            "targetconnectedblocks",
+            "TCB"
+        ],
+        "description": "Targets all connected blocks to a location, use with extreme caution",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "exclude"
+                ],
+                "type": "String",
+                "description": "Comma-separated list of materials to exclude from targeting",
+                "default_value": "AIR"
+            },
+            {
+                "name": [
+                    "loc",
+                    "location"
+                ],
+                "type": "String",
+                "description": "The starting location in the format 'x,y,z'",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "locOffset",
+                    "locationOffset"
+                ],
+                "type": "String",
+                "description": "Offset to apply to the starting location, in the format 'x,y,z'",
+                "default_value": "0,0,0"
+            },
+            {
+                "name": [
+                    "depth"
+                ],
+                "type": "Integer",
+                "description": "The maximum number of connected blocks to target",
+                "default_value": "10"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistEntityByClassTargeter",
+        "extends": "IEntitySelector",
+        "implements": [],
+        "name": [
+            "targetentitiesinradius",
+            "TPIR"
+        ],
+        "description": "Targets a specific entity in a radius around the caster",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "radius"
+                ],
+                "type": "Double",
+                "description": "The radius around the caster to target entities",
+                "default_value": "5.0"
+            },
+            {
+                "name": [
+                    "class"
+                ],
+                "type": "String",
+                "description": "The class name of the entities to target",
+                "default_value": "org.bukkit.entity.Projectile"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistEntityInSightTargeter",
+        "extends": "IEntitySelector",
+        "implements": [],
+        "name": [
+            "targetentityinsight",
+            "TEIS"
+        ],
+        "description": "Targets the entity the caster is looking at",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "maxDistance",
+                    "md"
+                ],
+                "type": "Double",
+                "description": "The maximum distance to check for entities in sight",
+                "default_value": "10.0"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistGroundLevelTargeter",
+        "extends": "ILocationSelector",
+        "implements": [],
+        "name": [
+            "targetgroundlocation",
+            "TGL"
+        ],
+        "description": "Targets the block location the target is standing on",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "y"
+                ],
+                "type": "Integer",
+                "description": "The Y offset to apply to the targeted block location",
+                "default_value": "0"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistLocationPredictingTargeter",
+        "extends": "ILocationTargeter",
+        "implements": [],
+        "name": [
+            "targetpredictedlocation",
+            "TPL"
+        ],
+        "description": "Predicts the location of the target",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "time"
+                ],
+                "type": "Double",
+                "description": "The time in ticks to predict the target's location",
+                "default_value": "1.0"
+            },
+            {
+                "name": [
+                    "y"
+                ],
+                "type": "Double",
+                "description": "The Y offset to apply to the predicted location",
+                "default_value": "0.0"
+            },
+            {
+                "name": [
+                    "ignoreY",
+                    "iy"
+                ],
+                "type": "Boolean",
+                "description": "Whether to ignore Y-axis movement when predicting",
+                "default_value": "false"
+            },
+            {
+                "name": [
+                    "ignoreStill",
+                    "is"
+                ],
+                "type": "Boolean",
+                "description": "Whether to ignore the target if it is stationary",
+                "default_value": "false"
+            }
+        ]
+    }
+]
