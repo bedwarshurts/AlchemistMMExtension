@@ -1,0 +1,1108 @@
+[
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistCancelPlayerDeathMechanic",
+        "extends": "SkillMechanic",
+        "implements": [],
+        "name": [
+            "cancelplayerdeath"
+        ],
+        "description": "Cancels the player's next death",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "healthPercentage"
+                ],
+                "type": "Double",
+                "description": "The health percentage to which return the player after the death",
+                "default_value": "100.0"
+            },
+            {
+                "name": [
+                    "skill"
+                ],
+                "type": "String",
+                "description": "The metaskill to execute on player death",
+                "default_value": "",
+                "enum": "Metaskill"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistChestGUIMechanic",
+        "extends": "SkillMechanic",
+        "implements": [],
+        "name": [
+            "chestgui"
+        ],
+        "description": "Opens a custom Chest GUI for target players.<br>The content is in the format<br><code>DIAMOND_SWORD[name=Sharp Sword,lore=Very sharp,slot=3,enchanted=true],STONE[name=Just a rock,slot=5],...</code>",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "title"
+                ],
+                "type": "String",
+                "description": "The Title",
+                "default_value": "Alchemist Chest GUI"
+            },
+            {
+                "name": [
+                    "slots"
+                ],
+                "type": "Integer",
+                "description": "The number of slots of the GUI",
+                "default_value": "9"
+            },
+            {
+                "name": [
+                    "content"
+                ],
+                "type": "String",
+                "description": "The content of the GUI",
+                "default_value": ""
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistHotbarSnapshotMechanic",
+        "extends": "SkillMechanic",
+        "implements": [],
+        "name": [
+            "hotbarsnapshot"
+        ],
+        "description": "Saves and replaces a player's hotbar for a duration",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "items"
+                ],
+                "type": "String",
+                "description": "The items to replace the player's hotbar with, separated by commas",
+                "default_value": "air"
+            },
+            {
+                "name": [
+                    "duration"
+                ],
+                "type": "Integer",
+                "description": "The duration in ticks for which the hotbar is replaced",
+                "default_value": "60"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistPlaceToInventoryMechanic",
+        "extends": "SkillMechanic",
+        "implements": [],
+        "name": [
+            "placetoinventory"
+        ],
+        "description": "Places an item in the player's inventory",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "item"
+                ],
+                "type": "String",
+                "description": "The item to place in the inventory, in the format 'material[name=,lore=,enchants=,custommodeldata=,skill=]'",
+                "default_value": "stone[name=,lore=,enchants=,custommodeldata=,skill=]"
+            },
+            {
+                "name": [
+                    "inventorySlot"
+                ],
+                "type": "Integer",
+                "description": "The inventory slot where the item will be placed",
+                "default_value": "0"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistRandomizeHotbarMechanic",
+        "extends": "SkillMechanic",
+        "implements": [],
+        "name": [
+            "randomizehotbar"
+        ],
+        "description": "Randomizes each targeted player's hotbar.",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": []
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistRestoreHotbarMechanic",
+        "extends": "SkillMechanic",
+        "implements": [],
+        "name": [
+            "restorehotbar"
+        ],
+        "description": "Restores a player's hotbar to its original state",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": []
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistAddMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "list:add"
+        ],
+        "description": "Adds a value to a list",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "name"
+                ],
+                "type": "String",
+                "description": "The name of the list to which the value will be added",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "value"
+                ],
+                "type": "String",
+                "description": "The value to add to the list",
+                "default_value": ""
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistListCreateVariablesMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["ITargetedEntitySkill"],
+        "name": [
+            "list:createvariables"
+        ],
+        "description": "Creates variables and registers them in a specified registry.",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "name"
+                ],
+                "type": "String",
+                "description": "The name of the variable to create.",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "registry"
+                ],
+                "type": "String",
+                "description": "The registry where the variable will be stored.",
+                "default_value": ""
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistListGetMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "list:get"
+        ],
+        "description": "Gets a value from a list",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "name"
+                ],
+                "type": "String",
+                "description": "The name of the list from which the value will be retrieved",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "index"
+                ],
+                "type": "Integer",
+                "description": "The index of the value to retrieve from the list",
+                "default_value": "0"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistListIndexMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "list:index"
+        ],
+        "description": "Gets the index of a value in a list",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "name"
+                ],
+                "type": "String",
+                "description": "The name of the list to search",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "value"
+                ],
+                "type": "String",
+                "description": "The value to find the index of in the list",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "last"
+                ],
+                "type": "Boolean",
+                "description": "Whether to find the last occurrence of the value in the list",
+                "default_value": "false"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistListMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "list"
+        ],
+        "description": "Creates a list",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "name"
+                ],
+                "type": "String",
+                "description": "The name of the list to create",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "type"
+                ],
+                "type": "String",
+                "description": "The type of the list",
+                "default_value": ""
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistListRemoveMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "list:remove"
+        ],
+        "description": "Removes a value from a list",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "name"
+                ],
+                "type": "String",
+                "description": "The name of the list from which the value will be removed",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "index"
+                ],
+                "type": "Integer",
+                "description": "The index of the value to remove from the list",
+                "default_value": "0"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistListReplaceMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "list:replace"
+        ],
+        "description": "Replaces a value in a list",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "name"
+                ],
+                "type": "String",
+                "description": "The name of the list where the value will be replaced",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "index"
+                ],
+                "type": "Integer",
+                "description": "The index of the value to replace in the list",
+                "default_value": "0"
+            },
+            {
+                "name": [
+                    "value"
+                ],
+                "type": "String",
+                "description": "The new value to replace the old value at the specified index",
+                "default_value": ""
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistListSizeMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "list:size"
+        ],
+        "description": "Gets the size of a list",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "name"
+                ],
+                "type": "String",
+                "description": "The name of the list whose size will be retrieved",
+                "default_value": ""
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistForEachMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "foreachloop",
+            "foreach"
+        ],
+        "description": "Execute a skill for each location or entity target",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "skill"
+                ],
+                "type": "String",
+                "description": "The name of the skill to execute for each target",
+                "default_value": "",
+                "enum": "Metaskill"
+            },
+            {
+                "name": [
+                    "interval",
+                    "i"
+                ],
+                "type": "Integer",
+                "description": "The delay in milliseconds between executions",
+                "default_value": "0"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistWhileLoopMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "whileloop",
+            "while"
+        ],
+        "description": "Executes a skill sequence in a while loop",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "condition"
+                ],
+                "type": "String",
+                "description": "The condition to evaluate for the while loop",
+                "default_value": "",
+                "enum": "Condition"
+            },
+            {
+                "name": [
+                    "skill"
+                ],
+                "type": "String",
+                "description": "The skill to execute in the loop",
+                "default_value": "",
+                "enum": "Metaskill"
+            },
+            {
+                "name": [
+                    "interval",
+                    "i"
+                ],
+                "type": "Integer",
+                "description": "The delay in milliseconds between loop iterations",
+                "default_value": "0"
+            },
+            {
+                "name": [
+                    "onStart"
+                ],
+                "type": "String",
+                "description": "The skill to execute when the loop starts",
+                "default_value": "",
+                "enum": "Metaskill"
+            },
+            {
+                "name": [
+                    "onEnd"
+                ],
+                "type": "String",
+                "description": "The skill to execute when the loop ends",
+                "default_value": "",
+                "enum": "Metaskill"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistBreakMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "break"
+        ],
+        "description": "Breaks a while loop",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": []
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistSetMMOCooldownMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "setmmocooldown",
+            "setmmocd"
+        ],
+        "description": "Sets the cooldown for a specified MMO ability",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "ability",
+                    "a"
+                ],
+                "type": "String",
+                "description": "The name of the MMO ability to set the cooldown for",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "cooldown",
+                    "cd"
+                ],
+                "type": "Double",
+                "description": "The cooldown duration to set for the ability, in seconds",
+                "default_value": "0"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistParticleMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [],
+        "description": "Spawns particles with customizable properties.",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "particle",
+                    "p"
+                ],
+                "type": "String",
+                "description": "The type of particle to spawn.",
+                "default_value": "FLAME",
+                "enum": "Particle"
+            },
+            {
+                "name": [
+                    "radius",
+                    "r"
+                ],
+                "type": "Double",
+                "description": "The radius around the center to spawn particles.",
+                "default_value": "1.0"
+            },
+            {
+                "name": [
+                    "count",
+                    "c",
+                    "a"
+                ],
+                "type": "Integer",
+                "description": "The number of particles to spawn.",
+                "default_value": "100"
+            },
+            {
+                "name": [
+                    "dirMultiplier",
+                    "dirMult"
+                ],
+                "type": "Double",
+                "description": "Multiplier for the particle direction.",
+                "default_value": "1.0"
+            },
+            {
+                "name": [
+                    "shiftRadius",
+                    "shift"
+                ],
+                "type": "Double",
+                "description": "Shift the radius of the particle spawn location.",
+                "default_value": "0.0"
+            },
+            {
+                "name": [
+                    "variance",
+                    "v"
+                ],
+                "type": "Double",
+                "description": "Variance in particle spawn location.",
+                "default_value": "0.0"
+            },
+            {
+                "name": [
+                    "speed",
+                    "s"
+                ],
+                "type": "Double",
+                "description": "The speed of the particles.",
+                "default_value": "1"
+            },
+            {
+                "name": [
+                    "skill",
+                    "onPoint",
+                    "oP"
+                ],
+                "type": "String",
+                "description": "The skill to execute at the particle spawn point.",
+                "default_value": "",
+                "enum": "Metaskill"
+            },
+            {
+                "name": [
+                    "interval",
+                    "i"
+                ],
+                "type": "Double",
+                "description": "The delay in milliseconds between particle spawns.",
+                "default_value": "0"
+            },
+            {
+                "name": [
+                    "direction",
+                    "dir"
+                ],
+                "type": "String",
+                "description": "The direction vector for the particles, in the format 'x,y,z'.",
+                "default_value": "0,0,0"
+            },
+            {
+                "name": [
+                    "audience"
+                ],
+                "type": "String",
+                "description": "The target audience for the particles.",
+                "default_value": "",
+                "enum": "Audience"
+            },
+            {
+                "name": [
+                    "dirOverride",
+                    "dirO"
+                ],
+                "type": "String",
+                "description": "Override the direction vector, in the format 'x,y,z'.",
+                "default_value": "null"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistRingShapeMechanic",
+        "extends": "AlchemistParticleMechanic",
+        "implements": ["ITargetedLocationSkill", "ITargetedEntitySkill"],
+        "name": [
+            "ringshape"
+        ],
+        "description": "Spawns particles in a ring shape and casts a skill at each particle location",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "rotation",
+                    "rot"
+                ],
+                "type": "String",
+                "description": "The rotation of the ring in degrees, in the format 'x,y,z'",
+                "default_value": "0,0,0"
+            },
+            {
+                "name": [
+                    "rotMultiplier",
+                    "rotMult"
+                ],
+                "type": "String",
+                "description": "The rotation multiplier for each axis, in the format 'x,y,z'",
+                "default_value": "0,0,0"
+            },
+            {
+                "name": [
+                    "density",
+                    "d"
+                ],
+                "type": "Integer",
+                "description": "The number of particles per ring",
+                "default_value": "1"
+            },
+            {
+                "name": [
+                    "matchRotation",
+                    "mp"
+                ],
+                "type": "Boolean",
+                "description": "Whether to match the caster's rotation",
+                "default_value": "false"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistSphereShapeMechanic",
+        "extends": "ParticleMechanic",
+        "implements": ["ITargetedLocationSkill"],
+        "name": [
+            "sphereshape"
+        ],
+        "description": "Spawns particles in a sphere shape and casts a skill at each particle location",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "radius",
+                    "r"
+                ],
+                "type": "Double",
+                "description": "The radius of the sphere.",
+                "default_value": "1.0"
+            },
+            {
+                "name": [
+                    "particleCount",
+                    "pc"
+                ],
+                "type": "Integer",
+                "description": "The number of particles to spawn in the sphere.",
+                "default_value": "100"
+            },
+            {
+                "name": [
+                    "variance",
+                    "v"
+                ],
+                "type": "Double",
+                "description": "Variance in particle spawn location.",
+                "default_value": "0.0"
+            },
+            {
+                "name": [
+                    "shiftRadius",
+                    "shift"
+                ],
+                "type": "Double",
+                "description": "Shift the radius of the particle spawn location.",
+                "default_value": "0.0"
+            },
+            {
+                "name": [
+                    "direction",
+                    "dir"
+                ],
+                "type": "List<Double>",
+                "description": "The direction vector for the particles, in the format 'x,y,z'.",
+                "default_value": "[0.0, 0.0, 0.0]"
+            },
+            {
+                "name": [
+                    "dirMultiplier",
+                    "dirMult"
+                ],
+                "type": "Double",
+                "description": "Multiplier for the particle direction.",
+                "default_value": "1.0"
+            },
+            {
+                "name": [
+                    "dirOverride",
+                    "dirO"
+                ],
+                "type": "List<Double>",
+                "description": "Override the direction vector, in the format 'x,y,z'.",
+                "default_value": "null"
+            },
+            {
+                "name": [
+                    "speed",
+                    "s"
+                ],
+                "type": "Double",
+                "description": "The speed of the particles.",
+                "default_value": "1.0"
+            },
+            {
+                "name": [
+                    "delayMs",
+                    "delay"
+                ],
+                "type": "Double",
+                "description": "The delay in milliseconds between particle spawns.",
+                "default_value": "0.0"
+            },
+            {
+                "name": [
+                    "audience"
+                ],
+                "type": "String",
+                "description": "The target audience for the particles.",
+                "default_value": "",
+                "enum": "Audience"
+            },
+            {
+                "name": [
+                    "skill",
+                    "onPoint",
+                    "oP"
+                ],
+                "type": "String",
+                "description": "The skill to execute at the particle spawn point.",
+                "default_value": "",
+                "enum": "Metaskill"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistVerticalSlashMechanic",
+        "extends": "AlchemistParticleMechanic",
+        "implements": ["ITargetedLocationSkill"],
+        "name": [
+            "verticalslash"
+        ],
+        "description": "Spawns particles in a half circle shape",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "particle",
+                    "p"
+                ],
+                "type": "String",
+                "description": "The type of particle to spawn.",
+                "default_value": "FLAME",
+                "enum": "Particle"
+            },
+            {
+                "name": [
+                    "radius",
+                    "r"
+                ],
+                "type": "Double",
+                "description": "The radius of the half circle.",
+                "default_value": "1.0"
+            },
+            {
+                "name": [
+                    "particleCount",
+                    "pc"
+                ],
+                "type": "Integer",
+                "description": "The number of particles to spawn in the half circle.",
+                "default_value": "100"
+            },
+            {
+                "name": [
+                    "speed",
+                    "s"
+                ],
+                "type": "Double",
+                "description": "The speed of the particles.",
+                "default_value": "1.0"
+            },
+            {
+                "name": [
+                    "delayMs",
+                    "delay"
+                ],
+                "type": "Double",
+                "description": "The delay in milliseconds between particle spawns.",
+                "default_value": "0.0"
+            },
+            {
+                "name": [
+                    "audience"
+                ],
+                "type": "String",
+                "description": "The target audience for the particles.",
+                "default_value": "",
+                "enum": "Audience"
+            },
+            {
+                "name": [
+                    "skill",
+                    "onPoint",
+                    "oP"
+                ],
+                "type": "String",
+                "description": "The skill to execute at the particle spawn point.",
+                "default_value": "",
+                "enum": "Metaskill"
+            }
+        ]
+    }
+    ,
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistBookGUIMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "bookgui"
+        ],
+        "description": "Opens a book GUI for the target players with specified contents",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "contents"
+                ],
+                "type": "String",
+                "description": "The contents of the book, separated by '\\n' for pages",
+                "default_value": "Alchemist - No Contents Specified"
+            },
+            {
+                "name": [
+                    "title"
+                ],
+                "type": "String",
+                "description": "The title of the book",
+                "default_value": "BuffsMenu"
+            },
+            {
+                "name": [
+                    "author"
+                ],
+                "type": "String",
+                "description": "The author of the book",
+                "default_value": "AlchemistNetwork"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistHideChatMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["ITargetedEntitySkill"],
+        "name": [
+            "hidechat"
+        ],
+        "description": "Hide the chat for a player",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "duration",
+                    "d"
+                ],
+                "type": "Integer",
+                "description": "The duration in ticks for which the chat will be hidden",
+                "default_value": "0"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistOnSignalMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "onsignal"
+        ],
+        "description": "Triggers a skill when a specific signal is active for a player.",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "skill"
+                ],
+                "type": "String",
+                "description": "The skill to trigger when the signal is active.",
+                "default_value": "",
+                "enum": "Metaskill"
+            },
+            {
+                "name": [
+                    "signal"
+                ],
+                "type": "String",
+                "description": "The signal to listen for.",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "duration",
+                    "d"
+                ],
+                "type": "Double",
+                "description": "The duration in ticks for which the signal remains active.",
+                "default_value": "0"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistOpenChestMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["ITargetedLocationSkill"],
+        "name": [
+            "openchest"
+        ],
+        "description": "Opens or closes a chest by mimicking a player opening or closing it.",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "action"
+                ],
+                "type": "String",
+                "description": "The action to perform on the chest (open or close).",
+                "default_value": "open",
+                "enum": "open,close"
+            },
+            {
+                "name": [
+                    "audience"
+                ],
+                "type": "String",
+                "description": "The audience to mimic the chest opening or closing for.",
+                "default_value": ""
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistPeriodicBlockBreakMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["INoTargetSkill"],
+        "name": [
+            "periodicblockbreak",
+            "periodicbreak"
+        ],
+        "description": "Breaks blocks in a list of locations over time",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "interval",
+                    "i"
+                ],
+                "type": "Integer",
+                "description": "The delay in milliseconds between block breaks",
+                "default_value": "0"
+            },
+            {
+                "name": [
+                    "block"
+                ],
+                "type": "String",
+                "description": "The type of block to break",
+                "default_value": "AIR"
+            },
+            {
+                "name": [
+                    "startingLocation",
+                    "sLoc"
+                ],
+                "type": "String",
+                "description": "The starting location in the format 'x,y,z'",
+                "default_value": "0,0,0"
+            },
+            {
+                "name": [
+                    "skill",
+                    "onBlockBreak",
+                    "oBB"
+                ],
+                "type": "String",
+                "description": "The skill to execute when a block is broken",
+                "default_value": "",
+                "enum": "Metaskill"
+            }
+        ]
+    },
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistPrimedTnTMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["ITargetedLocationSkill"],
+        "name": [
+            "primedtnt"
+        ],
+        "description": "Spawns a primed TNT at a specific location with break and damage options",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "break"
+                ],
+                "type": "Boolean",
+                "description": "Whether the TNT explosion breaks blocks",
+                "default_value": "false"
+            },
+            {
+                "name": [
+                    "fuse"
+                ],
+                "type": "Integer",
+                "description": "The fuse time in ticks before the TNT explodes",
+                "default_value": "80"
+            },
+            {
+                "name": [
+                    "damage"
+                ],
+                "type": "Boolean",
+                "description": "Whether the TNT explosion causes damage",
+                "default_value": "false"
+            }
+        ]
+    }
+]

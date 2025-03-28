@@ -1,0 +1,14 @@
+[
+    {
+        "elementType": "Mechanic",
+        "pathOrUrl": "./Mechanics/Mechanics.json"
+    },
+    {
+        "elementType": "Condition",
+        "pathOrUrl": "./Mechanics/Conditions.json"
+    },
+    {
+        "elementType": "Targeter",
+        "pathOrUrl": "./Mechanics/Targeters.json"
+    }
+]
