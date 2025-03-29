@@ -1,26 +1,33 @@
-package me.bedwarshurts.mmextension.mechanics;
+package me.bedwarshurts.mmextension.mechanics.signal;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
+import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.listeners.OnSignalListener;
+import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
 import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
+@MythicMechanic(author = "bedwarshurts", name = "onsignal", aliases = {}, description = "Triggers a skill when a player receives a signal")
 public class OnSignalMechanic implements INoTargetSkill {
-    private static final Map<String, Long> ACTIVE_SIGNALS = new HashMap<>();
+    private final String identifier;
     private final String skill;
     private final String signal;
     private final long durationTicks;
 
+    public static final Map<String, OnSignalData> ACTIVE_SIGNALS = new HashMap<>();
+
     public OnSignalMechanic(MythicLineConfig mlc) {
         Bukkit.getPluginManager().registerEvents(new OnSignalListener(), plugin);
 
+        this.identifier = mlc.getString(new String[]{"name", "id", "identifier"}, "signal");
         this.skill = mlc.getString(new String[]{"skill"}, "");
         this.signal = mlc.getString(new String[]{"signal"}, "");
         this.durationTicks = (long) mlc.getDouble(new String[]{"duration", "d"}, 0);
@@ -32,28 +39,15 @@ public class OnSignalMechanic implements INoTargetSkill {
 
         for (AbstractEntity entity : data.getEntityTargets()) {
             if (!entity.isPlayer()) continue;
-            success = true;
 
-            UUID playerId = entity.getUniqueId();
-            String signalKey = playerId + ":" + signal.toLowerCase() + ":" + skill;
-            ACTIVE_SIGNALS.put(signalKey, System.currentTimeMillis() + (durationTicks * 50));
+            Player player = (Player) entity.getBukkitEntity();
+            OnSignalData onSignal = new OnSignalData(identifier, player, new MythicSkill(skill), signal, data.getCaster());
+
+            ACTIVE_SIGNALS.put(identifier + entity.getUniqueId(), onSignal);
+
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> ACTIVE_SIGNALS.remove(identifier), durationTicks);
+            success = true;
         }
         return success ? SkillResult.SUCCESS : SkillResult.INVALID_TARGET;
-    }
-
-    public static List<String> getActiveSkills(UUID playerId, String signal) {
-        String prefix = playerId + ":" + signal + ":";
-        List<String> result = new ArrayList<>();
-        for (String key : new HashSet<>(ACTIVE_SIGNALS.keySet())) {
-            if (key.startsWith(prefix)) {
-                Long expires = ACTIVE_SIGNALS.get(key);
-                if (expires != null && System.currentTimeMillis() <= expires) {
-                    result.add(key.substring(prefix.length()));
-                } else {
-                    ACTIVE_SIGNALS.remove(key);
-                }
-            }
-        }
-        return result;
     }
 }

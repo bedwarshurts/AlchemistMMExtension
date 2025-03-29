@@ -5,13 +5,14 @@ import io.lumine.mythic.bukkit.events.MythicPlayerSignalEvent;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.core.skills.SkillMetadataImpl;
 import io.lumine.mythic.core.skills.SkillTriggers;
+import me.bedwarshurts.mmextension.mechanics.signal.OnSignalData;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import me.bedwarshurts.mmextension.mechanics.OnSignalMechanic;
+import me.bedwarshurts.mmextension.mechanics.signal.OnSignalMechanic;
 
-import java.util.List;
+import java.util.LinkedList;
 
 public class OnSignalListener implements Listener {
 
@@ -20,16 +21,19 @@ public class OnSignalListener implements Listener {
         Player eventPlayer = BukkitAdapter.adapt(event.getProfile().getEntity());
         if (eventPlayer == null) return;
 
-        List<String> skills = OnSignalMechanic.getActiveSkills(eventPlayer.getUniqueId(), event.getSignal());
-        if (skills.isEmpty()) return;
+        LinkedList<OnSignalData> onSignalList = new LinkedList<>(OnSignalMechanic.ACTIVE_SIGNALS.values().stream()
+                .filter(data -> data.getPlayer().equals(eventPlayer))
+                .toList());
 
-        SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, event.getProfile(), BukkitAdapter.adapt(eventPlayer));
+        if (onSignalList.isEmpty()) return;
 
-        for (String skillName : skills) {
-            if (data.getEntityTargets() != null) continue;
-
-            data.setEntityTarget(event.getProfile().getEntity());
-            new MythicSkill(skillName).cast(data);
+        for (OnSignalData signal : onSignalList) {
+            if (signal.getSignal().equals(event.getSignal())) {
+                SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, signal.getCaster(), BukkitAdapter.adapt(eventPlayer));
+                MythicSkill skill = signal.getSkill();
+                skill.cast(data);
+            }
         }
+
     }
 }
