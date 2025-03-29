@@ -47,7 +47,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
             this.skill = new MythicSkill(mlc.getString(new String[]{"skill", "s"}, ""));
             this.priority = EventPriority.valueOf(mlc.getString(new String[]{"eventPriority", "priority"}, "NORMAL").toUpperCase());
             this.methods.addAll(Arrays.asList(mlc.getString(new String[]{"methods", "m"}, "").split("\\),")));
-            this.triggerMethod = mlc.getString(new String[]{"triggerMethod", "trigger"}, "getPlayer");
+            this.triggerMethod = mlc.getString(new String[]{"triggerMethod", "trigger"}, "getPlayer()");
             this.cancelled = mlc.getBoolean(new String[]{"cancelled", "cancel", "c"}, false);
             this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "p"}, false);
             this.duration = mlc.getDouble(new String[]{"duration", "d"}, 90);
