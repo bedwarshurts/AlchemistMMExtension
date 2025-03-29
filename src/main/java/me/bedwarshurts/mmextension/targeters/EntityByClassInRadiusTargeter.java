@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 
 import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
-@MythicTargeter(author = "bedwarshurts", name = "targetentitiesinradius", aliases = {"TPIR"}, description = "Targets a specific entity in a radius around the caster")
-public class EntityByClassTargeter implements IEntityTargeter {
+@MythicTargeter(author = "bedwarshurts", name = "targetentitiesinradius", aliases = {"TEIR"}, description = "Targets a specific entity in a radius around the caster")
+public class EntityByClassInRadiusTargeter implements IEntityTargeter {
     private final PlaceholderDouble radius;
     private final String className;
 
-    public EntityByClassTargeter(MythicLineConfig mlc) {
+    public EntityByClassInRadiusTargeter(MythicLineConfig mlc) {
         this.radius = mlc.getPlaceholderDouble("radius", 5);
         this.className = mlc.getString("class", "org.bukkit.entity.Projectile");
     }
