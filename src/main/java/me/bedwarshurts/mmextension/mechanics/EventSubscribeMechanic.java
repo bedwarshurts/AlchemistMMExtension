@@ -65,8 +65,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                     try {
                         Method isCancelled = e.getClass().getMethod("isCancelled");
                         return !((boolean) isCancelled.invoke(e));
-                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ex) {
-                        throw new UnsupportedOperationException("Your event is not cancellable, these events are not yet supported");
+                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
                     }
                 })
                 .handler(e -> {
