@@ -27,15 +27,16 @@ import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.ForEachMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.WhileLoopMechanic;
 import me.bedwarshurts.mmextension.mechanics.mmocore.SetMMOCooldownMechanic;
-import me.bedwarshurts.mmextension.mechanics.OnSignalMechanic;
+import me.bedwarshurts.mmextension.mechanics.signal.OnSignalMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.VerticalSlashMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.RingShapeMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.SphereShapeMechanic;
+import me.bedwarshurts.mmextension.mechanics.signal.OnSignalRemoveMechanic;
 import me.bedwarshurts.mmextension.targeters.ConnectedBlocksTargeter;
 import me.bedwarshurts.mmextension.targeters.EntityInSightTargeter;
 import me.bedwarshurts.mmextension.targeters.GroundLevelTargeter;
 import me.bedwarshurts.mmextension.targeters.LocationPredictingTargeter;
-import me.bedwarshurts.mmextension.targeters.EntityByClassTargeter;
+import me.bedwarshurts.mmextension.targeters.EntityByClassInRadiusTargeter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -91,6 +92,9 @@ public final class MythicMobsHook implements Listener {
             case "onsignal":
                 event.register(new OnSignalMechanic(event.getConfig()));
                 break;
+            case "onsignalremove":
+                event.register(new OnSignalRemoveMechanic(event.getConfig()));
+                break;
             case "hotbarsnapshot":
                 event.register(new HotbarSnapshotMechanic(event.getConfig()));
                 break;
@@ -130,6 +134,12 @@ public final class MythicMobsHook implements Listener {
             case "placetoinventory":
                 event.register(new PlaceToInventoryMechanic(event.getConfig()));
                 break;
+            case "events:subscribe":
+                event.register(new EventSubscribeMechanic(event.getConfig()));
+                break;
+            case "events:unsubscribe":
+                event.register(new EventUnsubscribeMechanic(event.getConfig()));
+                break;
             default: break;
         }
     }
@@ -157,7 +167,7 @@ public final class MythicMobsHook implements Listener {
                 break;
             case "targetentitiesinradius":
             case "teir":
-                event.register(new EntityByClassTargeter(event.getConfig()));
+                event.register(new EntityByClassInRadiusTargeter(event.getConfig()));
                 break;
             default: break;
         }
