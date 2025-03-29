@@ -129,7 +129,7 @@ the result is placed in the skill scoped <(methodName)Result> variable.
 ### EventsUnSubscribeMechanic (Aura)
 
 ```
-- events:subscribe{listenerIdentifier=;}
+- events:unsubscribe{listenerIdentifier=;}
 ```
 
 ## Targeters
