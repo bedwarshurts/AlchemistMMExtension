@@ -1106,4 +1106,97 @@
             }
         ]
     }
+    {
+        "plugin": "AlchemistExtension",
+        "class": "AlchemistEventsSubscribeMechanic",
+        "extends": "SkillMechanic",
+        "implements": ["ITargetedEntitySkill"],
+        "name": [
+            "events:subscribe"
+        ],
+        "description": "Subscribes to an event and runs a skill when it is triggered",
+        "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
+        "attributes": [
+            {
+                "name": [
+                    "id",
+                    "identifier",
+                    "name",
+                    "listenerIdentifier"
+                ],
+                "type": "String",
+                "description": "The unique aura identifier, it can be anything as long as its different from other auras of the same type.",
+                "default_value": "event"
+            },
+            {
+                "name": [
+                    "class"
+                ],
+                "type": "String",
+                "description": "The full class name of the event that you want to listen to, supports ALL plugins.",
+                "default_value": "org.bukkit.event.player.PlayerMoveEvent"
+            },
+            {
+                "name": [
+                    "Skill"
+                ],
+                "type": "String",
+                "description": "The name of the Skill to execute (supports internal skill syntax)",
+                "default_value": ""
+            },
+            {
+                "name": [
+                    "priority",
+                    "eventPriority"
+                ],
+                "type": "String",
+                "description": "The event priority to listen to, available are LOWEST, LOW, NORMAL, HIGH, HIGHEST, MONITOR(this should be used for monitoring the outcome of the event and not executing actions alongside it)",
+                "default_value": "NORMAL"
+            },
+            {
+                "name": [
+                    "methods",
+                    "m"
+                ],
+                "type": "String",
+                "description": "The methods from the Java event class that you want to invoke example is getDamage(),setDamage(double.class 5) the result is placed on <skill.var.methodName> variable",
+                "default_value": ""
+            }, 
+            {
+                "name": [
+                    "cancel",
+                    "cancelled"
+                ],
+                "type": "boolean",
+                "description": "If this is true and the event has a setCancelled method then this cancels the event",
+                "default_value": ""
+            }, 
+            {
+                "name": [
+                    "trigger",
+                ],
+                "type": "String",
+                "description": "This is the method that returns the trigger of the event, it differs per event and it is REQUIRED TO SUPPLY",
+                "default_value": "getPlayer()"
+            }, 
+            {
+                "name": [
+                    "duration",
+                    "d"
+                ],
+                "type": "String",
+                "description": "This is the method that returns the trigger of the event, it differs per event and it is REQUIRED TO SUPPLY",
+                "default_value": "getPlayer()"
+            }, 
+            {
+                "name": [
+                    "requirePlayer",
+                    "rp"
+                ],
+                "type": "boolean",
+                "description": "If this is true and the entity returned by a targeter is NOT a player then the aura will NOT register",
+                "default_value": "false"
+            }, 
+        ]
+    }
 ]
