@@ -80,32 +80,37 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                         Entity trigger = (Entity) getTrigger.invoke(e);
                         if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
                         data.setTrigger(BukkitAdapter.adapt(trigger));
-                        
+
                         for (String methodString : methods) {
-                            String methodName = methodString.split("\\(")[0];
-                            String methodArgs = methodString.split("\\(")[1].replace(")", "");
-                            String[] args = methodArgs.split(",");
-                            Class<?>[] argTypes = new Class<?>[args.length];
-                            Object[] argValues = new Object[args.length];
-                            for (String arg : args) {
-                                int spaceIndex = arg.indexOf(" ");
-                                if (spaceIndex == -1) continue;
-                                String type = arg.substring(0, arg.indexOf(" ")).trim();
-                                String value = arg.substring(arg.indexOf(" ")).trim();
-                                argTypes[Arrays.asList(args).indexOf(arg)] = getClassFromString(type);
-                                argValues[Arrays.asList(args).indexOf(arg)] = getValue(getClassFromString(type), value);
-                            }
                             Method method;
-                            try {
-                                method = argTypes.length == 0
-                                        ? e.getClass().getMethod(methodName)
-                                        : e.getClass().getMethod(methodName, argTypes);
-                                Object currentObj = argTypes.length == 0
-                                        ? method.invoke(e)
-                                        : method.invoke(e, argValues);
-                                data.getVariables().put(methodName + "Result", new StringVariable(currentObj.toString()));
-                            } catch (NullPointerException ignored) {
+                            Object obj = e;
+                            Class<?> objClass = e.getClass();
+                            for (String call : methodString.split("\\.")) {
+                                String methodName = call.split("\\(")[0];
+                                String methodArgs = call.split("\\(")[1].replace(")", "");
+                                String[] args = methodArgs.split(",");
+                                Class<?>[] argTypes = new Class<?>[args.length];
+                                Object[] argValues = new Object[args.length];
+                                for (String arg : args) {
+                                    int spaceIndex = arg.indexOf(" ");
+                                    if (spaceIndex == -1) continue;
+                                    String type = arg.substring(0, arg.indexOf(" ")).trim();
+                                    String value = arg.substring(arg.indexOf(" ")).trim();
+                                    argTypes[Arrays.asList(args).indexOf(arg)] = getClassFromString(type);
+                                    argValues[Arrays.asList(args).indexOf(arg)] = getValue(getClassFromString(type), value);
+                                }
+                                try {
+                                    method = argTypes[0] == null
+                                            ? objClass.getMethod(methodName)
+                                            : objClass.getMethod(methodName, argTypes);
+                                    obj = argTypes[0] == null
+                                            ? method.invoke(obj)
+                                            : method.invoke(obj, argValues);
+                                    objClass = obj.getClass();
+                                } catch (NullPointerException ignored) {
+                                }
                             }
+                            data.getVariables().put(methodString, new StringVariable(obj.toString()));
                         }
                         skill.cast(data);
                     } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
@@ -114,6 +119,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                     }
                 })
                 .bindWith(plugin);
+
         listenerIdentifier += target.getUniqueId();
         activeSubscriptions.put(listenerIdentifier, subscriptionBuilder);
 
