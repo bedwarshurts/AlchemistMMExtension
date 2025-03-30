@@ -115,7 +115,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                         skill.cast(data);
                     } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
                              InvocationTargetException ex) {
-                        ex.printStackTrace();
+                        throw new IllegalArgumentException("A method you specified doesnt exist in the specified class " + ex);
                     }
                 })
                 .bindWith(plugin);
@@ -160,7 +160,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                 Method valueOf = type.getMethod("valueOf", String.class);
                 return valueOf.invoke(type, strValue);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
+                throw new UnsupportedOperationException("Not an enum" + e);
             }
         }
         return strValue;
