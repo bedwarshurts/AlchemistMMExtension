@@ -1250,7 +1250,7 @@
                "duration",
                "d"
             ],
-            "type":"int",
+            "type":"Integer",
             "description":"The duration this aura lasts in ticks, 0 = infinite till removed with events:unsubscribe mechanic (or server restart)",
             "default_value":"0"
          },
