@@ -37,6 +37,7 @@
     <plugins>
         <plugin>
             <artifactId>maven-jar-plugin</artifactId>
+            <version>3.4.1</version>
             <configuration>
                 <excludes>
                     <exclude>**/mythicdungeon/IsInDungeonCondition.class</exclude>
