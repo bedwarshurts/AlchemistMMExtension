@@ -80,7 +80,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                         Entity trigger = (Entity) getTrigger.invoke(e);
                         if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
                         data.setTrigger(BukkitAdapter.adapt(trigger));
-
+                        
                         for (String methodString : methods) {
                             String methodName = methodString.split("\\(")[0];
                             String methodArgs = methodString.split("\\(")[1].replace(")", "");
@@ -97,13 +97,13 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                             }
                             Method method;
                             try {
-                                if (argTypes[0] == null) {
-                                    method = e.getClass().getMethod(methodName);
-                                    data.getVariables().put(methodName + "Result", new StringVariable(method.invoke(e).toString()));
-                                } else {
-                                    method = e.getClass().getMethod(methodName, argTypes);
-                                    data.getVariables().put(methodName + "Result", new StringVariable(method.invoke(e, argValues).toString()));
-                                }
+                                method = argTypes.length == 0
+                                        ? e.getClass().getMethod(methodName)
+                                        : e.getClass().getMethod(methodName, argTypes);
+                                Object currentObj = argTypes.length == 0
+                                        ? method.invoke(e)
+                                        : method.invoke(e, argValues);
+                                data.getVariables().put(methodName + "Result", new StringVariable(currentObj.toString()));
                             } catch (NullPointerException ignored) {
                             }
                         }
