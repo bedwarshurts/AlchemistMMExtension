@@ -37,7 +37,8 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
     private final boolean requirePlayer;
     private final double duration;
 
-    public static ConcurrentMap<String, EventSubscriptionBuilder<? extends Event>> activeSubscriptions = Maps.newConcurrentMap();
+    private final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
+    public static final ConcurrentMap<String, EventSubscriptionBuilder<? extends Event>> activeSubscriptions = Maps.newConcurrentMap();
 
     public EventSubscribeMechanic(MythicLineConfig mlc) {
         try {
@@ -63,21 +64,21 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
         EventSubscriptionBuilder<? extends Event> subscriptionBuilder = Events.subscribe(eventClass, priority)
                 .filter(e -> {
                     try {
-                        Method isCancelled = e.getClass().getMethod("isCancelled");
+                        Method isCancelled = getMethod(e.getClass(), "isCancelled");
                         return !((boolean) isCancelled.invoke(e));
-                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
+                    } catch (InvocationTargetException | IllegalAccessException ignored) {
                         return true;
                     }
                 })
                 .handler(e -> {
                     try {
-                        Method getTrigger = e.getClass().getMethod(triggerMethod.substring(0, triggerMethod.indexOf("(")));
+                        Method getTrigger = getMethod(e.getClass(), triggerMethod.substring(0, triggerMethod.indexOf("(")));
                         Entity trigger = (Entity) getTrigger.invoke(e);
                         if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
                         data.setTrigger(BukkitAdapter.adapt(trigger));
 
                         if (cancelled) {
-                            Method cancelEvent = e.getClass().getMethod("setCancelled", boolean.class);
+                            Method cancelEvent = getMethod(e.getClass(), "setCancelled", boolean.class);
                             cancelEvent.invoke(e, true);
                         }
 
@@ -89,20 +90,19 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                                 String methodName = call.split("\\(")[0];
                                 String methodArgs = call.split("\\(")[1].replace(")", "");
                                 String[] args = methodArgs.split(",");
-                                Class<?>[] argTypes = new Class<?>[args.length];
-                                Object[] argValues = new Object[args.length];
+                                final int length = args[0] == null ? 0 : args.length;
+                                Class<?>[] argTypes = new Class<?>[length];
+                                Object[] argValues = new Object[length];
                                 for (String arg : args) {
                                     int spaceIndex = arg.indexOf(" ");
                                     if (spaceIndex == -1) continue;
-                                    String type = arg.substring(0, arg.indexOf(" ")).trim();
-                                    String value = arg.substring(arg.indexOf(" ")).trim();
+                                    String type = arg.substring(0, spaceIndex).trim();
+                                    String value = arg.substring(spaceIndex).trim();
                                     argTypes[Arrays.asList(args).indexOf(arg)] = getClassFromString(type);
                                     argValues[Arrays.asList(args).indexOf(arg)] = getValue(getClassFromString(type), value);
                                 }
                                 try {
-                                    method = argTypes[0] == null
-                                            ? objClass.getMethod(methodName)
-                                            : objClass.getMethod(methodName, argTypes);
+                                    method = getMethod(objClass, methodName, argTypes);
                                     obj = argTypes[0] == null
                                             ? method.invoke(obj)
                                             : method.invoke(obj, argValues);
@@ -113,9 +113,9 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                             data.getVariables().put(methodString, new StringVariable(obj.toString()));
                         }
                         skill.cast(data);
-                    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
+                    } catch (ClassNotFoundException | IllegalAccessException |
                              InvocationTargetException ex) {
-                        throw new IllegalArgumentException("A method you specified doesnt exist in the specified class " + ex);
+                        throw new IllegalArgumentException("Couldnt access a method " + ex);
                     }
                 })
                 .bindWith(plugin);
@@ -146,6 +146,25 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
         };
     }
 
+    private Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+        try {
+            Method method;
+            if (cachedMethods.containsKey(clazz.getName() + methodName)) {
+                return cachedMethods.get(clazz.getName() + methodName);
+            }
+            if (parameterTypes.length == 0) {
+                method = clazz.getMethod(methodName);
+                cachedMethods.put(clazz.getName() + methodName, method);
+                return method;
+            }
+            method = clazz.getMethod(methodName, parameterTypes);
+            cachedMethods.put(clazz.getName() + methodName, method);
+            return method;
+        } catch (NoSuchMethodException ex) {
+            throw new IllegalArgumentException("A method you specified doesnt exist in the specified class " + ex);
+        }
+    }
+
     private Object getValue(Class<?> type, String strValue) {
         if (type == double.class) return Double.parseDouble(strValue);
         if (type == float.class) return Float.parseFloat(strValue);
@@ -160,7 +179,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                 Method valueOf = type.getMethod("valueOf", String.class);
                 return valueOf.invoke(type, strValue);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                throw new UnsupportedOperationException("Not an enum" + e);
+                throw new IllegalArgumentException("Not an enum " + e);
             }
         }
         return strValue;
