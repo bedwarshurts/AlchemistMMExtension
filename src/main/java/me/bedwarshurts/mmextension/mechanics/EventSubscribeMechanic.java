@@ -132,6 +132,25 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
         return SkillResult.SUCCESS;
     }
 
+    private Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+        try {
+            Method method;
+            if (cachedMethods.containsKey(clazz.getName() + methodName)) {
+                return cachedMethods.get(clazz.getName() + methodName);
+            }
+            if (parameterTypes.length == 0) {
+                method = clazz.getMethod(methodName);
+                cachedMethods.put(clazz.getName() + methodName, method);
+            } else {
+                method = clazz.getMethod(methodName, parameterTypes);
+                cachedMethods.put(clazz.getName() + methodName, method);
+            }
+            return method;
+        } catch (NoSuchMethodException ex) {
+            throw new IllegalArgumentException("A method you specified doesnt exist in the specified class " + ex);
+        }
+    }
+
     private Class<?> getClassFromString(String typeName) throws ClassNotFoundException {
         return switch (typeName) {
             case "byte.class" -> byte.class;
@@ -144,25 +163,6 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
             case "char.class" -> char.class;
             default -> Class.forName(typeName);
         };
-    }
-
-    private Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
-        try {
-            Method method;
-            if (cachedMethods.containsKey(clazz.getName() + methodName)) {
-                return cachedMethods.get(clazz.getName() + methodName);
-            }
-            if (parameterTypes.length == 0) {
-                method = clazz.getMethod(methodName);
-                cachedMethods.put(clazz.getName() + methodName, method);
-                return method;
-            }
-            method = clazz.getMethod(methodName, parameterTypes);
-            cachedMethods.put(clazz.getName() + methodName, method);
-            return method;
-        } catch (NoSuchMethodException ex) {
-            throw new IllegalArgumentException("A method you specified doesnt exist in the specified class " + ex);
-        }
     }
 
     private Object getValue(Class<?> type, String strValue) {
