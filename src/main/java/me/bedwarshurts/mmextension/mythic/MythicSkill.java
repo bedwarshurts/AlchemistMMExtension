@@ -24,7 +24,7 @@ public class MythicSkill {
         }
         Optional<Skill> skillOptional = manager.getSkill(skillName);
         if (skillOptional.isEmpty()) {
-            throw new NullPointerException("Skill not found");
+            throw new IllegalArgumentException("Skill " + skillName + " not found");
         }
 
         this.skill = skillOptional.get();

@@ -99,7 +99,7 @@ public final class ItemUtils {
             for (String pair : pairs) {
                 String[] parts = pair.split(":");
                 if (parts.length == 2) {
-                    Enchantment enchant = Enchantment.getByKey(org.bukkit.NamespacedKey.minecraft(parts[0].toLowerCase()));
+                    Enchantment enchant = Enchantment.getByKey(NamespacedKey.minecraft(parts[0].toLowerCase()));
                     int level = Integer.parseInt(parts[1]);
                     if (enchant != null) {
                         meta.addEnchant(enchant, level, true);

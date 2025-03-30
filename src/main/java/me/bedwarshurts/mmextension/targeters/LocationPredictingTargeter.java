@@ -61,7 +61,8 @@ public class LocationPredictingTargeter implements ILocationTargeter {
                 speedBpt = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue();
             }
 
-            if (Double.isNaN(direction.length())) { // direction.length() returns NaN if the player isn't moving
+            if (Double.isNaN(direction.length()) ) { // direction.length() returns NaN if the player isn't moving
+                direction = currentLocation.toVector();
                 if (ignoreIfStill) {
                     continue;
                 }
