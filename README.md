@@ -123,7 +123,7 @@ This introduces a new variable type a list, currently the types supported are ST
 ```
 - events:subscribe{listenerIdentifier=; class=; skill=; priority=; methods=; triggerMethod=; cancel=; requirePlayer=; duration=;} 
 When the entity returned by a @EntityTargeter triggers the specified event, a mythicmobs skill will cast. If a method returns a value (not void)
-the result is placed in the skill scoped <(methodName)Result> variable.
+the result is placed in the skill scoped <(methodName)> variable.
 ```
 
 ### EventsUnSubscribeMechanic (Aura)
