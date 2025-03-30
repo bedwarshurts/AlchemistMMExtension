@@ -6,7 +6,7 @@
 
     <groupId>me.bedwarshurs</groupId>
     <artifactId>alchemistmmextension</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.2-SNAPSHOT</version>
 
     <distributionManagement>
         <repository>
