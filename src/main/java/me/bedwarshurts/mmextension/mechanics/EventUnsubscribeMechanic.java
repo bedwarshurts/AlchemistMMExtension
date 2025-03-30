@@ -9,7 +9,7 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.events.EventSubscriptionBuilder;
 import org.bukkit.event.Event;
 
-@MythicMechanic(author = "bedwarshurts", name = "events:unsubscribe", aliases = {}, description = "Unsubscribes from an event")
+@MythicMechanic(author = "bedwarshurts", name = "events:unsubscribe", aliases = {"events:unsub"}, description = "Unsubscribes from an event")
 public class EventUnsubscribeMechanic implements ITargetedEntitySkill {
     private final String listenerIdentifier;
 

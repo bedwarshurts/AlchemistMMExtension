@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
-@MythicMechanic(author = "bedwarshurts", name = "events:subscribe", aliases = {}, description = "Subscribes to an event and runs a skill when it is triggered")
+@MythicMechanic(author = "bedwarshurts", name = "events:subscribe", aliases = {"events:sub"}, description = "Subscribes to an event and runs a skill when it is triggered")
 public class EventSubscribeMechanic implements ITargetedEntitySkill {
     private final Class<? extends Event> eventClass;
     private String listenerIdentifier;
@@ -52,7 +52,6 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
             this.cancelled = mlc.getBoolean(new String[]{"cancelled", "cancel", "c"}, false);
             this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "p"}, false);
             this.duration = mlc.getDouble(new String[]{"duration", "d"}, 90);
-
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException("Invalid event class: " + e);
         }

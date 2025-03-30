@@ -134,9 +134,11 @@ public final class MythicMobsHook implements Listener {
                 event.register(new PlaceToInventoryMechanic(event.getConfig()));
                 break;
             case "events:subscribe":
+            case "events:sub":
                 event.register(new EventSubscribeMechanic(event.getConfig()));
                 break;
             case "events:unsubscribe":
+            case "events:unsub":
                 event.register(new EventUnsubscribeMechanic(event.getConfig()));
                 break;
             default: break;
