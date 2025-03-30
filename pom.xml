@@ -21,6 +21,7 @@
         </snapshotRepository>
     </distributionManagement>
 
+
     <build>
         <finalName>AlchemistMMExtension</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -33,6 +34,16 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
+    <plugins>
+        <plugin>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+                <excludes>
+                    <exclude>**/mythicdungeon/IsInDungeonCondition.class</exclude>
+                </excludes>
+            </configuration>
+        </plugin>
+    </plugins>
 
     </build>
 
@@ -83,6 +94,7 @@
             <version>6.10-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>net.playavalon</groupId>
             <artifactId>MythicDungeons</artifactId>
@@ -90,6 +102,7 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/../libs/MythicDungeons.jar</systemPath>
         </dependency>
+        -->
         <dependency>
             <groupId>org.mariuszgromada.math</groupId>
             <artifactId>MathParser.org-mXparser</artifactId>

@@ -1,4 +1,4 @@
-package me.bedwarshurts.mmextension.conditions.mythicdungeon;
+/* package me.bedwarshurts.mmextension.conditions.mythicdungeon;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.skills.conditions.IEntityCondition;
@@ -24,3 +24,4 @@ public class IsInDungeonCondition implements IEntityCondition {
         return inst != null;
     }
 }
+*/

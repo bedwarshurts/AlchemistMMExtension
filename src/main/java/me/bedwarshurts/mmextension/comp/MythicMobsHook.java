@@ -7,7 +7,6 @@ import me.bedwarshurts.mmextension.conditions.OxygenLevelCondition;
 import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
-import me.bedwarshurts.mmextension.conditions.mythicdungeon.IsInDungeonCondition;
 import me.bedwarshurts.mmextension.mechanics.*;
 import me.bedwarshurts.mmextension.mechanics.canceldeath.CancelPlayerDeathMechanic;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
@@ -190,9 +189,10 @@ public final class MythicMobsHook implements Listener {
             case "oxygenlevel":
                 event.register(new OxygenLevelCondition(event.getConfig()));
                 break;
-            case "isindungeon":
-                event.register(new IsInDungeonCondition());
-                break;
+            /* case "isindungeon":
+             *   event.register(new IsInDungeonCondition());
+             *   break;
+             */
             default: break;
         }
     }
