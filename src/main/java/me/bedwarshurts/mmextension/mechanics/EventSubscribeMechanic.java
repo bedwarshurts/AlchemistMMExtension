@@ -149,7 +149,14 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
         if (type == byte.class) return Byte.parseByte(strValue);
         if (type == short.class) return Short.parseShort(strValue);
         if (type == char.class) return strValue.charAt(0);
-
+        if (type.isEnum()) {
+            try {
+                Method valueOf = type.getMethod("valueOf", String.class);
+                return valueOf.invoke(type, strValue);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return strValue;
     }
 }
