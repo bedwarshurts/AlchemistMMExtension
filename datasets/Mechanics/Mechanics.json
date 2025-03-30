@@ -1114,7 +1114,7 @@
         "name": [
             "events:subscribe"
         ],
-        "description": "Subscribes to an event and runs a skill when it is triggered"",
+        "description": "Subscribes to an event and runs a skill when it is triggered",
         "link": "https://github.com/bedwarshurts/AlchemistMMExtension/tree/main",
         "attributes": [
             {
@@ -1184,9 +1184,18 @@
                     "duration",
                     "d"
                 ],
-                "type": "int",
+                "type": "String",
                 "description": "This is the method that returns the trigger of the event, it differs per event and it is REQUIRED TO SUPPLY",
                 "default_value": "getPlayer()"
+            }, 
+            {
+                "name": [
+                    "requirePlayer",
+                    "rp"
+                ],
+                "type": "boolean",
+                "description": "If this is true and the entity returned by a targeter is NOT a player then the aura will NOT register",
+                "default_value": "false"
             }, 
         ]
     }
