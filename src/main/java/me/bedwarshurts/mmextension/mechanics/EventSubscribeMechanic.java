@@ -71,15 +71,15 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                 })
                 .handler(e -> {
                     try {
-                        if (cancelled) {
-                            Method cancelEvent = e.getClass().getMethod("setCancelled", boolean.class);
-                            cancelEvent.invoke(e, true);
-                        }
-
                         Method getTrigger = e.getClass().getMethod(triggerMethod.substring(0, triggerMethod.indexOf("(")));
                         Entity trigger = (Entity) getTrigger.invoke(e);
                         if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
                         data.setTrigger(BukkitAdapter.adapt(trigger));
+
+                        if (cancelled) {
+                            Method cancelEvent = e.getClass().getMethod("setCancelled", boolean.class);
+                            cancelEvent.invoke(e, true);
+                        }
 
                         for (String methodString : methods) {
                             Method method;
