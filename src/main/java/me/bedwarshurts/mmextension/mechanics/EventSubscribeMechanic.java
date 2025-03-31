@@ -87,6 +87,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                             Object obj = e;
                             Class<?> objClass = e.getClass();
                             for (String call : methodString.split("\\).")) {
+                                call += ")";
                                 String methodName = call.split("\\(")[0];
                                 String methodArgs = call.split("\\(")[1].replace(")", "");
                                 String[] args = methodArgs.split(",");
