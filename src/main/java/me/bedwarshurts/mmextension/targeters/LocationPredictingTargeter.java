@@ -10,12 +10,10 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.players.PlayerManager;
 import io.lumine.mythic.core.utils.annotations.MythicTargeter;
 import io.lumine.mythic.bukkit.utils.serialize.Position;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
