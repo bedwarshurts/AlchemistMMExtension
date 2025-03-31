@@ -37,7 +37,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
     private final boolean requirePlayer;
     private final double duration;
 
-    private final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
+    private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
     public static final ConcurrentMap<String, EventSubscriptionBuilder<? extends Event>> activeSubscriptions = Maps.newConcurrentMap();
 
     public EventSubscribeMechanic(MythicLineConfig mlc) {
