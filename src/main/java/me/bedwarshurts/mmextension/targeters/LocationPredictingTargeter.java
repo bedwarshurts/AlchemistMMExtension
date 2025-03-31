@@ -7,12 +7,15 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.targeters.ILocationTargeter;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.players.PlayerManager;
 import io.lumine.mythic.core.utils.annotations.MythicTargeter;
 import io.lumine.mythic.bukkit.utils.serialize.Position;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
@@ -47,8 +50,9 @@ public class LocationPredictingTargeter implements ILocationTargeter {
 
             Entity bukkitEntity = targetEntity.getBukkitEntity();
             UUID entityId = bukkitEntity.getUniqueId();
-            Location currentLocation = MythicBukkit.inst().getPlayerManager().getPlayerPositions().get(entityId).getTo();
-            Location previousLocation = MythicBukkit.inst().getPlayerManager().getPlayerPositions().get(entityId).getFrom();
+            PlayerManager.PlayerMovementData playerMovementData = MythicBukkit.inst().getPlayerManager().getPlayerPositions().get(entityId);
+            Location currentLocation = playerMovementData.getTo();
+            Location previousLocation = playerMovementData.getFrom();
 
             Vector direction = currentLocation.toVector().subtract(previousLocation.toVector()).normalize();
 
@@ -61,15 +65,15 @@ public class LocationPredictingTargeter implements ILocationTargeter {
                 speedBpt = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue();
             }
 
-            if (Double.isNaN(direction.length()) ) { // direction.length() returns NaN if the player isn't moving
-                direction = currentLocation.toVector();
-                if (ignoreIfStill) {
-                    continue;
-                }
-            }
-
             Vector predictedMovement = direction.multiply(speedBpt * predictionTimeTicks.get(data));
-            Location targetLocation = currentLocation.clone().add(predictedMovement);
+
+            boolean isStill = Double.isNaN(direction.length()) || System.currentTimeMillis() - playerMovementData.getLastMovementTime() >= 60;
+            if (isStill && ignoreIfStill) continue;
+
+            Location targetLocation = currentLocation.clone();
+            if (!isStill) {
+                targetLocation.add(predictedMovement);
+            }
             targetLocation.setY(targetLocation.getY() + yOffset);
 
             locations.add(new AbstractLocation(Position.of(targetLocation)));
