@@ -82,14 +82,15 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                         }
 
                         for (String methodString : methods) {
+                            if (!methodString.contains(")")) methodString += ")";
                             Method method;
                             Object obj = e;
                             Class<?> objClass = e.getClass();
-                            for (String call : methodString.split("\\.")) {
+                            for (String call : methodString.split("\\).")) {
                                 String methodName = call.split("\\(")[0];
                                 String methodArgs = call.split("\\(")[1].replace(")", "");
                                 String[] args = methodArgs.split(",");
-                                final int length = args[0] == null ? 0 : args.length;
+                                final int length = args[0].isEmpty() ? 0 : args.length;
                                 Class<?>[] argTypes = new Class<?>[length];
                                 Object[] argValues = new Object[length];
                                 for (String arg : args) {
@@ -100,16 +101,18 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                                     argTypes[Arrays.asList(args).indexOf(arg)] = getClassFromString(type);
                                     argValues[Arrays.asList(args).indexOf(arg)] = getValue(getClassFromString(type), value);
                                 }
-                                try {
-                                    method = getMethod(objClass, methodName, argTypes);
-                                    obj = argTypes[0] == null
-                                            ? method.invoke(obj)
-                                            : method.invoke(obj, argValues);
+                                method = getMethod(objClass, methodName, argTypes);
+                                obj = length == 0
+                                        ? method.invoke(obj)
+                                        : method.invoke(obj, argValues);
+                                if (!method.getReturnType().equals(void.class)) {
                                     objClass = obj.getClass();
-                                } catch (NullPointerException ignored) {
                                 }
                             }
-                            data.getVariables().put(methodString, new StringVariable(obj.toString()));
+                            try {
+                                data.getVariables().put(methodString, new StringVariable(obj.toString()));
+                            } catch (NullPointerException ignored) {
+                            }
                         }
                         skill.cast(data);
                     } catch (ClassNotFoundException | IllegalAccessException |
@@ -132,22 +135,17 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
     }
 
     private Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
-        try {
-            Method method;
-            if (cachedMethods.containsKey(clazz.getName() + methodName)) {
-                return cachedMethods.get(clazz.getName() + methodName);
+        String key = clazz.getName() + "." + methodName + Arrays.toString(parameterTypes);
+        return cachedMethods.computeIfAbsent(key, k -> {
+            try {
+                if (parameterTypes.length == 0) {
+                    return clazz.getMethod(methodName);
+                }
+                return clazz.getMethod(methodName, parameterTypes);
+            } catch (NoSuchMethodException e) {
+                throw new IllegalArgumentException("Specified method not found: " + e);
             }
-            if (parameterTypes.length == 0) {
-                method = clazz.getMethod(methodName);
-                cachedMethods.put(clazz.getName() + methodName, method);
-            } else {
-                method = clazz.getMethod(methodName, parameterTypes);
-                cachedMethods.put(clazz.getName() + methodName, method);
-            }
-            return method;
-        } catch (NoSuchMethodException ex) {
-            throw new IllegalArgumentException("A method you specified doesnt exist in the specified class " + ex);
-        }
+        });
     }
 
     private Class<?> getClassFromString(String typeName) throws ClassNotFoundException {
