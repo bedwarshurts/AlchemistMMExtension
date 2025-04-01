@@ -21,7 +21,6 @@ import java.io.File;
 public class OnSignalMechanic extends Aura implements ITargetedEntitySkill {
     private final MythicSkill skill;
     private final String signal;
-    private EventSubscriptionBuilder<MythicPlayerSignalEvent> listener;
 
     public OnSignalMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
@@ -61,7 +60,6 @@ public class OnSignalMechanic extends Aura implements ITargetedEntitySkill {
 
         @Override
         public void auraStop() {
-            listener.unsubscribe();
             executeAuraSkill(onEndSkill, skillMetadata);
         }
     }
