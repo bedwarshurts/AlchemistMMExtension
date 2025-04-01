@@ -8,6 +8,7 @@ import me.bedwarshurts.mmextension.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.mechanics.*;
+import me.bedwarshurts.mmextension.mechanics.aura.EventSubscribeMechanic;
 import me.bedwarshurts.mmextension.mechanics.canceldeath.CancelPlayerDeathMechanic;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.HotbarSnapshotMechanic;
@@ -26,7 +27,7 @@ import me.bedwarshurts.mmextension.mechanics.loop.BreakMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.ForEachMechanic;
 import me.bedwarshurts.mmextension.mechanics.loop.WhileLoopMechanic;
 import me.bedwarshurts.mmextension.mechanics.mmocore.SetMMOCooldownMechanic;
-import me.bedwarshurts.mmextension.mechanics.signal.OnSignalMechanic;
+import me.bedwarshurts.mmextension.mechanics.aura.OnSignalMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.VerticalSlashMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.RingShapeMechanic;
 import me.bedwarshurts.mmextension.mechanics.particle.SphereShapeMechanic;
@@ -88,7 +89,8 @@ public final class MythicMobsHook implements Listener {
                 event.register(new ChestGUIMechanic(event.getConfig()));
                 break;
             case "onsignal":
-                event.register(new OnSignalMechanic(event.getConfig()));
+                event.register(new OnSignalMechanic(event.getContainer().getManager(), event.getContainer().getFile(),
+                        event.getContainer().getConfigLine(), event.getConfig()));
                 break;
             case "hotbarsnapshot":
                 event.register(new HotbarSnapshotMechanic(event.getConfig()));
@@ -131,10 +133,8 @@ public final class MythicMobsHook implements Listener {
                 break;
             case "events:subscribe":
             case "events:sub":
-                event.register(new EventSubscribeMechanic(event.getConfig()));
-                break;
-            case "aura:remove":
-                event.register(new AuraRemoveMechanic(event.getConfig()));
+                event.register(new EventSubscribeMechanic(event.getContainer().getManager(), event.getContainer().getFile(),
+                        event.getContainer().getConfigLine(), event.getConfig()));
                 break;
             default: break;
         }

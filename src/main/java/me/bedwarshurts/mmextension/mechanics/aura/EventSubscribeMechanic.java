@@ -1,4 +1,4 @@
-package me.bedwarshurts.mmextension.mechanics;
+package me.bedwarshurts.mmextension.mechanics.aura;
 
 import com.google.common.collect.Maps;
 import io.lumine.mythic.api.adapters.AbstractEntity;
@@ -7,6 +7,8 @@ import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.core.skills.SkillExecutor;
+import io.lumine.mythic.core.skills.auras.Aura;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
@@ -18,6 +20,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.mariuszgromada.math.mxparser.Expression;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -27,24 +30,21 @@ import java.util.concurrent.ConcurrentMap;
 import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "events:subscribe", aliases = {"events:sub"}, description = "Subscribes to an event and runs a skill when it is triggered")
-public class EventSubscribeMechanic implements ITargetedEntitySkill, AuraMechanic {
+public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill {
     private final Class<? extends Event> eventClass;
-    private final String listenerIdentifier;
     private final MythicSkill skill;
     private final EventPriority priority;
     private final ArrayList<String> methods = new ArrayList<>();
     private final String triggerMethod;
     private final String cancelCondition;
     private final boolean requirePlayer;
-    private final double duration;
-    private EventSubscriptionBuilder<? extends Event> subscriptionBuilder;
+    private EventSubscriptionBuilder<? extends Event> listener;
 
     private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
-    public static final ConcurrentMap<String, EventSubscriptionBuilder<? extends Event>> activeSubscriptions = Maps.newConcurrentMap();
 
-    public EventSubscribeMechanic(MythicLineConfig mlc) {
+    public EventSubscribeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
+        super(manager, file, line, mlc);
         try {
-            this.listenerIdentifier = mlc.getString(new String[]{"name", "id", "identifier", "listenerIdentifier"}, "event");
             this.eventClass = Class.forName(mlc.getString(new String[]{"class"}, "org.bukkit.event.player.PlayerMoveEvent"))
                     .asSubclass(Event.class);
             this.skill = new MythicSkill(mlc.getString(new String[]{"skill", "s"}, ""));
@@ -53,7 +53,6 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill, AuraMechani
             this.triggerMethod = mlc.getString(new String[]{"triggerMethod", "trigger"}, "getPlayer()");
             this.cancelCondition = mlc.getString(new String[]{"cancelled", "cancel", "c"}, "false");
             this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "p"}, false);
-            this.duration = mlc.getDouble(new String[]{"duration", "d"}, 90);
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException("Invalid event class: " + e);
         }
@@ -62,71 +61,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill, AuraMechani
     @Override
     public SkillResult castAtEntity(SkillMetadata data, AbstractEntity target) {
         if (requirePlayer && !target.isPlayer()) return SkillResult.INVALID_TARGET;
-        subscriptionBuilder = Events.subscribe(eventClass, priority)
-                .filter(e -> {
-                    try {
-                        Method isCancelled = getMethod(e.getClass(), "isCancelled");
-                        return !((boolean) isCancelled.invoke(e));
-                    } catch (InvocationTargetException | IllegalAccessException ignored) {
-                        return true;
-                    }
-                })
-                .handler(e -> {
-                    try {
-                        Method getTrigger = getMethod(e.getClass(), triggerMethod.substring(0, triggerMethod.indexOf("(")));
-                        Entity trigger = (Entity) getTrigger.invoke(e);
-                        if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
-                        data.setTrigger(BukkitAdapter.adapt(trigger));
-
-                        for (String methodString : methods) {
-                            if (!methodString.contains(")")) methodString += ")";
-                            Method method;
-                            Object obj = e;
-                            Class<?> objClass = e.getClass();
-                            for (String call : methodString.split("\\).")) {
-                                call += ")";
-                                String methodName = call.split("\\(")[0];
-                                String methodArgs = call.split("\\(")[1].replace(")", "");
-                                String[] args = methodArgs.split(",");
-                                final int length = args[0].isEmpty() ? 0 : args.length;
-                                Class<?>[] argTypes = new Class<?>[length];
-                                Object[] argValues = new Object[length];
-                                for (String arg : args) {
-                                    int spaceIndex = arg.indexOf(" ");
-                                    if (spaceIndex == -1) continue;
-                                    String type = arg.substring(0, spaceIndex).trim();
-                                    String value = arg.substring(spaceIndex).trim();
-                                    argTypes[Arrays.asList(args).indexOf(arg)] = getClassFromString(type);
-                                    argValues[Arrays.asList(args).indexOf(arg)] = getValue(getClassFromString(type), value);
-                                }
-                                method = getMethod(objClass, methodName, argTypes);
-                                obj = length == 0
-                                        ? method.invoke(obj)
-                                        : method.invoke(obj, argValues);
-                                if (!method.getReturnType().equals(void.class)) {
-                                    objClass = obj.getClass();
-                                }
-                            }
-                            try {
-                                data.getVariables().put(methodString, new StringVariable(obj.toString()));
-                            } catch (NullPointerException ignored) {
-                            }
-                        }
-
-                        if (evaluateCondition(cancelCondition, data)) {
-                            Method cancelEvent = getMethod(e.getClass(), "setCancelled", boolean.class);
-                            cancelEvent.invoke(e, true);
-                        }
-
-                        skill.cast(data);
-                    } catch (ClassNotFoundException | IllegalAccessException |
-                             InvocationTargetException ex) {
-                        throw new IllegalArgumentException("Couldnt access a method " + ex);
-                    }
-                })
-                .bindWith(plugin);
-
-        this.register(target.getUniqueId(), this, listenerIdentifier, duration);
+        new EventSubscribeMechanicTracker(target, data);
         return SkillResult.SUCCESS;
     }
 
@@ -200,8 +135,88 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill, AuraMechani
         return strValue;
     }
 
-    @Override
-    public void terminate() {
-        subscriptionBuilder.unsubscribe();
+    private class EventSubscribeMechanicTracker extends AuraTracker {
+        private final AbstractEntity target;
+
+        public EventSubscribeMechanicTracker(AbstractEntity target, SkillMetadata data) {
+            super(target, data);
+            this.target = target;
+
+            start();
+        }
+
+        @Override
+        public void auraStart() {
+            executeAuraSkill(onStartSkill, skillMetadata);
+            listener = Events.subscribe(eventClass, priority)
+                    .filter(e -> {
+                        try {
+                            Method isCancelled = getMethod(e.getClass(), "isCancelled");
+                            return !((boolean) isCancelled.invoke(e));
+                        } catch (InvocationTargetException | IllegalAccessException ignored) {
+                            return true;
+                        }
+                    })
+                    .handler(e -> {
+                        try {
+                            Method getTrigger = getMethod(e.getClass(), triggerMethod.substring(0, triggerMethod.indexOf("(")));
+                            Entity trigger = (Entity) getTrigger.invoke(e);
+                            if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
+                            skillMetadata.setTrigger(BukkitAdapter.adapt(trigger));
+
+                            for (String methodString : methods) {
+                                if (!methodString.contains(")")) methodString += ")";
+                                Method method;
+                                Object obj = e;
+                                Class<?> objClass = e.getClass();
+                                for (String call : methodString.split("\\).")) {
+                                    call += ")";
+                                    String methodName = call.split("\\(")[0];
+                                    String methodArgs = call.split("\\(")[1].replace(")", "");
+                                    String[] args = methodArgs.split(",");
+                                    final int length = args[0].isEmpty() ? 0 : args.length;
+                                    Class<?>[] argTypes = new Class<?>[length];
+                                    Object[] argValues = new Object[length];
+                                    for (String arg : args) {
+                                        int spaceIndex = arg.indexOf(" ");
+                                        if (spaceIndex == -1) continue;
+                                        String type = arg.substring(0, spaceIndex).trim();
+                                        String value = arg.substring(spaceIndex).trim();
+                                        argTypes[Arrays.asList(args).indexOf(arg)] = getClassFromString(type);
+                                        argValues[Arrays.asList(args).indexOf(arg)] = getValue(getClassFromString(type), value);
+                                    }
+                                    method = getMethod(objClass, methodName, argTypes);
+                                    obj = length == 0
+                                            ? method.invoke(obj)
+                                            : method.invoke(obj, argValues);
+                                    if (!method.getReturnType().equals(void.class)) {
+                                        objClass = obj.getClass();
+                                    }
+                                }
+                                try {
+                                    skillMetadata.getVariables().put(methodString, new StringVariable(obj.toString()));
+                                } catch (NullPointerException ignored) {
+                                }
+                            }
+
+                            if (evaluateCondition(cancelCondition, skillMetadata)) {
+                                Method cancelEvent = getMethod(e.getClass(), "setCancelled", boolean.class);
+                                cancelEvent.invoke(e, true);
+                            }
+
+                            skill.cast(skillMetadata);
+                        } catch (ClassNotFoundException | IllegalAccessException |
+                                 InvocationTargetException ex) {
+                            throw new IllegalArgumentException("Couldnt access a method " + ex);
+                        }
+                    })
+                    .bindWith(plugin);
+        }
+
+        @Override
+        public void auraStop() {
+            listener.unsubscribe();
+            executeAuraSkill(onEndSkill, skillMetadata);
+        }
     }
 }
