@@ -10,12 +10,13 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
+import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.bedwarshurts.mmextension.utils.events.EventSubscriptionBuilder;
 import me.bedwarshurts.mmextension.utils.events.Events;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
+import org.mariuszgromada.math.mxparser.Expression;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,16 +27,17 @@ import java.util.concurrent.ConcurrentMap;
 import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "events:subscribe", aliases = {"events:sub"}, description = "Subscribes to an event and runs a skill when it is triggered")
-public class EventSubscribeMechanic implements ITargetedEntitySkill {
+public class EventSubscribeMechanic implements ITargetedEntitySkill, AuraMechanic {
     private final Class<? extends Event> eventClass;
-    private String listenerIdentifier;
+    private final String listenerIdentifier;
     private final MythicSkill skill;
     private final EventPriority priority;
     private final ArrayList<String> methods = new ArrayList<>();
     private final String triggerMethod;
-    private final boolean cancelled;
+    private final String cancelCondition;
     private final boolean requirePlayer;
     private final double duration;
+    private EventSubscriptionBuilder<? extends Event> subscriptionBuilder;
 
     private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
     public static final ConcurrentMap<String, EventSubscriptionBuilder<? extends Event>> activeSubscriptions = Maps.newConcurrentMap();
@@ -49,7 +51,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
             this.priority = EventPriority.valueOf(mlc.getString(new String[]{"eventPriority", "priority"}, "NORMAL").toUpperCase());
             this.methods.addAll(Arrays.asList(mlc.getString(new String[]{"methods", "m"}, "").split("\\),")));
             this.triggerMethod = mlc.getString(new String[]{"triggerMethod", "trigger"}, "getPlayer()");
-            this.cancelled = mlc.getBoolean(new String[]{"cancelled", "cancel", "c"}, false);
+            this.cancelCondition = mlc.getString(new String[]{"cancelled", "cancel", "c"}, "false");
             this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "p"}, false);
             this.duration = mlc.getDouble(new String[]{"duration", "d"}, 90);
         } catch (ClassNotFoundException e) {
@@ -60,7 +62,7 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
     @Override
     public SkillResult castAtEntity(SkillMetadata data, AbstractEntity target) {
         if (requirePlayer && !target.isPlayer()) return SkillResult.INVALID_TARGET;
-        EventSubscriptionBuilder<? extends Event> subscriptionBuilder = Events.subscribe(eventClass, priority)
+        subscriptionBuilder = Events.subscribe(eventClass, priority)
                 .filter(e -> {
                     try {
                         Method isCancelled = getMethod(e.getClass(), "isCancelled");
@@ -75,11 +77,6 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                         Entity trigger = (Entity) getTrigger.invoke(e);
                         if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
                         data.setTrigger(BukkitAdapter.adapt(trigger));
-
-                        if (cancelled) {
-                            Method cancelEvent = getMethod(e.getClass(), "setCancelled", boolean.class);
-                            cancelEvent.invoke(e, true);
-                        }
 
                         for (String methodString : methods) {
                             if (!methodString.contains(")")) methodString += ")";
@@ -115,6 +112,12 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                             } catch (NullPointerException ignored) {
                             }
                         }
+
+                        if (evaluateCondition(cancelCondition, data)) {
+                            Method cancelEvent = getMethod(e.getClass(), "setCancelled", boolean.class);
+                            cancelEvent.invoke(e, true);
+                        }
+
                         skill.cast(data);
                     } catch (ClassNotFoundException | IllegalAccessException |
                              InvocationTargetException ex) {
@@ -123,16 +126,30 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
                 })
                 .bindWith(plugin);
 
-        listenerIdentifier += target.getUniqueId();
-        activeSubscriptions.put(listenerIdentifier, subscriptionBuilder);
-
-        if (duration == 0) return SkillResult.SUCCESS;
-
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
-            EventSubscriptionBuilder<? extends Event> subscription = activeSubscriptions.remove(listenerIdentifier);
-            if (subscription != null) subscription.unsubscribe();
-        }, (long) duration);
+        this.register(target.getUniqueId(), this, listenerIdentifier, duration);
         return SkillResult.SUCCESS;
+    }
+
+    private boolean evaluateCondition(String condition, SkillMetadata data) {
+        String parsedCondition = PlaceholderUtils.parseDoublePlaceholders(condition, data);
+        parsedCondition = PlaceholderUtils.parseIntPlaceholders(parsedCondition, data);
+        parsedCondition = PlaceholderUtils.parseStringPlaceholders(parsedCondition, data);
+
+        if (condition.equals("true")) return true;
+        if (condition.equals("false")) return false;
+
+        if (!condition.contains("equals")) {
+            Expression expression = new Expression(parsedCondition);
+
+            return expression.calculate() == 1;
+        }
+
+        String[] parts = condition.split(".equals\\(");
+        if (parts.length != 2) return false;
+        String firstPart = parts[0].trim();
+        String secondPart = parts[1].replace(")", "").trim();
+
+        return firstPart.equals(secondPart);
     }
 
     private Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
@@ -181,5 +198,10 @@ public class EventSubscribeMechanic implements ITargetedEntitySkill {
             }
         }
         return strValue;
+    }
+
+    @Override
+    public void terminate() {
+        subscriptionBuilder.unsubscribe();
     }
 }
