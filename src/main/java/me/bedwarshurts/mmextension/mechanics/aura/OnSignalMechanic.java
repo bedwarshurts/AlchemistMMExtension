@@ -6,18 +6,16 @@ import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.bukkit.events.MythicPlayerSignalEvent;
+import io.lumine.mythic.bukkit.utils.Events;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.auras.Aura;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import me.bedwarshurts.mmextension.utils.events.EventSubscriptionBuilder;
-import me.bedwarshurts.mmextension.utils.events.Events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 
 import java.io.File;
-
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "onsignal", aliases = {}, description = "Triggers a skill when a player receives a signal")
 public class OnSignalMechanic extends Aura implements ITargetedEntitySkill {
@@ -52,13 +50,13 @@ public class OnSignalMechanic extends Aura implements ITargetedEntitySkill {
         @Override
         public void auraStart() {
             executeAuraSkill(onStartSkill, skillMetadata);
-            listener = Events.subscribe(MythicPlayerSignalEvent.class, EventPriority.NORMAL).filter(event -> {
+            Events.subscribe(MythicPlayerSignalEvent.class, EventPriority.NORMAL).filter(event -> {
                 Player eventPlayer = (Player) event.getProfile().getEntity().getBukkitEntity();
                 return eventPlayer != null && eventPlayer.getUniqueId().equals(target.getUniqueId()) && event.getSignal().equals(signal);
             }).handler(event -> {
                 skillMetadata.setTrigger(event.getProfile().getEntity());
                 skill.cast(skillMetadata);
-            }).bindWith(plugin);
+            }).bindWith(this);
         }
 
         @Override

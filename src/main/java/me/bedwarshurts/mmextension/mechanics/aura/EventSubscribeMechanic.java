@@ -7,6 +7,7 @@ import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.utils.Events;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.auras.Aura;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
@@ -14,7 +15,6 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.bedwarshurts.mmextension.utils.events.EventSubscriptionBuilder;
-import me.bedwarshurts.mmextension.utils.events.Events;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentMap;
 
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
-
 @MythicMechanic(author = "bedwarshurts", name = "events:subscribe", aliases = {"events:sub"}, description = "Subscribes to an event and runs a skill when it is triggered")
 public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill {
     private final Class<? extends Event> eventClass;
@@ -38,7 +36,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
     private final String triggerMethod;
     private final String cancelCondition;
     private final boolean requirePlayer;
-    private EventSubscriptionBuilder<? extends Event> listener;
 
     private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
 
@@ -148,7 +145,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
         @Override
         public void auraStart() {
             executeAuraSkill(onStartSkill, skillMetadata);
-            listener = Events.subscribe(eventClass, priority)
+            Events.subscribe(eventClass, priority)
                     .filter(e -> {
                         try {
                             Method isCancelled = getMethod(e.getClass(), "isCancelled");
@@ -210,12 +207,11 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                             throw new IllegalArgumentException("Couldnt access a method " + ex);
                         }
                     })
-                    .bindWith(plugin);
+                    .bindWith(this);
         }
 
         @Override
         public void auraStop() {
-            listener.unsubscribe();
             executeAuraSkill(onEndSkill, skillMetadata);
         }
     }
