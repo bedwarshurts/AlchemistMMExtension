@@ -2,17 +2,16 @@ package me.bedwarshurts.mmextension.mechanics.signal;
 
 import io.lumine.mythic.api.skills.SkillCaster;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
+import me.bedwarshurts.mmextension.utils.DataHolder;
 import org.bukkit.entity.Player;
 
-public class OnSignalData {
-    private final String identifier;
+public class OnSignalData implements DataHolder {
     private final Player player;
     private final MythicSkill skill;
     private final String signal;
     private final SkillCaster caster;
 
-    public OnSignalData(String identifier, Player player, MythicSkill skill, String signal, SkillCaster caster) {
-        this.identifier = identifier;
+    public OnSignalData(Player player, MythicSkill skill, String signal, SkillCaster caster) {
         this.player = player;
         this.skill = skill;
         this.signal = signal;
@@ -21,10 +20,6 @@ public class OnSignalData {
 
     public Player getPlayer() {
         return player;
-    }
-
-    public String getIdentifier() {
-        return identifier;
     }
 
     public MythicSkill getSkill() {

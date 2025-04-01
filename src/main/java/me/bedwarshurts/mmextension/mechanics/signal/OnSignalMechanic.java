@@ -7,6 +7,7 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.listeners.OnSignalListener;
+import me.bedwarshurts.mmextension.mechanics.AuraMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,7 +17,7 @@ import java.util.*;
 import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "onsignal", aliases = {}, description = "Triggers a skill when a player receives a signal")
-public class OnSignalMechanic implements INoTargetSkill {
+public class OnSignalMechanic implements INoTargetSkill, AuraMechanic {
     private final String identifier;
     private final String skill;
     private final String signal;
@@ -37,17 +38,20 @@ public class OnSignalMechanic implements INoTargetSkill {
     public SkillResult cast(SkillMetadata data) {
         boolean success = false;
 
-        for (AbstractEntity entity : data.getEntityTargets()) {
-            if (!entity.isPlayer()) continue;
+        for (AbstractEntity target : data.getEntityTargets()) {
+            if (!target.isPlayer()) continue;
 
-            Player player = (Player) entity.getBukkitEntity();
-            OnSignalData onSignal = new OnSignalData(identifier, player, new MythicSkill(skill), signal, data.getCaster());
+            Player player = (Player) target.getBukkitEntity();
+            OnSignalData onSignal = new OnSignalData(player, new MythicSkill(skill), signal, data.getCaster());
 
-            ACTIVE_SIGNALS.put(identifier + entity.getUniqueId(), onSignal);
-
-            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> ACTIVE_SIGNALS.remove(identifier), durationTicks);
+            ACTIVE_SIGNALS.put(identifier + target.getUniqueId(), onSignal);
+            this.register(target.getUniqueId(), this, identifier, (double) durationTicks, onSignal);
             success = true;
         }
         return success ? SkillResult.SUCCESS : SkillResult.INVALID_TARGET;
+    }
+
+    @Override
+    public void terminate() {
     }
 }
