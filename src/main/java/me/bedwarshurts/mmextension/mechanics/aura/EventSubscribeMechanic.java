@@ -3,6 +3,7 @@ package me.bedwarshurts.mmextension.mechanics.aura;
 import com.google.common.collect.Maps;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
+import io.lumine.mythic.api.skills.IParentSkill;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
@@ -13,11 +14,9 @@ import io.lumine.mythic.core.skills.auras.Aura;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
-import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
-import org.mariuszgromada.math.mxparser.Expression;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -33,7 +32,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
     private final EventPriority priority;
     private final ArrayList<String> methods = new ArrayList<>();
     private final String triggerMethod;
-    private final String cancelCondition;
     private final boolean requirePlayer;
 
     private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
@@ -47,7 +45,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
             this.priority = EventPriority.valueOf(mlc.getString(new String[]{"eventPriority", "priority"}, "NORMAL").toUpperCase());
             this.methods.addAll(Arrays.asList(mlc.getString(new String[]{"methods", "m"}, "").split("\\),")));
             this.triggerMethod = mlc.getString(new String[]{"triggerMethod", "trigger"}, "getPlayer()");
-            this.cancelCondition = mlc.getString(new String[]{"cancelled", "cancel", "c"}, "false");
             this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "p"}, false);
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException("Invalid event class: " + e);
@@ -59,25 +56,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
         if (requirePlayer && !target.isPlayer()) return SkillResult.INVALID_TARGET;
         new EventSubscribeMechanicTracker(target, data);
         return SkillResult.SUCCESS;
-    }
-
-    private boolean evaluateCondition(String condition, SkillMetadata data) {
-        String parsedCondition = PlaceholderUtils.parseStringPlaceholders(condition, data);
-
-        if (parsedCondition.equals("true")) return true;
-        if (parsedCondition.equals("false")) return false;
-
-        if (!parsedCondition.contains("equals")) {
-            Expression expression = new Expression(parsedCondition);
-
-            return expression.calculate() == 1;
-        }
-
-        String[] parts = parsedCondition.split(".equals\\(");
-        if (parts.length != 2) return false;
-        String firstPart = parts[0].trim();
-        String secondPart = parts[1].replace(")", "").trim();
-        return firstPart.equals(secondPart);
     }
 
     private Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
@@ -128,8 +106,9 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
         return strValue;
     }
 
-    private class EventSubscribeMechanicTracker extends AuraTracker {
+    private class EventSubscribeMechanicTracker extends AuraTracker implements IParentSkill {
         private final AbstractEntity target;
+        private boolean cancel;
 
         public EventSubscribeMechanicTracker(AbstractEntity target, SkillMetadata data) {
             super(target, data);
@@ -192,12 +171,12 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                                 }
                             }
 
-                            if (evaluateCondition(cancelCondition, skillMetadata)) {
+                            skill.cast(skillMetadata);
+
+                            if (this.cancel) {
                                 Method cancelEvent = getMethod(e.getClass(), "setCancelled", boolean.class);
                                 cancelEvent.invoke(e, true);
                             }
-
-                            skill.cast(skillMetadata);
                         } catch (ClassNotFoundException | IllegalAccessException |
                                  InvocationTargetException ex) {
                             throw new IllegalArgumentException("Couldnt access a method " + ex);
@@ -206,9 +185,20 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                     .bindWith(this);
         }
 
+
         @Override
         public void auraStop() {
             executeAuraSkill(onEndSkill, skillMetadata);
+        }
+
+        @Override
+        public void setCancelled() {
+            this.cancel = true;
+        }
+
+        @Override
+        public boolean getCancelled() {
+            return cancel;
         }
     }
 }
