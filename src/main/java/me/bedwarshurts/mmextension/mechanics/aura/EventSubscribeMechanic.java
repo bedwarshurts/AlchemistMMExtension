@@ -62,24 +62,21 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
     }
 
     private boolean evaluateCondition(String condition, SkillMetadata data) {
-        String parsedCondition = PlaceholderUtils.parseDoublePlaceholders(condition, data);
-        parsedCondition = PlaceholderUtils.parseIntPlaceholders(parsedCondition, data);
-        parsedCondition = PlaceholderUtils.parseStringPlaceholders(parsedCondition, data);
+        String parsedCondition = PlaceholderUtils.parseStringPlaceholders(condition, data);
 
-        if (condition.equals("true")) return true;
-        if (condition.equals("false")) return false;
+        if (parsedCondition.equals("true")) return true;
+        if (parsedCondition.equals("false")) return false;
 
-        if (!condition.contains("equals")) {
+        if (!parsedCondition.contains("equals")) {
             Expression expression = new Expression(parsedCondition);
 
             return expression.calculate() == 1;
         }
 
-        String[] parts = condition.split(".equals\\(");
+        String[] parts = parsedCondition.split(".equals\\(");
         if (parts.length != 2) return false;
         String firstPart = parts[0].trim();
         String secondPart = parts[1].replace(")", "").trim();
-
         return firstPart.equals(secondPart);
     }
 
@@ -190,7 +187,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                                     }
                                 }
                                 try {
-                                    System.out.println(methodString);
                                     skillMetadata.getVariables().put(methodString, new StringVariable(obj.toString()));
                                 } catch (NullPointerException ignored) {
                                 }
