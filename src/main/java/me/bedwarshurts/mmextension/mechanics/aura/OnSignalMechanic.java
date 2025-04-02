@@ -11,7 +11,6 @@ import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.auras.Aura;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
-import me.bedwarshurts.mmextension.utils.events.EventSubscriptionBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 
@@ -22,8 +21,8 @@ public class OnSignalMechanic extends Aura implements ITargetedEntitySkill {
     private final MythicSkill skill;
     private final String signal;
 
-    public OnSignalMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
-        super(manager, file, line, mlc);
+    public OnSignalMechanic(SkillExecutor manager, File file, MythicLineConfig mlc) {
+        super(manager, file, mlc.getLine(), mlc);
 
         this.skill = new MythicSkill(mlc.getString(new String[]{"skill"}, ""));
         this.signal = mlc.getString(new String[]{"signal"}, "");

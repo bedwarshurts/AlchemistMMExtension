@@ -89,8 +89,7 @@ public final class MythicMobsHook implements Listener {
                 event.register(new ChestGUIMechanic(event.getConfig()));
                 break;
             case "onsignal":
-                event.register(new OnSignalMechanic(event.getContainer().getManager(), event.getContainer().getFile(),
-                        event.getContainer().getConfigLine(), event.getConfig()));
+                event.register(new OnSignalMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getConfig()));
                 break;
             case "hotbarsnapshot":
                 event.register(new HotbarSnapshotMechanic(event.getConfig()));
@@ -133,8 +132,7 @@ public final class MythicMobsHook implements Listener {
                 break;
             case "events:subscribe":
             case "events:sub":
-                event.register(new EventSubscribeMechanic(event.getContainer().getManager(), event.getContainer().getFile(),
-                        event.getContainer().getConfigLine(), event.getConfig()));
+                event.register(new EventSubscribeMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getConfig()));
                 break;
             default: break;
         }

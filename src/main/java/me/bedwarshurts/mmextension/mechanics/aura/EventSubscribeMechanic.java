@@ -14,7 +14,6 @@ import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
-import me.bedwarshurts.mmextension.utils.events.EventSubscriptionBuilder;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -39,8 +38,8 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
 
     private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
 
-    public EventSubscribeMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
-        super(manager, file, line, mlc);
+    public EventSubscribeMechanic(SkillExecutor manager, File file, MythicLineConfig mlc) {
+        super(manager, file, mlc.getLine(), mlc);
         try {
             this.eventClass = Class.forName(mlc.getString(new String[]{"class"}, "org.bukkit.event.player.PlayerMoveEvent"))
                     .asSubclass(Event.class);
@@ -162,7 +161,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                             skillMetadata.setTrigger(BukkitAdapter.adapt(trigger));
 
                             for (String methodString : methods) {
-                                if (!methodString.contains(")")) methodString += ")";
+                                if (!methodString.endsWith(")")) methodString += ")";
                                 Method method;
                                 Object obj = e;
                                 Class<?> objClass = e.getClass();
@@ -191,6 +190,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                                     }
                                 }
                                 try {
+                                    System.out.println(methodString);
                                     skillMetadata.getVariables().put(methodString, new StringVariable(obj.toString()));
                                 } catch (NullPointerException ignored) {
                                 }
