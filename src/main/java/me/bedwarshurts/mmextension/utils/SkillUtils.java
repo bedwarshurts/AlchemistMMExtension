@@ -6,19 +6,15 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import io.lumine.mythic.api.adapters.AbstractEntity;
-import io.lumine.mythic.api.adapters.AbstractLocation;
-import io.lumine.mythic.api.skills.Skill;
 import io.lumine.mythic.api.skills.SkillMetadata;
-import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.bukkit.utils.terminable.TerminableRegistry;
 import io.lumine.mythic.core.players.PlayerData;
-import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -122,5 +118,14 @@ public final class SkillUtils {
 
         return optionalMythicPlayer.orElse(null);
 
+    }
+
+    public static boolean isAuraValid(TerminableRegistry components, int startDuration, int chargesRemaining, int startCharges, int ticksRemaining, AbstractEntity entity, boolean hasEnded) {
+        if (hasEnded || components.hasTerminated()) return false;
+        if (startCharges > 0 && chargesRemaining <= 0) return false;
+        if (startDuration < 0) {
+            return entity.isValid();
+        }
+        return ticksRemaining > 0 && entity.isValid();
     }
 }

@@ -9,7 +9,7 @@ import me.bedwarshurts.mmextension.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.mechanics.*;
 import me.bedwarshurts.mmextension.mechanics.aura.EventSubscribeMechanic;
-import me.bedwarshurts.mmextension.mechanics.canceldeath.CancelPlayerDeathMechanic;
+import me.bedwarshurts.mmextension.mechanics.aura.CancelPlayerDeathMechanic;
 import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.HotbarSnapshotMechanic;
 import me.bedwarshurts.mmextension.mechanics.inventory.PlaceToInventoryMechanic;
@@ -56,7 +56,7 @@ public final class MythicMobsHook implements Listener {
                 event.register(new RingShapeMechanic(event.getConfig()));
                 break;
             case "cancelplayerdeath":
-                event.register(new CancelPlayerDeathMechanic(event.getConfig()));
+                event.register(new CancelPlayerDeathMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getConfig()));
                 break;
             case "openchest":
                 event.register(new OpenChestMechanic(event.getConfig()));

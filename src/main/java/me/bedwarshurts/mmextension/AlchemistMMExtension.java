@@ -21,6 +21,8 @@ public class AlchemistMMExtension extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        plugin = this;
+
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") == null) {
             getLogger().severe("MythicMobs is not installed! Disabling AlchemistMMExtension...");
             Bukkit.getPluginManager().disablePlugin(this);
@@ -42,8 +44,6 @@ public class AlchemistMMExtension extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("MMOCore") == null) {
             getLogger().warning("MMOCore is not installed! Some features may not work.");
         }
-
-        plugin = this;
 
         Bukkit.getPluginManager().registerEvents(new MythicMobsHook(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
