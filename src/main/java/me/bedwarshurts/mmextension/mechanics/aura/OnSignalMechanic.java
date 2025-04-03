@@ -11,6 +11,7 @@ import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.auras.Aura;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
+import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 
@@ -60,6 +61,26 @@ public class OnSignalMechanic extends Aura implements ITargetedEntitySkill {
         @Override
         public void auraStop() {
             executeAuraSkill(onEndSkill, skillMetadata);
+        }
+
+        @Override
+        public boolean isValid() {
+            return this.entity.filter(abstractEntity ->
+                    SkillUtils.isAuraValid(this.components, this.startDuration, this.chargesRemaining,
+                            this.startCharges, this.ticksRemaining, abstractEntity, this.hasEnded)).isPresent();
+        }
+
+        @Override
+        public void run() {
+            if (this.startDuration >= 0) {
+                this.ticksRemaining -= this.interval;
+            }
+            if (!this.isValid()) {
+                this.terminate();
+                return;
+            }
+            this.entity.ifPresent(e -> this.skillMetadata.setOrigin(e.getLocation()));
+            this.auraTick();
         }
     }
 }
