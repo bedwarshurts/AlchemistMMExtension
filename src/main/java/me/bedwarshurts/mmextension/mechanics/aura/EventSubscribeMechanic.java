@@ -11,9 +11,11 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.utils.Events;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.auras.Aura;
+import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
+import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -45,7 +47,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
             this.priority = EventPriority.valueOf(mlc.getString(new String[]{"eventPriority", "priority"}, "NORMAL").toUpperCase());
             this.methods.addAll(Arrays.asList(mlc.getString(new String[]{"methods", "m"}, "").split("\\),")));
             this.triggerMethod = mlc.getString(new String[]{"triggerMethod", "trigger"}, "getPlayer()");
-            this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "p"}, false);
+            this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "rp"}, false);
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException("Invalid event class: " + e);
         }
@@ -130,6 +132,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                         }
                     })
                     .handler(e -> {
+                        long lastCallTime = System.currentTimeMillis();
                         try {
                             Method getTrigger = getMethod(e.getClass(), triggerMethod.substring(0, triggerMethod.indexOf("(")));
                             Entity trigger = (Entity) getTrigger.invoke(e);
@@ -171,6 +174,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                                 }
                             }
 
+                            skillMetadata.getVariables().put("lastCallTime", new IntegerVariable((int) lastCallTime));
                             skill.cast(skillMetadata);
 
                             if (this.cancel) {
@@ -185,7 +189,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                     .bindWith(this);
         }
 
-
         @Override
         public void auraStop() {
             executeAuraSkill(onEndSkill, skillMetadata);
@@ -199,6 +202,26 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
         @Override
         public boolean getCancelled() {
             return cancel;
+        }
+
+        @Override
+        public boolean isValid() {
+            return this.entity.filter(abstractEntity ->
+                    SkillUtils.isAuraValid(this.components, this.startDuration, this.chargesRemaining,
+                            this.startCharges, this.ticksRemaining, abstractEntity, this.hasEnded)).isPresent();
+        }
+
+        @Override
+        public void run() {
+            if (this.startDuration >= 0) {
+                this.ticksRemaining -= this.interval;
+            }
+            if (!this.isValid()) {
+                this.terminate();
+                return;
+            }
+            this.entity.ifPresent(e -> this.skillMetadata.setOrigin(e.getLocation()));
+            this.auraTick();
         }
     }
 }
