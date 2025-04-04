@@ -55,9 +55,7 @@ public class HotbarSnapshotListener implements Listener {
         ItemMeta meta = event.getCurrentItem().getItemMeta();
         if (meta == null) return;
 
-        if (meta.getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
-            event.setCancelled(true);
-        }
+        event.setCancelled(cancelInteraction(meta));
     }
 
     @EventHandler
@@ -65,8 +63,11 @@ public class HotbarSnapshotListener implements Listener {
         ItemMeta meta = event.getItemDrop().getItemStack().getItemMeta();
         if (meta == null) return;
 
-        if (meta.getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
-            event.setCancelled(true);
-        }
+        event.setCancelled(cancelInteraction(meta));
+    }
+
+    private boolean cancelInteraction(ItemMeta meta) {
+        return meta.getPersistentDataContainer().has(key, PersistentDataType.STRING);
+
     }
 }
