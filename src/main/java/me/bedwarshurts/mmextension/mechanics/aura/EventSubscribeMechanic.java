@@ -48,7 +48,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
             this.priority = EventPriority.valueOf(mlc.getString(new String[]{"eventPriority", "priority"}, "NORMAL").toUpperCase());
             this.methods.addAll(Arrays.stream(mlc.getString(new String[]{"methods", "m"}, "")
                     .split("\\),"))
-                    .map(s -> s.endsWith(")") ? s : s + ")")
+                    .map(s -> !s.endsWith(")") && !s.isEmpty() ?  s + ")" : s)
                     .toList());
             this.triggerMethod = mlc.getString(new String[]{"triggerMethod", "trigger"}, "getPlayer()");
             this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "rp"}, false);
@@ -151,6 +151,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                             skillMetadata.setTrigger(BukkitAdapter.adapt(trigger));
 
                             for (String methodString : methods) {
+                                if (methodString.isEmpty()) continue;
                                 Method method;
                                 Object obj = e;
                                 Class<?> objClass = e.getClass();
