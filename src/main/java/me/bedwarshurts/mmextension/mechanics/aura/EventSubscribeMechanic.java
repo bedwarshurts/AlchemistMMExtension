@@ -37,6 +37,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
     private final boolean requirePlayer;
 
     private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
+    private static final ConcurrentMap<String, Class<?>> cachedClasses = Maps.newConcurrentMap();
 
     public EventSubscribeMechanic(SkillExecutor manager, File file, MythicLineConfig mlc) {
         super(manager, file, mlc.getLine(), mlc);
@@ -79,7 +80,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
     }
 
     private Class<?> getClassFromString(String typeName) throws ClassNotFoundException {
-        return switch (typeName) {
+        return cachedClasses.computeIfAbsent(typeName, k -> switch (k) {
             case "byte.class" -> byte.class;
             case "short.class" -> short.class;
             case "int.class" -> int.class;
@@ -88,8 +89,14 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
             case "double.class" -> double.class;
             case "boolean.class" -> boolean.class;
             case "char.class" -> char.class;
-            default -> Class.forName(typeName);
-        };
+            default -> {
+                try {
+                    yield Class.forName(k);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     private Object getValue(Class<?> type, String strValue) {
