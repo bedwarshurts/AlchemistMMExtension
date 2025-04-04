@@ -9,6 +9,7 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.players.PlayerData;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.listeners.HotbarSnapshotListener;
 import me.bedwarshurts.mmextension.utils.ItemUtils;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
@@ -23,8 +24,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
-
 @MythicMechanic(author = "bedwarshurts", name = "hotbarsnapshot", aliases = {}, description = "Saves and replaces a player's hotbar for a duration")
 public class HotbarSnapshotMechanic implements INoTargetSkill {
 
@@ -33,7 +32,7 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
     private final String itemsArg;
 
     public HotbarSnapshotMechanic(MythicLineConfig mlc) {
-        Bukkit.getPluginManager().registerEvents(new HotbarSnapshotListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new HotbarSnapshotListener(), AlchemistMMExtension.inst());
 
         this.itemsArg = mlc.getString("items", "air");
         this.replacementItems = new ItemStack[9];

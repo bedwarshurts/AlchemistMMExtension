@@ -6,11 +6,11 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
         }
 
         for (int i = 0; i < particleCount.get(data); i++) {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(AlchemistMMExtension.inst(), () -> {
                 double theta = -360 + random.nextDouble() * 720;
                 double phi = -720 + random.nextDouble() * 1440;
 

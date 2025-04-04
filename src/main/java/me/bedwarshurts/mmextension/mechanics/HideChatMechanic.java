@@ -7,14 +7,13 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.listeners.ChatListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
-
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "hidechat", description = "Hide the chat for a player")
 public class HideChatMechanic implements ITargetedEntitySkill {
@@ -23,7 +22,7 @@ public class HideChatMechanic implements ITargetedEntitySkill {
     public static HashSet<Player> playerChatList = new HashSet<>();
 
     public HideChatMechanic(MythicLineConfig mlc) {
-        Bukkit.getPluginManager().registerEvents(new ChatListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new ChatListener(), AlchemistMMExtension.inst());
 
         this.duration = PlaceholderInt.of(String.valueOf(mlc.getInteger(new String[]{"duration", "d"}, 0)));
     }

@@ -13,7 +13,7 @@ import org.mariuszgromada.math.mxparser.License;
 import java.util.Objects;
 
 public class AlchemistMMExtension extends JavaPlugin {
-    public static AlchemistMMExtension plugin;
+    private static AlchemistMMExtension plugin;
 
     static {
         License.iConfirmCommercialUse("bedwarshurts@alchemistnetwork.org");
@@ -60,5 +60,9 @@ public class AlchemistMMExtension extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("AlchemistMMExtension has been disabled!");
+    }
+
+    public static AlchemistMMExtension inst() {
+        return plugin;
     }
 }

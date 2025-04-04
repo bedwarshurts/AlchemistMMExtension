@@ -7,6 +7,7 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.targeters.IEntityTargeter;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.utils.annotations.MythicTargeter;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -15,8 +16,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
 @MythicTargeter(author = "bedwarshurts", name = "targetentitiesinradius", aliases = {"TEIR"}, description = "Targets a specific entity in a radius around the caster")
 public class EntityByClassInRadiusTargeter implements IEntityTargeter {
@@ -34,7 +33,7 @@ public class EntityByClassInRadiusTargeter implements IEntityTargeter {
         double r = radius.get(data);
 
         try {
-            return Bukkit.getScheduler().callSyncMethod(plugin, () ->
+            return Bukkit.getScheduler().callSyncMethod(AlchemistMMExtension.inst(), () ->
                     center.getWorld().getEntitiesByClass(Class.forName(className).asSubclass(Entity.class)).stream()
                             .filter(entity -> entity.getLocation().distanceSquared(center) <= r * r)
                             .map(BukkitAdapter::adapt)

@@ -4,7 +4,7 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +64,7 @@ public final class PlaceholderUtils {
         try {
             return Double.parseDouble(placeholder);
         } catch (NumberFormatException e) {
-            plugin.getLogger().warning("Invalid placeholder value for " + placeholder);
+            AlchemistMMExtension.inst().getLogger().warning("Invalid placeholder value for " + placeholder);
             return 0;
         }
     }

@@ -35,7 +35,7 @@ public class SetMMOCooldownMechanic implements INoTargetSkill {
                     playerData.getCooldownMap().applyCooldown(playerData.getProfess().getSkill(MMOCore.plugin.skillManager.getSkill(ability.get(data))), cooldown.get(data));
                 }
                 catch (Exception e) {
-                    AlchemistMMExtension.plugin.getLogger().info("Failed to apply cooldown for " + ability + " to " + player.getName());
+                    AlchemistMMExtension.inst().getLogger().info("Failed to apply cooldown for " + ability + " to " + player.getName());
                     throw e;
                 }
                 success = true;

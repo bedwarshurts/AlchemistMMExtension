@@ -8,6 +8,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import io.lumine.mythic.bukkit.BukkitAdapter;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,8 +16,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-
-import static me.bedwarshurts.mmextension.AlchemistMMExtension.plugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "openchest", aliases = {}, description = "Opens a chest by mimicking a player opening it")
 public class OpenChestMechanic implements ITargetedLocationSkill {
@@ -47,7 +46,7 @@ public class OpenChestMechanic implements ITargetedLocationSkill {
                     yield SkillResult.SUCCESS;
                 }
                 default -> {
-                    plugin.getLogger().warning("Invalid action for openchest mechanic: " + action + " (valid actions: open, close)");
+                    AlchemistMMExtension.inst().getLogger().warning("Invalid action for openchest mechanic: " + action + " (valid actions: open, close)");
                     yield SkillResult.INVALID_CONFIG;
                 }
             };
