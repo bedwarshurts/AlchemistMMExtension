@@ -15,13 +15,15 @@ An extension for MythicMobs that adds some Mechanics, Targeters, Conditions and 
 
 ## Mechanics
 
+Mechanics with (Aura) in them inherit all attributes with MM auras. Only one exception, that duration = -1 makes them last forever.
+
 ### BookGUIMechanic
 
 ```
 - bookgui{contents=; author=; title=;}
 ```
 
-### CancelPlayerDeathMechanic
+### CancelPlayerDeathMechanic (Aura)
 
 ```
 - cancelplayerdeath{healthPercentage=; skill=;}
@@ -97,13 +99,6 @@ This mechanic loops through the locations returned by a targeter and executes th
  player the skill will execute with them being the caster
 ```
 
-### OnSignalRemoveMechanic (Aura)
-
-```
-- onsignalremove{skill=; signal=; duration=;} When the player receives a signal if the aura is active for said
- player the skill will execute with them being the caster
-```
-
 ### ListMechanic
 
 This introduces a new variable type a list, currently the types supported are STRING, INTEGER and DOUBLE
@@ -121,15 +116,10 @@ This introduces a new variable type a list, currently the types supported are ST
 ### EventsSubscribeMechanic (Aura)
 
 ```
-- events:subscribe{listenerIdentifier=; class=; skill=; priority=; methods=; triggerMethod=; cancel=; requirePlayer=; duration=;} 
+- events:subscribe{class=; skill=; priority=; methods=; triggerMethod=; requirePlayer=; duration=;} 
 When the entity returned by a @EntityTargeter triggers the specified event, a mythicmobs skill will cast. If a method returns a value (not void)
 the result is placed in the skill scoped <(methodName)> variable.
-```
-
-### EventsUnSubscribeMechanic (Aura)
-
-```
-- events:unsubscribe{listenerIdentifier=;}
+Using - cancelevent inside the mechanic will cancel the event.
 ```
 
 ## Targeters
