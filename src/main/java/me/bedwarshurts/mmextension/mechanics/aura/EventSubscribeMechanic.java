@@ -45,7 +45,10 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                     .asSubclass(Event.class);
             this.skill = new MythicSkill(mlc.getString(new String[]{"skill", "s"}, ""));
             this.priority = EventPriority.valueOf(mlc.getString(new String[]{"eventPriority", "priority"}, "NORMAL").toUpperCase());
-            this.methods.addAll(Arrays.asList(mlc.getString(new String[]{"methods", "m"}, "").split("\\),")));
+            this.methods.addAll(Arrays.stream(mlc.getString(new String[]{"methods", "m"}, "")
+                    .split("\\),"))
+                    .map(s -> s.endsWith(")") ? s : s + ")")
+                    .toList());
             this.triggerMethod = mlc.getString(new String[]{"triggerMethod", "trigger"}, "getPlayer()");
             this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "rp"}, false);
         } catch (ClassNotFoundException e) {
@@ -141,7 +144,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                             skillMetadata.setTrigger(BukkitAdapter.adapt(trigger));
 
                             for (String methodString : methods) {
-                                if (!methodString.endsWith(")")) methodString += ")";
                                 Method method;
                                 Object obj = e;
                                 Class<?> objClass = e.getClass();
