@@ -8,6 +8,7 @@ import io.lumine.mythic.core.skills.SkillMetadataImpl;
 import io.lumine.mythic.core.skills.SkillTriggers;
 import me.bedwarshurts.mmextension.mechanics.inventory.RestoreHotbarMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
+import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -43,19 +44,9 @@ public class HotbarSnapshotListener implements Listener {
     @EventHandler
     public void onInteractWithItem(PlayerInteractEvent event) {
         if (event.getItem() == null) return;
-        ItemMeta meta = event.getItem().getItemMeta();
-        if (meta == null) return;
+        if (!event.getItem().getPersistentDataContainer().has(key, PersistentDataType.STRING)) return;
 
-        if (!(meta.getPersistentDataContainer().has(skillKey, PersistentDataType.STRING) && meta.getPersistentDataContainer().has(casterKey, PersistentDataType.STRING)))
-            return;
-
-        String skillName = meta.getPersistentDataContainer().get(skillKey, PersistentDataType.STRING);
-        String casterUUID = meta.getPersistentDataContainer().get(casterKey, PersistentDataType.STRING);
-        SkillCaster caster = new GenericCaster(BukkitAdapter.adapt(Bukkit.getEntity(UUID.fromString(casterUUID))));
-        SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, caster, BukkitAdapter.adapt(event.getPlayer()));
-
-        MythicSkill skill = new MythicSkill(skillName);
-        skill.cast(data);
+        SkillUtils.castItemSkill(event, skillKey, casterKey);
     }
 
     @EventHandler

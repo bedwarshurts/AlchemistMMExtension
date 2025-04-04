@@ -53,6 +53,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
         }
     }
 
+    @SuppressWarnings("resource")
     @Override
     public SkillResult castAtEntity(SkillMetadata data, AbstractEntity target) {
         if (requirePlayer && !target.isPlayer()) return SkillResult.INVALID_TARGET;

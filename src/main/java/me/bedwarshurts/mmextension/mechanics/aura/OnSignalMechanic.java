@@ -29,6 +29,7 @@ public class OnSignalMechanic extends Aura implements ITargetedEntitySkill {
         this.signal = mlc.getString(new String[]{"signal"}, "");
     }
 
+    @SuppressWarnings("resource")
     @Override
     public SkillResult castAtEntity(SkillMetadata data, AbstractEntity target) {
         if (!target.isPlayer()) return SkillResult.INVALID_TARGET;

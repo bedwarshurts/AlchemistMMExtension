@@ -27,7 +27,8 @@ public class CancelPlayerDeathMechanic extends Aura implements ITargetedEntitySk
         this.healthPercentage = mlc.getDouble("healthPercentage", 100.0);
         this.skill = new MythicSkill(mlc.getString("skill", ""));
     }
-
+    
+    @SuppressWarnings("resource")
     @Override
     public SkillResult castAtEntity(SkillMetadata data, AbstractEntity target) {
         if (!target.isPlayer()) return SkillResult.INVALID_TARGET;

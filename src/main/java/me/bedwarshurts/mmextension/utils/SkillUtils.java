@@ -6,22 +6,33 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.api.mobs.GenericCaster;
+import io.lumine.mythic.api.skills.SkillCaster;
 import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.utils.terminable.TerminableRegistry;
 import io.lumine.mythic.core.players.PlayerData;
+import io.lumine.mythic.core.skills.SkillMetadataImpl;
+import io.lumine.mythic.core.skills.SkillTriggers;
 import io.lumine.mythic.core.skills.audience.TargeterAudience;
+import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class SkillUtils {
@@ -127,5 +138,22 @@ public final class SkillUtils {
             return entity.isValid();
         }
         return ticksRemaining > 0 && entity.isValid();
+    }
+
+    public static void castItemSkill(PlayerInteractEvent event, NamespacedKey skillKey, NamespacedKey casterKey) {
+        if (event.getItem() == null) return;
+        ItemMeta meta = event.getItem().getItemMeta();
+        if (meta == null) return;
+
+        if (!(meta.getPersistentDataContainer().has(skillKey, PersistentDataType.STRING) && meta.getPersistentDataContainer().has(casterKey, PersistentDataType.STRING)))
+            return;
+
+        String skillName = meta.getPersistentDataContainer().get(skillKey, PersistentDataType.STRING);
+        String casterUUID = meta.getPersistentDataContainer().get(casterKey, PersistentDataType.STRING);
+        SkillCaster caster = new GenericCaster(BukkitAdapter.adapt(Bukkit.getEntity(UUID.fromString(Objects.requireNonNull(casterUUID)))));
+        SkillMetadata data = new SkillMetadataImpl(SkillTriggers.API, caster, BukkitAdapter.adapt(event.getPlayer()));
+
+        MythicSkill skill = new MythicSkill(skillName);
+        skill.cast(data);
     }
 }
