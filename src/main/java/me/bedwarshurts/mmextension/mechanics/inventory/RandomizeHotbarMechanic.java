@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,22 +19,17 @@ public class RandomizeHotbarMechanic implements INoTargetSkill {
     @Override
     public SkillResult cast(SkillMetadata data) {
         boolean success = false;
-
         for (AbstractEntity target : data.getEntityTargets()) {
             if (!target.isPlayer()) continue;
-            Player player = (Player) target.getBukkitEntity();
             success = true;
-
-            List<Integer> slots = new ArrayList<>();
-            for (int i = 0; i < 9; i++) slots.add(i);
-            Collections.shuffle(slots);
-
+            Player player = (Player) target.getBukkitEntity();
             ItemStack[] contents = player.getInventory().getContents();
-            ItemStack[] shuffledHotbar = new ItemStack[9];
+
+            List<ItemStack> hotbar = new ArrayList<>(Arrays.asList(contents).subList(0, 9));
+            Collections.shuffle(hotbar);
             for (int i = 0; i < 9; i++) {
-                shuffledHotbar[i] = contents[slots.get(i)];
+                contents[i] = hotbar.get(i);
             }
-            System.arraycopy(shuffledHotbar, 0, contents, 0, 9);
             player.getInventory().setContents(contents);
         }
         return success ? SkillResult.SUCCESS : SkillResult.INVALID_TARGET;
