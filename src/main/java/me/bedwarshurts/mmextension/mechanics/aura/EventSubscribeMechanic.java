@@ -153,13 +153,15 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                                     final int length = args[0].isEmpty() ? 0 : args.length;
                                     Class<?>[] argTypes = new Class<?>[length];
                                     Object[] argValues = new Object[length];
-                                    for (String arg : args) {
+                                    for (int i = 0; i < args.length; i++) {
+                                        String arg = args[i];
                                         int spaceIndex = arg.indexOf(" ");
                                         if (spaceIndex == -1) continue;
                                         String type = arg.substring(0, spaceIndex).trim();
                                         String value = arg.substring(spaceIndex).trim();
-                                        argTypes[Arrays.asList(args).indexOf(arg)] = getClassFromString(type);
-                                        argValues[Arrays.asList(args).indexOf(arg)] = getValue(getClassFromString(type), value);
+                                        Class<?> argClass = getClassFromString(type);
+                                        argTypes[i] = argClass;
+                                        argValues[i] = getValue(argClass, value);
                                     }
                                     method = getMethod(objClass, methodName, argTypes);
                                     obj = length == 0
