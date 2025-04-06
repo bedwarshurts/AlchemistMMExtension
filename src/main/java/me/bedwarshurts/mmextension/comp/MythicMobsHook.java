@@ -134,6 +134,10 @@ public final class MythicMobsHook implements Listener {
             case "events:sub":
                 event.register(new EventSubscribeMechanic(event.getContainer().getManager(), event.getContainer().getFile(), event.getConfig()));
                 break;
+            case "setworldborder":
+            case "swb":
+                event.register(new SetWorldBorderMechanic(event.getConfig()));
+                break;
             default: break;
         }
     }
