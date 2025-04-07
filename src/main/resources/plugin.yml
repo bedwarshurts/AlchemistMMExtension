@@ -1,11 +1,11 @@
 name: AlchemistMMExtension
 main: me.bedwarshurts.mmextension.AlchemistMMExtension
-version: 3.0.4
+version: ${project.version}
 api-version: 1.21
 description: An extension for MythicMobs
 author: bedwarshurts
-depend: [MythicMobs,PlaceholderAPI,ProtocolLib]
-softdepend: [MythicLib,MMOCore,MMOItems]
+depend: [MythicMobs]
+softdepend: [MythicLib,MMOCore,MMOItems,PlaceholderAPI,ProtocolLib]
 commands:
   playerspawnmythicmob:
     description: Spawns a MythicMob for a player
