@@ -9,6 +9,7 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
+import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
 import net.Indyuce.mmocore.MMOCore;
 import net.Indyuce.mmocore.api.player.PlayerData;
 import org.bukkit.entity.Player;
@@ -19,6 +20,8 @@ public class SetMMOCooldownMechanic implements INoTargetSkill {
     private final PlaceholderDouble cooldown;
 
     public SetMMOCooldownMechanic(MythicLineConfig config) {
+        if (!AlchemistMMExtension.inst().isMMOCore()) throw new DependencyNotFoundException("MMOCore is required to use SetMMOCooldownMechanic");
+
         this.ability = PlaceholderString.of(config.getString(new String[]{"ability", "a"}, ""));
         this.cooldown = PlaceholderDouble.of(String.valueOf(config.getDouble(new String[]{"cooldown", "cd"}, 0)));
     }

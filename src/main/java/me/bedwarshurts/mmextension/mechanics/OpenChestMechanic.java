@@ -10,6 +10,7 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
+import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,6 +24,8 @@ public class OpenChestMechanic implements ITargetedLocationSkill {
     private final TargeterAudience audience;
 
     public OpenChestMechanic(MythicLineConfig mlc) {
+        if (!AlchemistMMExtension.inst().isProtocolLib()) throw new DependencyNotFoundException("ProtocolLIB is required to use OpenChestMechanic");
+
         String audienceTargeterString = mlc.getString("audience", null);
         this.audience = audienceTargeterString != null ? new TargeterAudience(mlc, audienceTargeterString) : null;
         this.action = mlc.getString("action", "open");
