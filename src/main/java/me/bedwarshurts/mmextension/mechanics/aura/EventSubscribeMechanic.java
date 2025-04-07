@@ -93,7 +93,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                 try {
                     yield Class.forName(k);
                 } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
+                    throw new UnsupportedOperationException("Specified class not found " + e);
                 }
             }
         });
