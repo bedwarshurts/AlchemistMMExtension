@@ -1,11 +1,11 @@
 package me.bedwarshurts.mmextension.utils.events;
 
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -15,7 +15,6 @@ public final class EventSubscriptionBuilder<T extends Event> {
     private final Listener listener = new Listener() {};
     private final EventPriority priority;
     private Predicate<T> filter;
-    private Consumer<T> handler;
 
     public EventSubscriptionBuilder(Class<T> eventClass, EventPriority priority) {
         this.eventClass = eventClass;
@@ -28,11 +27,6 @@ public final class EventSubscriptionBuilder<T extends Event> {
     }
 
     public EventSubscriptionBuilder<T> handler(Consumer<T> handler) {
-        this.handler = handler;
-        return this;
-    }
-
-    public EventSubscriptionBuilder<T> bindWith(Plugin plugin) {
         Bukkit.getPluginManager().registerEvent(
                 eventClass,
                 listener,
@@ -45,8 +39,13 @@ public final class EventSubscriptionBuilder<T extends Event> {
                         }
                     }
                 },
-                plugin
+                AlchemistMMExtension.inst()
         );
+        return this;
+    }
+
+    public EventSubscriptionBuilder<T> bindWith(Terminable terminable) {
+        terminable.onTerminate(this::unsubscribe);
         return this;
     }
 
