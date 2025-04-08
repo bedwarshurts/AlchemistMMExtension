@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Objects;
 
-@MythicTargeter(author = "bedwarshurts", name = "targetpredictedlocation", aliases = {"TPL"}, description = "Predicts the location of the target")
+@MythicTargeter(author = "bedwarshurts", name = "targetpredictedlocation", aliases = {"TPL", "TPL2"}, description = "Predicts the location of the target")
 public class LocationPredictingTargeter implements ILocationTargeter {
 
     private final PlaceholderDouble predictionTimeTicks;

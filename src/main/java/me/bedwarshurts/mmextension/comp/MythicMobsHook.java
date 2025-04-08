@@ -138,6 +138,10 @@ public final class MythicMobsHook implements Listener {
             case "swb":
                 event.register(new SetWorldBorderMechanic(event.getConfig()));
                 break;
+            case "stringbuilder":
+            case "sbuilder":
+                event.register(new StringBuilderMechanic(event.getConfig()));
+                break;
             default: break;
         }
     }
@@ -153,6 +157,7 @@ public final class MythicMobsHook implements Listener {
                 break;
             case "targetpredictedlocation":
             case "tpl":
+            case "tpl2":
                 event.register(new LocationPredictingTargeter(event.getConfig()));
                 break;
             case "targetconnectedblocks":
