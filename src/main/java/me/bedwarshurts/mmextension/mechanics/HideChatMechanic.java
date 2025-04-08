@@ -37,7 +37,7 @@ public class HideChatMechanic implements ITargetedEntitySkill {
             playerChatList.add((Player) target.getBukkitEntity());
         }
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(AlchemistMMExtension.inst(), () -> {
             playerChatList.remove((Player) target.getBukkitEntity());
         }, duration.get(data));
 

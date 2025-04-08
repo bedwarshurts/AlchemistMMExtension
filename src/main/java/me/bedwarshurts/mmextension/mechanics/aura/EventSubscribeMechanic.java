@@ -1,6 +1,5 @@
 package me.bedwarshurts.mmextension.mechanics.aura;
 
-import com.google.common.collect.Maps;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.IParentSkill;
@@ -15,6 +14,7 @@ import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
+import me.bedwarshurts.mmextension.utils.InvokeUtils;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -25,7 +25,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.ConcurrentMap;
 
 @MythicMechanic(author = "bedwarshurts", name = "events:subscribe", aliases = {"events:sub"}, description = "Subscribes to an event and runs a skill when it is triggered")
 public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill {
@@ -35,9 +34,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
     private final ArrayList<String> methods = new ArrayList<>();
     private final String triggerMethod;
     private final boolean requirePlayer;
-
-    private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
-    private static final ConcurrentMap<String, Class<?>> cachedClasses = Maps.newConcurrentMap();
 
     public EventSubscribeMechanic(SkillExecutor manager, File file, MythicLineConfig mlc) {
         super(manager, file, mlc.getLine(), mlc);
@@ -65,60 +61,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
         return SkillResult.SUCCESS;
     }
 
-    private Method getMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
-        String key = clazz.getName() + "." + methodName + Arrays.toString(parameterTypes);
-        return cachedMethods.computeIfAbsent(key, k -> {
-            try {
-                if (parameterTypes.length == 0) {
-                    return clazz.getMethod(methodName);
-                }
-                return clazz.getMethod(methodName, parameterTypes);
-            } catch (NoSuchMethodException e) {
-                throw new IllegalArgumentException("Specified method not found: " + e);
-            }
-        });
-    }
-
-    private Class<?> getClassFromString(String typeName) throws ClassNotFoundException {
-        return cachedClasses.computeIfAbsent(typeName, k -> switch (k) {
-            case "byte.class" -> byte.class;
-            case "short.class" -> short.class;
-            case "int.class" -> int.class;
-            case "long.class" -> long.class;
-            case "float.class" -> float.class;
-            case "double.class" -> double.class;
-            case "boolean.class" -> boolean.class;
-            case "char.class" -> char.class;
-            default -> {
-                try {
-                    yield Class.forName(k);
-                } catch (ClassNotFoundException e) {
-                    throw new UnsupportedOperationException("Specified class not found " + e);
-                }
-            }
-        });
-    }
-
-    private Object getValue(Class<?> type, String strValue) {
-        if (type == double.class) return Double.parseDouble(strValue);
-        if (type == float.class) return Float.parseFloat(strValue);
-        if (type == int.class) return Integer.parseInt(strValue);
-        if (type == long.class) return Long.parseLong(strValue);
-        if (type == boolean.class) return Boolean.parseBoolean(strValue);
-        if (type == byte.class) return Byte.parseByte(strValue);
-        if (type == short.class) return Short.parseShort(strValue);
-        if (type == char.class) return strValue.charAt(0);
-        if (type.isEnum()) {
-            try {
-                Method valueOf = type.getMethod("valueOf", String.class);
-                return valueOf.invoke(type, strValue);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                throw new IllegalArgumentException("Not an enum " + e);
-            }
-        }
-        return strValue;
-    }
-
     private class EventSubscribeMechanicTracker extends AuraTracker implements IParentSkill {
         private final AbstractEntity target;
         private boolean cancel;
@@ -136,7 +78,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
             Events.subscribe(eventClass, priority)
                     .filter(e -> {
                         try {
-                            Method isCancelled = getMethod(e.getClass(), "isCancelled");
+                            Method isCancelled = InvokeUtils.getMethod(e.getClass(), "isCancelled");
                             return !((boolean) isCancelled.invoke(e));
                         } catch (InvocationTargetException | IllegalAccessException ignored) {
                             return true;
@@ -145,7 +87,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                     .handler(e -> {
                         long lastCallTime = System.currentTimeMillis();
                         try {
-                            Method getTrigger = getMethod(e.getClass(), triggerMethod.substring(0, triggerMethod.indexOf("(")));
+                            Method getTrigger = InvokeUtils.getMethod(e.getClass(), triggerMethod.substring(0, triggerMethod.indexOf("(")));
                             Entity trigger = (Entity) getTrigger.invoke(e);
                             if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
                             skillMetadata.setTrigger(BukkitAdapter.adapt(trigger));
@@ -169,11 +111,11 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                                         if (spaceIndex == -1) continue;
                                         String type = arg.substring(0, spaceIndex).trim();
                                         String value = arg.substring(spaceIndex).trim();
-                                        Class<?> argClass = getClassFromString(type);
+                                        Class<?> argClass = InvokeUtils.getClassFromString(type);
                                         argTypes[i] = argClass;
-                                        argValues[i] = getValue(argClass, value);
+                                        argValues[i] = InvokeUtils.getValue(argClass, value);
                                     }
-                                    method = getMethod(objClass, methodName, argTypes);
+                                    method = InvokeUtils.getMethod(objClass, methodName, argTypes);
                                     obj = length == 0
                                             ? method.invoke(obj)
                                             : method.invoke(obj, argValues);
@@ -191,7 +133,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                             skill.cast(skillMetadata);
 
                             if (this.cancel) {
-                                Method cancelEvent = getMethod(e.getClass(), "setCancelled", boolean.class);
+                                Method cancelEvent = InvokeUtils.getMethod(e.getClass(), "setCancelled", boolean.class);
                                 cancelEvent.invoke(e, true);
                             }
                         } catch (ClassNotFoundException | IllegalAccessException |
