@@ -2,8 +2,8 @@ package me.bedwarshurts.mmextension.listeners;
 
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.BukkitAdapter;
-import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUIMechanic;
-import me.bedwarshurts.mmextension.mechanics.chestgui.ChestGUISlot;
+import me.bedwarshurts.mmextension.skills.mechanics.chestgui.ChestGUIMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.chestgui.ChestGUISlot;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;

@@ -1,6 +1,6 @@
 package me.bedwarshurts.mmextension.listeners;
 
-import me.bedwarshurts.mmextension.mechanics.inventory.RestoreHotbarMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.inventory.RestoreHotbarMechanic;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
