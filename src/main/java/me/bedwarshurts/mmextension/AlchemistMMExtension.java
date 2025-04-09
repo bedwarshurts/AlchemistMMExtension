@@ -1,11 +1,14 @@
 package me.bedwarshurts.mmextension;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.bedwarshurts.mmextension.commands.PlayerSpawnMythicMobCommand;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
 import me.bedwarshurts.mmextension.listeners.PlayerChangeSlotListener;
 import me.bedwarshurts.mmextension.listeners.PlayerSkillCastListener;
+import me.bedwarshurts.mmextension.listeners.SkillTriggerListeners;
+import me.bedwarshurts.mmextension.skills.triggers.MoreSkillTriggers;
 import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,6 +34,7 @@ public class AlchemistMMExtension extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
+        getLogger().info("Checking for plugins to hook into");
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") == null) {
             throw new DependencyNotFoundException("xd? you seriously installed an extension for mythicmobs without mythicmobs");
         }
@@ -55,17 +59,29 @@ public class AlchemistMMExtension extends JavaPlugin {
             this.isProtocolLib = false;
         }
 
+        getLogger().info("Registering mythic skills...");
         Bukkit.getPluginManager().registerEvents(new MythicMobsHook(), this);
+
+        getLogger().info("Registering skill triggers...");
+        MoreSkillTriggers.registerTriggers();
+        MythicBukkit.inst().getMobManager().loadMobs(); // For some reason I first need to call .register else Mythic wont recognise the skills.
+
+        getLogger().info("Registering events...");
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SkillTriggerListeners(), this);
         if (isMMOCore && isMythicLib) Bukkit.getPluginManager().registerEvents(new PlayerSkillCastListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerChangeSlotListener(), this);
 
+        getLogger().info("Registering commands...");
         Objects.requireNonNull(this.getCommand("playerspawnmythicmob")).setExecutor(new PlayerSpawnMythicMobCommand());
 
-        if (isPlaceholderAPI) new PlaceholderAPIHook().register();
+        if (isPlaceholderAPI) {
+            getLogger().info("Registering PlaceholderAPI Placeholders...");
+            new PlaceholderAPIHook().register();
+        }
 
         getLogger().info("AlchemistMMExtension has been enabled! Made by bedwarshurts");
-        getLogger().info("Version: " + plugin.getDescription());
+        getLogger().info("Version: " + plugin.getDescription().getVersion());
     }
 
     @Override
