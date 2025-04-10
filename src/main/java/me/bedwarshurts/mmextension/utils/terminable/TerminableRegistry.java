@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class TerminableStorage implements TerminableConsumer, Terminable {
+public class TerminableRegistry implements TerminableConsumer, Terminable {
     private final Queue<AutoCloseable> terminables = new ConcurrentLinkedQueue<>();
 
     public TerminableConsumer with(AutoCloseable autoCloseable) {
