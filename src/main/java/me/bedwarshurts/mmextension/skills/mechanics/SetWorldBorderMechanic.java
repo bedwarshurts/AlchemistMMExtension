@@ -7,8 +7,9 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
-import me.bedwarshurts.mmextension.utils.events.EventSubscriptionBuilder;
 import me.bedwarshurts.mmextension.utils.events.Events;
+import me.bedwarshurts.mmextension.utils.terminable.TerminableConsumer;
+import me.bedwarshurts.mmextension.utils.terminable.TerminableStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
@@ -16,10 +17,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 @MythicMechanic(author = "bedwarshurts", name = "setworldborder", aliases = {"swb"}, description = "Sets the world border for a player")
-public class SetWorldBorderMechanic implements ITargetedEntitySkill {
+public class SetWorldBorderMechanic implements ITargetedEntitySkill, TerminableConsumer {
+    TerminableStorage consumer = new TerminableStorage();
     private final PlaceholderDouble radius;
     private final boolean cancelOnQuit;
-    private EventSubscriptionBuilder<?> subscription;
 
     public SetWorldBorderMechanic(MythicLineConfig mlc) {
         this.radius = mlc.getPlaceholderDouble(new String[]{"radius", "r"}, "0");
@@ -33,7 +34,7 @@ public class SetWorldBorderMechanic implements ITargetedEntitySkill {
 
         if (player.getWorldBorder() != null) {
             player.setWorldBorder(null);
-            subscription.unsubscribe();
+            consumer.close();
 
             return SkillResult.SUCCESS;
         }
@@ -45,10 +46,16 @@ public class SetWorldBorderMechanic implements ITargetedEntitySkill {
         player.setWorldBorder(border);
 
         if (!cancelOnQuit) {
-            subscription = Events.subscribe(PlayerJoinEvent.class, EventPriority.NORMAL)
+            Events.subscribe(PlayerJoinEvent.class, EventPriority.NORMAL)
                     .filter(e -> e.getPlayer().getUniqueId().equals(player.getUniqueId()))
-                    .handler(e -> player.setWorldBorder(border));
+                    .handler(e -> player.setWorldBorder(border))
+                    .bindWith(this);
         }
         return SkillResult.SUCCESS;
+    }
+
+    @Override
+    public TerminableConsumer with(AutoCloseable terminable) {
+        return this.consumer.with(terminable);
     }
 }
