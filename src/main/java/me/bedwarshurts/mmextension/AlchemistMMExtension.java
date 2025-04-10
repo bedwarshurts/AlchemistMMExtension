@@ -5,9 +5,8 @@ import me.bedwarshurts.mmextension.commands.PlayerSpawnMythicMobCommand;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
-import me.bedwarshurts.mmextension.listeners.PlayerChangeSlotListener;
-import me.bedwarshurts.mmextension.listeners.PlayerSkillCastListener;
 import me.bedwarshurts.mmextension.listeners.SkillTriggerListeners;
+import me.bedwarshurts.mmextension.listeners.mmocore.SkillCastTriggerListener;
 import me.bedwarshurts.mmextension.skills.triggers.MoreSkillTriggers;
 import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
 import org.bukkit.Bukkit;
@@ -18,7 +17,6 @@ import java.util.Objects;
 
 public class AlchemistMMExtension extends JavaPlugin {
     private boolean isMMOItems = true;
-    private boolean isMythicLib = true;
     private boolean isMMOCore = true;
     private boolean isPlaceholderAPI = true;
     private boolean isProtocolLib = true;
@@ -47,10 +45,6 @@ public class AlchemistMMExtension extends JavaPlugin {
             this.isPlaceholderAPI = false;
         }
 
-        if (Bukkit.getPluginManager().getPlugin("MythicLib") == null) {
-            this.isMythicLib = false;
-        }
-
         if (Bukkit.getPluginManager().getPlugin("MMOCore") == null) {
             this.isMMOCore = false;
         }
@@ -69,8 +63,7 @@ public class AlchemistMMExtension extends JavaPlugin {
         getLogger().info("Registering events...");
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
         Bukkit.getPluginManager().registerEvents(new SkillTriggerListeners(), this);
-        if (isMMOCore && isMythicLib) Bukkit.getPluginManager().registerEvents(new PlayerSkillCastListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerChangeSlotListener(), this);
+        if (isMMOCore) Bukkit.getPluginManager().registerEvents(new SkillCastTriggerListener(), this);
 
         getLogger().info("Registering commands...");
         Objects.requireNonNull(this.getCommand("playerspawnmythicmob")).setExecutor(new PlayerSpawnMythicMobCommand());
