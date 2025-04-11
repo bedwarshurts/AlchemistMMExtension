@@ -52,6 +52,7 @@ public class SetWorldBorderMechanic implements ITargetedEntitySkill, TerminableC
 
         WorldBorder border = Bukkit.createWorldBorder();
         border.setCenter(player.getLocation());
+        border.setCenter(BukkitAdapter.adapt(data.getCaster().getLocation()));
         border.setWarningTime(warningTicks.get(data, data.getCaster().getEntity()) / 20);
         border.setDamageBuffer(damageBuffer.get(data, data.getCaster().getEntity()));
         border.setWarningDistance(warningDistance.get(data, data.getCaster().getEntity()));
