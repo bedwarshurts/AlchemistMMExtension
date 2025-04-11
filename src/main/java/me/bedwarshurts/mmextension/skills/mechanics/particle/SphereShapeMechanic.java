@@ -1,7 +1,9 @@
 package me.bedwarshurts.mmextension.skills.mechanics.particle;
 
+import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.config.MythicLineConfig;
+import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillResult;
@@ -19,10 +21,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @MythicMechanic(author = "bedwarshurts", name = "sphereshape", aliases = {}, description = "Spawns particles in a sphere shape and casts a skill at each particle location")
-public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill {
+public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLocationSkill, ITargetedEntitySkill {
 
     public SphereShapeMechanic(MythicLineConfig mlc) {
         super(mlc);
+    }
+
+    @Override
+    public SkillResult castAtEntity(SkillMetadata data, AbstractEntity target) {
+        return this.castAtLocation(data, target.getLocation());
     }
 
     @Override
