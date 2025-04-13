@@ -60,6 +60,10 @@
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
         <repository>
+            <id>md_5-public</id>
+            <url>https://repo.md-5.net/content/groups/public/</url>
+        </repository>
+        <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
@@ -79,6 +83,14 @@
             <id>phoenix</id>
             <url>https://nexus.phoenixdevt.fr/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>codemc-releases</id>
+            <url>https://repo.codemc.io/repository/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -90,9 +102,27 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>me.libraryaddict.disguises</groupId>
+            <artifactId>libsdisguises</artifactId>
+            <version>11.0.4-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+            <dependency>
+                <groupId>com.mojang</groupId>
+                <artifactId>authlib</artifactId>
+                <version>3.13.56</version>
+                <scope>provided</scope>
+            </dependency>
+        <dependency>
             <groupId>net.Indyuce</groupId>
             <artifactId>MMOItems-API</artifactId>
             <version>6.10-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.retrooper</groupId>
+            <artifactId>packetevents-spigot</artifactId>
+            <version>2.7.0</version>
             <scope>provided</scope>
         </dependency>
         <!--

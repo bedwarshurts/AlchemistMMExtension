@@ -148,6 +148,10 @@ public final class MythicMobsHook implements Listener {
             case "sbuilder":
                 event.register(new StringBuilderMechanic(event.getConfig()));
                 break;
+            case "mirrorplayerskin":
+            case "mirrorskin":
+                event.register(new me.bedwarshurts.mmextension.skills.mechanics.MirrorPlayerSkinMechanic());
+                break;
             default: break;
         }
     }

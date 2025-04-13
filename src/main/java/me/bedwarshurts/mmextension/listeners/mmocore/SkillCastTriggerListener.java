@@ -9,6 +9,7 @@ import io.lumine.mythic.core.skills.TriggeredSkill;
 import io.lumine.mythic.lib.api.event.skill.PlayerCastSkillEvent;
 import me.bedwarshurts.mmextension.skills.triggers.MoreSkillTriggers;
 import me.bedwarshurts.mmextension.skills.triggers.meta.SkillCastMeta;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,8 +22,9 @@ public class SkillCastTriggerListener implements Listener {
     @EventHandler
     public void onSkillCastTrigger(PlayerCastSkillEvent event) {
         Player player = event.getPlayer();
+        Location targetLocation = event.getMetadata().getTargetLocation();
 
-        for (Entity entity : player.getNearbyEntities(30, 30, 30)) {
+        for (Entity entity : targetLocation.getNearbyEntities(30, 30, 30)) {
             if (MythicBukkit.inst().getAPIHelper().isMythicMob(entity)) {
                 ActiveMob am = MythicBukkit.inst().getAPIHelper().getMythicMobInstance(entity);
 
