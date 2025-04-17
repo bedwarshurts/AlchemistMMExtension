@@ -45,7 +45,12 @@ public class StringBuilderMechanic implements INoTargetSkill {
             Class<?>[] paramTypes = new Class<?>[argValues.length];
             Object[] parsedValues = new Object[argValues.length];
             for (int i = 0; i < argValues.length; i++) {
-                paramTypes[i] = String.class;
+                String[] args = argValues[i].split(" ");
+                try {
+                    paramTypes[i] = InvokeUtils.getClassFromString(args[0]);
+                } catch (ClassNotFoundException e) {
+                    throw new IllegalArgumentException("Invalid class name: " + args[0], e);
+                }
                 parsedValues[i] = argValues[i].trim();
             }
 
