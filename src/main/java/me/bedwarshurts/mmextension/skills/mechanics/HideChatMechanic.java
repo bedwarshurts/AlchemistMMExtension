@@ -34,8 +34,7 @@ public class HideChatMechanic implements ITargetedEntitySkill, TerminableConsume
         if (!target.isPlayer()) return SkillResult.INVALID_TARGET;
 
         if (playerChatList.containsKey((Player) target.getBukkitEntity())) {
-            playerChatList.get((Player) target.getBukkitEntity()).close();
-            playerChatList.remove((Player) target.getBukkitEntity());
+            playerChatList.remove((Player) target.getBukkitEntity()).close();
             return SkillResult.SUCCESS;
         }
 

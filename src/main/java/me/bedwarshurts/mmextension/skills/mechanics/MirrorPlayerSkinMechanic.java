@@ -30,7 +30,7 @@ public class MirrorPlayerSkinMechanic implements INoTargetSkill, TerminableConsu
 
         if (disguisedCasters.containsKey(caster)) {
             DisguiseAPI.undisguiseToAll(casterEntity);
-            disguisedCasters.get(caster).close();
+            disguisedCasters.remove(caster).close();
             return SkillResult.SUCCESS;
         }
         if (DisguiseAPI.isDisguised(casterEntity)) {
