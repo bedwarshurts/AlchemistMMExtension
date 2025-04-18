@@ -16,21 +16,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 @MythicMechanic(name = "mirrorplayerskin", aliases = {"mirrorskin"}, description = "Mirror the skin of the player to the entity")
 public class MirrorPlayerSkinMechanic implements INoTargetSkill, TerminableConsumer {
     private final TerminableRegistry consumer = new TerminableRegistry();
-    private static final HashSet<SkillCaster> disguisedCasters = new HashSet<>();
+    private static final ConcurrentHashMap<SkillCaster, TerminableRegistry> disguisedCasters = new ConcurrentHashMap<>();
 
     @Override
     public SkillResult cast(SkillMetadata data) {
         SkillCaster caster = data.getCaster();
         LivingEntity casterEntity = (LivingEntity) caster.getEntity().getBukkitEntity();
 
-        if (disguisedCasters.contains(caster)) {
+        if (disguisedCasters.containsKey(caster)) {
             DisguiseAPI.undisguiseToAll(casterEntity);
-            consumer.close();
+            disguisedCasters.get(caster).close();
             return SkillResult.SUCCESS;
         }
         if (DisguiseAPI.isDisguised(casterEntity)) {
@@ -51,7 +51,7 @@ public class MirrorPlayerSkinMechanic implements INoTargetSkill, TerminableConsu
                 })
                 .bindWith(this);
 
-        disguisedCasters.add(caster);
+        disguisedCasters.put(caster, consumer);
 
         return SkillResult.SUCCESS;
     }
