@@ -7,10 +7,10 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 @MythicMechanic(author = "bedwarshurts", name = "verticalslash", aliases = {}, description = "Spawns particles in a half circle shape")
@@ -38,7 +38,7 @@ public class VerticalSlashMechanic extends ParticleMechanic implements ITargeted
 
         for (int i = 0; i <= 180; i++) {
             int finalI = i;
-            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(AlchemistMMExtension.inst(), () -> {
                         double angle = Math.toRadians(180 - finalI);
                         double cos = Math.cos(angle);
                         double sin = Math.sin(angle);
