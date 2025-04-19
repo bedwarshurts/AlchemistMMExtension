@@ -58,7 +58,7 @@ public class AlchemistMMExtension extends JavaPlugin {
 
         getLogger().info("Registering skill triggers...");
         MoreSkillTriggers.registerTriggers();
-        MythicBukkit.inst().getMobManager().loadMobs(); // For some reason I first need to call .register else Mythic wont recognise the skills.
+        MythicBukkit.inst().getMobManager().loadMobs(); // required for the skills related to the triggers to be registered
 
         getLogger().info("Registering events...");
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
@@ -91,7 +91,7 @@ public class AlchemistMMExtension extends JavaPlugin {
     }
 
     public boolean isMMOCore() {
-        return isProtocolLib;
+        return isMMOCore;
     }
 
     public static AlchemistMMExtension inst() {

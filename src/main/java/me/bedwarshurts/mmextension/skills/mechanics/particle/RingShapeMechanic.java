@@ -10,11 +10,11 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -92,7 +92,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
             currentRotation.set(2, currentRotation.get(2) + currentRotMultiplier.get(2));
             double dr = currentRadius + (random.nextDouble() * 2 - 1) * variance.get(data);
             List<Double> updatedRotation = List.copyOf(currentRotation);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(JavaPlugin.getProvidingPlugin(getClass()), () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(AlchemistMMExtension.inst(), () -> {
                 for (int j = 0; j < densityValue; j++) {
                     double angle = 2 * Math.PI * random.nextDouble();
                     double x = dr * Math.cos(angle);
@@ -101,7 +101,6 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
                     Vector particleVector = new Vector(x, 0, z);
                     SkillUtils.rotateVector(particleVector, updatedRotation.get(0), updatedRotation.get(1), updatedRotation.get(2));
 
-                    // Apply the look direction rotation if matchRotation is true
                     if (lookDirection != null) {
                         SkillUtils.rotateVectorToDirection(particleVector, lookDirection);
                     }
@@ -131,7 +130,7 @@ public class RingShapeMechanic extends ParticleMechanic implements ITargetedLoca
 
                     skill.castAtPoint(data, particleLocation);
                 }
-            }, (long) (delayMs.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
+            }, (long) (delayMs.get(data) * i / 50));
         }
         return SkillResult.SUCCESS;
     }

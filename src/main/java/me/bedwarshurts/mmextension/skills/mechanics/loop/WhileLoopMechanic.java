@@ -6,9 +6,9 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.mariuszgromada.math.mxparser.Expression;
@@ -54,7 +54,7 @@ public class WhileLoopMechanic implements INoTargetSkill {
                 }
                 skill.cast(data);
             }
-        }.runTaskTimer(JavaPlugin.getProvidingPlugin(getClass()), 0L, tickInterval);
+        }.runTaskTimer(AlchemistMMExtension.inst(), 0L, tickInterval);
 
         activeLoops.put(loopId, task);
         return SkillResult.SUCCESS;

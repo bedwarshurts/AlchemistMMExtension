@@ -45,20 +45,24 @@ public class StringBuilderMechanic implements INoTargetSkill {
             Class<?>[] paramTypes = new Class<?>[argValues.length];
             Object[] parsedValues = new Object[argValues.length];
             for (int i = 0; i < argValues.length; i++) {
-                String[] args = argValues[i].split(" ");
+                String[] args = argValues[i].split(" ", 2);
+                if (args.length < 2) {
+                    throw new IllegalArgumentException("Invalid argument format: " + argValues[i] + ". Expected format: 'type value'");
+                }
                 try {
-                    paramTypes[i] = InvokeUtils.getClassFromString(args[0]);
+                    Class<?> paramType = InvokeUtils.getClassFromString(args[0]);
+                    paramTypes[i] = paramType;
+                    parsedValues[i] = InvokeUtils.getValue(paramType, args[1].trim());
                 } catch (ClassNotFoundException e) {
                     throw new IllegalArgumentException("Invalid class name: " + args[0], e);
                 }
-                parsedValues[i] = argValues[i].trim();
             }
 
             try {
                 Method method = InvokeUtils.getMethod(StringBuilder.class, methodName, paramTypes);
                 method.invoke(builder, parsedValues);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                AlchemistMMExtension.inst().getLogger().severe("An error occurred while invoking method: " + methodName + e);
+                AlchemistMMExtension.inst().getLogger().severe("An error occurred while invoking method: " + methodName + " - " + e);
             }
         }
 

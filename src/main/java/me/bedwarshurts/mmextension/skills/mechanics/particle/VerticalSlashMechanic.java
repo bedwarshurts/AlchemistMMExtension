@@ -11,7 +11,10 @@ import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import java.util.Set;
 
 @MythicMechanic(author = "bedwarshurts", name = "verticalslash", aliases = {}, description = "Spawns particles in a half circle shape")
 public class VerticalSlashMechanic extends ParticleMechanic implements ITargetedLocationSkill {
@@ -36,6 +39,8 @@ public class VerticalSlashMechanic extends ParticleMechanic implements ITargeted
         Location center = origin.clone().add(chord.multiply(0.5));
         double radius = distance / 2;
 
+        final Set<Player> audience = SkillUtils.getAudienceTargets(data, this.audience);
+
         for (int i = 0; i <= 180; i++) {
             int finalI = i;
             Bukkit.getScheduler().runTaskLaterAsynchronously(AlchemistMMExtension.inst(), () -> {
@@ -47,7 +52,7 @@ public class VerticalSlashMechanic extends ParticleMechanic implements ITargeted
                                 .add(arcUp.clone().multiply(sin * radius));
                         Location particleLocation = center.clone().add(offset);
 
-                        SkillUtils.spawnParticle(SkillUtils.getAudienceTargets(data, audience), particleType,
+                        SkillUtils.spawnParticle(audience, particleType,
                                 particleLocation, 0, 0, 0, speed.get(data), particleCount.get(data));
                         skill.castAtPoint(data, particleLocation);
                     },

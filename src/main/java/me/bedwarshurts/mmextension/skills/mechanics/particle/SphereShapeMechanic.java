@@ -44,7 +44,8 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
 
         final Vector offset;
         if (dirOverride != null) {
-            offset = new Vector(dirOverride.get(0).get(data), dirOverride.get(1).get(data), dirOverride.get(2).get(data)).subtract(origin.toVector());
+            offset = new Vector(dirOverride.get(0).get(data), dirOverride.get(1).get(data),
+                    dirOverride.get(2).get(data)).subtract(origin.toVector());
         } else {
             offset = null;
         }
@@ -91,7 +92,7 @@ public class SphereShapeMechanic extends ParticleMechanic implements ITargetedLo
                 SkillUtils.spawnParticle(audience, particleType, particleLocation, dx, dy, dz, speed.get(data));
 
                 skill.castAtPoint(data, particleLocation);
-            }, (long) (delayMs.get(data) * i / 50)); // Convert delay from milliseconds to ticks (50 ms = 1 tick)
+            }, (long) (delayMs.get(data) * i / 50));
         }
 
         return SkillResult.SUCCESS;
