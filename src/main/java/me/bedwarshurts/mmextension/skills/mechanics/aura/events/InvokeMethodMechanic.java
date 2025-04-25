@@ -30,7 +30,7 @@ public class InvokeMethodMechanic implements INoTargetSkill {
     public SkillResult cast(SkillMetadata data) {
         Optional<Object> o = data.getMetadata("event");
         if (o.isEmpty()) return SkillResult.CONDITION_FAILED;
-        if (!(o.get() instanceof Event e)) return SkillResult.INVALID_TARGET;
+        if (!(o.get() instanceof Event e)) return SkillResult.CONDITION_FAILED;
 
         try {
             for (String methodString : methods) {
