@@ -10,7 +10,6 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.utils.Events;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
-import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.AlchemistAura;
@@ -22,8 +21,6 @@ import org.bukkit.event.EventPriority;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @MythicMechanic(author = "bedwarshurts", name = "events:subscribe", aliases = {"events:sub"}, description = "Subscribes to an event and runs a skill when it is triggered")
 public class EventSubscribeMechanic extends AlchemistAura implements ITargetedEntitySkill {

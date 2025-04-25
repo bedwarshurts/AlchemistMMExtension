@@ -5,6 +5,7 @@ import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
+import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.InvokeUtils;
 import org.bukkit.event.Event;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
+@MythicMechanic(author = "bedwarshurts", name = "events:invokemethod", aliases = {"events:invoke"}, description = "Invokes a method on an event")
 public class InvokeMethodMechanic implements INoTargetSkill {
     private final ArrayList<String> methods = new ArrayList<>();
 
