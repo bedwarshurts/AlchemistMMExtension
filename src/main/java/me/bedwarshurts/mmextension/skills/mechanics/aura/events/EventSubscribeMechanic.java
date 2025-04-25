@@ -1,4 +1,4 @@
-package me.bedwarshurts.mmextension.skills.mechanics.aura;
+package me.bedwarshurts.mmextension.skills.mechanics.aura.events;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
@@ -9,13 +9,12 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.utils.Events;
 import io.lumine.mythic.core.skills.SkillExecutor;
-import io.lumine.mythic.core.skills.auras.Aura;
 import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
+import me.bedwarshurts.mmextension.skills.mechanics.aura.AlchemistAura;
 import me.bedwarshurts.mmextension.utils.InvokeUtils;
-import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -27,11 +26,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @MythicMechanic(author = "bedwarshurts", name = "events:subscribe", aliases = {"events:sub"}, description = "Subscribes to an event and runs a skill when it is triggered")
-public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill {
+public class EventSubscribeMechanic extends AlchemistAura implements ITargetedEntitySkill {
     private final Class<? extends Event> eventClass;
     private final MythicSkill skill;
     private final EventPriority priority;
-    private final ArrayList<String> methods = new ArrayList<>();
     private final String triggerMethod;
     private final boolean requirePlayer;
 
@@ -42,10 +40,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                     .asSubclass(Event.class);
             this.skill = new MythicSkill(mlc.getString(new String[]{"skill", "s"}, ""));
             this.priority = EventPriority.valueOf(mlc.getString(new String[]{"eventPriority", "priority"}, "NORMAL").toUpperCase());
-            this.methods.addAll(Arrays.stream(mlc.getString(new String[]{"methods", "m"}, "")
-                    .split("\\),"))
-                    .map(s -> !s.endsWith(")") && !s.isEmpty() ?  s + ")" : s)
-                    .toList());
             this.triggerMethod = mlc.getString(new String[]{"triggerMethod", "trigger"}, "getPlayer()");
             this.requirePlayer = mlc.getBoolean(new String[]{"requirePlayer", "rp"}, false);
         } catch (ClassNotFoundException e) {
@@ -61,7 +55,7 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
         return SkillResult.SUCCESS;
     }
 
-    private class EventSubscribeMechanicTracker extends AuraTracker implements IParentSkill {
+    private class EventSubscribeMechanicTracker extends AlchemistAura.AlchemistAuraTracker implements IParentSkill {
         private final AbstractEntity target;
         private boolean cancel;
 
@@ -86,61 +80,29 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
                     })
                     .handler(e -> {
                         long lastCallTime = System.currentTimeMillis();
+                        skillMetadata.setMetadata("event", e);
+
                         try {
                             Method getTrigger = InvokeUtils.getMethod(e.getClass(), triggerMethod.substring(0, triggerMethod.indexOf("(")));
                             Entity trigger = (Entity) getTrigger.invoke(e);
                             if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
                             skillMetadata.setTrigger(BukkitAdapter.adapt(trigger));
+                        } catch (InvocationTargetException | IllegalAccessException ex) {
+                            throw new IllegalArgumentException("The trigger method specified is invalid", ex);
+                        }
 
-                            for (String methodString : methods) {
-                                if (methodString.isEmpty()) continue;
-                                Method method;
-                                Object obj = e;
-                                Class<?> objClass = e.getClass();
-                                for (String call : methodString.split("\\).")) {
-                                    call += ")";
-                                    String methodName = call.split("\\(")[0];
-                                    String methodArgs = call.split("\\(")[1].replace(")", "");
-                                    String[] args = methodArgs.split(",");
-                                    final int length = args[0].isEmpty() ? 0 : args.length;
-                                    Class<?>[] argTypes = new Class<?>[length];
-                                    Object[] argValues = new Object[length];
-                                    for (int i = 0; i < args.length; i++) {
-                                        String arg = args[i];
-                                        int spaceIndex = arg.indexOf(" ");
-                                        if (spaceIndex == -1) continue;
-                                        String type = arg.substring(0, spaceIndex).trim();
-                                        String value = arg.substring(spaceIndex).trim();
-                                        Class<?> argClass = InvokeUtils.getClassFromString(type);
-                                        argTypes[i] = argClass;
-                                        argValues[i] = InvokeUtils.getValue(argClass, value);
-                                    }
-                                    method = InvokeUtils.getMethod(objClass, methodName, argTypes);
-                                    obj = length == 0
-                                            ? method.invoke(obj)
-                                            : method.invoke(obj, argValues);
-                                    if (!method.getReturnType().equals(void.class)) {
-                                        objClass = obj.getClass();
-                                    }
-                                }
-                                try {
-                                    skillMetadata.getVariables().put(methodString, new StringVariable(obj.toString()));
-                                } catch (NullPointerException ignored) {
-                                }
-                            }
-
-                            skillMetadata.getVariables().put("lastCallTime", new IntegerVariable((int) lastCallTime));
+                        skillMetadata.getVariables().put("lastCallTime", new IntegerVariable((int) lastCallTime));
                             skill.cast(skillMetadata);
 
                             if (this.cancel) {
                                 Method cancelEvent = InvokeUtils.getMethod(e.getClass(), "setCancelled", boolean.class);
-                                cancelEvent.invoke(e, true);
+                                try {
+                                    cancelEvent.invoke(e, true);
+                                } catch (IllegalAccessException | InvocationTargetException ex) {
+                                    throw new UnsupportedOperationException("This event cannot be cancelled", ex);
+                                }
                             }
-                        } catch (ClassNotFoundException | IllegalAccessException |
-                                 InvocationTargetException ex) {
-                            throw new IllegalArgumentException("Couldnt access a method " + ex);
-                        }
-                    })
+                        })
                     .bindWith(this);
         }
 
@@ -157,26 +119,6 @@ public class EventSubscribeMechanic extends Aura implements ITargetedEntitySkill
         @Override
         public boolean getCancelled() {
             return cancel;
-        }
-
-        @Override
-        public boolean isValid() {
-            return this.entity.filter(abstractEntity ->
-                    SkillUtils.isAuraValid(this.components, this.startDuration, this.chargesRemaining,
-                            this.startCharges, this.ticksRemaining, abstractEntity, this.hasEnded)).isPresent();
-        }
-
-        @Override
-        public void run() {
-            if (this.startDuration >= 0) {
-                this.ticksRemaining -= this.interval;
-            }
-            if (!this.isValid()) {
-                this.terminate();
-                return;
-            }
-            this.entity.ifPresent(e -> this.skillMetadata.setOrigin(e.getLocation()));
-            this.auraTick();
         }
     }
 }

@@ -9,13 +9,16 @@ import me.bedwarshurts.mmextension.skills.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.skills.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.skills.mechanics.BookGUIMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.HideChatMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.MirrorPlayerSkinMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.OpenChestMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.PeriodicBlockBreakMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.PlaceBlockMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.PrimedTnTMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.SetWorldBorderMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.StringBuilderMechanic;
-import me.bedwarshurts.mmextension.skills.mechanics.aura.EventSubscribeMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.aura.events.EventSubscribeMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.CancelPlayerDeathMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.aura.events.InvokeMethodMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.chestgui.ChestGUIMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.inventory.HotbarSnapshotMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.inventory.PlaceToInventoryMechanic;
@@ -150,7 +153,15 @@ public final class MythicMobsHook implements Listener {
                 break;
             case "mirrorplayerskin":
             case "mirrorskin":
-                event.register(new me.bedwarshurts.mmextension.skills.mechanics.MirrorPlayerSkinMechanic());
+                event.register(new MirrorPlayerSkinMechanic());
+                break;
+            case "placeblock":
+            case "pb":
+                event.register(new PlaceBlockMechanic(event.getConfig()));
+                break;
+            case "events:invoke":
+            case "events:invokemethod":
+                event.register(new InvokeMethodMechanic(event.getConfig()));
                 break;
             default: break;
         }

@@ -5,10 +5,8 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.*;
 import io.lumine.mythic.bukkit.utils.Events;
 import io.lumine.mythic.core.skills.SkillExecutor;
-import io.lumine.mythic.core.skills.auras.Aura;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
-import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -17,7 +15,7 @@ import java.io.File;
 import java.util.Objects;
 
 @MythicMechanic(author = "bedwarshurts", name = "cancelplayerdeath", aliases = {}, description = "Cancels the player's next death")
-public class CancelPlayerDeathMechanic extends Aura implements ITargetedEntitySkill {
+public class CancelPlayerDeathMechanic extends AlchemistAura implements ITargetedEntitySkill {
     private final double healthPercentage;
     private final MythicSkill skill;
 
@@ -36,7 +34,7 @@ public class CancelPlayerDeathMechanic extends Aura implements ITargetedEntitySk
         return SkillResult.SUCCESS;
     }
 
-    private class CancelPlayerDeathMechanicTracker extends AuraTracker {
+    private class CancelPlayerDeathMechanicTracker extends AlchemistAura.AlchemistAuraTracker {
         private final AbstractEntity target;
 
         public CancelPlayerDeathMechanicTracker(AbstractEntity target, SkillMetadata data) {
@@ -62,26 +60,6 @@ public class CancelPlayerDeathMechanic extends Aura implements ITargetedEntitySk
         @Override
         public void auraStop() {
             executeAuraSkill(onEndSkill, skillMetadata);
-        }
-
-        @Override
-        public boolean isValid() {
-            return this.entity.filter(abstractEntity ->
-                    SkillUtils.isAuraValid(this.components, this.startDuration, this.chargesRemaining,
-                            this.startCharges, this.ticksRemaining, abstractEntity, this.hasEnded)).isPresent();
-        }
-
-        @Override
-        public void run() {
-            if (this.startDuration >= 0) {
-                this.ticksRemaining -= this.interval;
-            }
-            if (!this.isValid()) {
-                this.terminate();
-                return;
-            }
-            this.entity.ifPresent(e -> this.skillMetadata.setOrigin(e.getLocation()));
-            this.auraTick();
         }
     }
 }
