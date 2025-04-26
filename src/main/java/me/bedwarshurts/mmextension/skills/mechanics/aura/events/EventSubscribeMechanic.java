@@ -71,7 +71,7 @@ public class EventSubscribeMechanic extends AlchemistAura implements ITargetedEn
                         try {
                             Method isCancelled = InvokeUtils.getMethod(e.getClass(), "isCancelled");
                             return !((boolean) isCancelled.invoke(e));
-                        } catch (InvocationTargetException | IllegalAccessException ignored) {
+                        } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException ignored) {
                             return true;
                         }
                     })
