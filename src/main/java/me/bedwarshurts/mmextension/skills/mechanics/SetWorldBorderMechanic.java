@@ -10,6 +10,7 @@ import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
+import me.bedwarshurts.mmextension.mythic.MythicPlayer;
 import me.bedwarshurts.mmextension.utils.events.Events;
 import me.bedwarshurts.mmextension.utils.terminable.TerminableConsumer;
 import me.bedwarshurts.mmextension.utils.terminable.TerminableRegistry;
@@ -20,8 +21,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 @MythicMechanic(author = "bedwarshurts", name = "setworldborder", aliases = {"swb"}, description = "Sets the world border for a player")
-public class SetWorldBorderMechanic implements ITargetedEntitySkill, TerminableConsumer {
-    private final TerminableRegistry consumer = new TerminableRegistry();
+public class SetWorldBorderMechanic implements ITargetedEntitySkill {
     private final PlaceholderDouble radius;
     private final boolean cancelOnQuit;
     private final boolean remove;
@@ -50,7 +50,9 @@ public class SetWorldBorderMechanic implements ITargetedEntitySkill, TerminableC
         if (player.getWorldBorder() != null) {
             if (remove) {
                 player.setWorldBorder(null);
-                consumer.close();
+                if (MythicPlayer.getMythicPlayer(player).removeTracker("worldBorder") != null) {
+                    MythicPlayer.getMythicPlayer(player).removeTracker("worldBorder").close();
+                }
             } else {
                 player.getWorldBorder().setSize(radius.get(data), timeTicks.get(data, data.getCaster().getEntity()) / 20);
             }
@@ -72,13 +74,8 @@ public class SetWorldBorderMechanic implements ITargetedEntitySkill, TerminableC
                     .filter(e -> e.getPlayer().getUniqueId().toString().equals(player.getUniqueId().toString()))
                     .handler(e -> Bukkit.getScheduler().runTaskLater(AlchemistMMExtension.inst(),
                             () -> e.getPlayer().setWorldBorder(border), 40L))
-                    .bindWith(this);
+                    .bindWith(MythicPlayer.getMythicPlayer(player).addTracker("worldBorder"));
         }
         return SkillResult.SUCCESS;
-    }
-
-    @Override
-    public TerminableConsumer with(AutoCloseable terminable) {
-        return this.consumer.with(terminable);
     }
 }
