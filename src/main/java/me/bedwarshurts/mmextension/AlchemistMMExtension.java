@@ -7,6 +7,7 @@ import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
 import me.bedwarshurts.mmextension.listeners.SkillTriggerListeners;
 import me.bedwarshurts.mmextension.listeners.mmocore.SkillCastTriggerListener;
+import me.bedwarshurts.mmextension.skills.placeholders.TernaryPlaceholder;
 import me.bedwarshurts.mmextension.skills.triggers.MoreSkillTriggers;
 import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
 import org.bukkit.Bukkit;
@@ -16,6 +17,7 @@ import org.mariuszgromada.math.mxparser.License;
 import java.util.Objects;
 
 public class AlchemistMMExtension extends JavaPlugin {
+
     private boolean isMMOItems = true;
     private boolean isMMOCore = true;
     private boolean isPlaceholderAPI = true;
@@ -67,6 +69,9 @@ public class AlchemistMMExtension extends JavaPlugin {
 
         getLogger().info("Registering commands...");
         Objects.requireNonNull(this.getCommand("playerspawnmythicmob")).setExecutor(new PlayerSpawnMythicMobCommand());
+
+        getLogger().info("Registering placeholders...");
+        MythicBukkit.inst().getPlaceholderManager().register("eval", new TernaryPlaceholder());
 
         if (isPlaceholderAPI) {
             getLogger().info("Registering PlaceholderAPI Placeholders...");
