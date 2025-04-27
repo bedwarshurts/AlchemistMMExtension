@@ -7,6 +7,7 @@ import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
 import me.bedwarshurts.mmextension.listeners.SkillTriggerListeners;
 import me.bedwarshurts.mmextension.listeners.mmocore.SkillCastTriggerListener;
+import me.bedwarshurts.mmextension.skills.placeholders.RandomColorPlaceholder;
 import me.bedwarshurts.mmextension.skills.placeholders.TernaryPlaceholder;
 import me.bedwarshurts.mmextension.skills.triggers.MoreSkillTriggers;
 import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
@@ -72,6 +73,7 @@ public class AlchemistMMExtension extends JavaPlugin {
 
         getLogger().info("Registering placeholders...");
         MythicBukkit.inst().getPlaceholderManager().register("eval", new TernaryPlaceholder());
+        MythicBukkit.inst().getPlaceholderManager().register("random.color", new RandomColorPlaceholder());
 
         if (isPlaceholderAPI) {
             getLogger().info("Registering PlaceholderAPI Placeholders...");
