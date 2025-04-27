@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 @MythicCondition(author = "bedwarshurts", name = "isindungeon", aliases = {}, description = "Check if the entity is in a dungeon")
 public class IsInDungeonCondition implements IEntityCondition {
+
     @Override
     public boolean check(AbstractEntity target) {
         World world = BukkitAdapter.adapt(target.getWorld());

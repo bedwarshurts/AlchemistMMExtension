@@ -9,6 +9,7 @@ import io.lumine.mythic.core.skills.auras.Aura;
 import java.io.File;
 
 public abstract class AlchemistAura extends Aura {
+
     public AlchemistAura(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
         super(manager, file, line, mlc);
     }

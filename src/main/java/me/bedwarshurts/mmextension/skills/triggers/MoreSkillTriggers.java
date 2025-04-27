@@ -6,6 +6,7 @@ import me.bedwarshurts.mmextension.skills.triggers.meta.PreAttackEntityMeta;
 import me.bedwarshurts.mmextension.skills.triggers.meta.SkillCastMeta;
 
 public class MoreSkillTriggers {
+
     public static final SkillTrigger<?> PRE_ATTACK =
             SkillTrigger.create("PRE_ATTACK", PreAttackEntityMeta.class, "PREATTACK", "PRE_ATTACK", "PREATTACKENTITY", "PRE_ATTACK_ENTITY");
     public static final SkillTrigger<?> SKILL_CAST =

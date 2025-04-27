@@ -16,6 +16,7 @@ import java.util.Objects;
 
 @MythicMechanic(author = "bedwarshurts", name = "cancelplayerdeath", aliases = {}, description = "Cancels the player's next death")
 public class CancelPlayerDeathMechanic extends AlchemistAura implements ITargetedEntitySkill {
+
     private final double healthPercentage;
     private final MythicSkill skill;
 

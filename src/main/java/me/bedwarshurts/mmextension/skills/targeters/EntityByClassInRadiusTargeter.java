@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @MythicTargeter(author = "bedwarshurts", name = "targetentitiesinradius", aliases = {"TEIR"}, description = "Targets a specific entity in a radius around the caster")
 public class EntityByClassInRadiusTargeter implements IEntityTargeter {
+
     private final PlaceholderDouble radius;
     private final String className;
 

@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import java.util.Optional;
 
 public class MythicSkill {
+
     private final Skill skill;
 
     public MythicSkill(String skillName) {

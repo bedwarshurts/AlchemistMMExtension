@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "placetoinventory", aliases = {}, description = "Places an item in the player's inventory")
 public class PlaceToInventoryMechanic implements ITargetedEntitySkill {
+
     private final String itemString;
     private final int inventorySlot;
 

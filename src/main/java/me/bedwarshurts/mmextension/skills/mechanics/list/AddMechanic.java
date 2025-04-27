@@ -8,6 +8,7 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 @MythicMechanic(author = "bedwarshurts", name = "add", aliases = {}, description = "Adds a value to a list")
 public class AddMechanic implements INoTargetSkill {
+
     private final String name;
     private final String value;
 

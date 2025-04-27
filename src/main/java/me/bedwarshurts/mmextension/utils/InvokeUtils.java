@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.concurrent.ConcurrentMap;
 
 public final class InvokeUtils {
+
     private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
     private static final ConcurrentMap<String, Class<?>> cachedClasses = Maps.newConcurrentMap();
 

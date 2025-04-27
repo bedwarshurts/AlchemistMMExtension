@@ -6,6 +6,7 @@ import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 
 public class PlayerChangeSlotMeta extends SkillTriggerMetadata {
+
     private final PlayerItemHeldEvent event;
 
     public PlayerChangeSlotMeta(PlayerItemHeldEvent event) {

@@ -20,6 +20,7 @@ import java.util.List;
 
 @MythicMechanic(author = "bedwarshurts", name = "openchest", aliases = {}, description = "Opens a chest by mimicking a player opening it")
 public class OpenChestMechanic implements ITargetedLocationSkill {
+
     private final String action;
     private final TargeterAudience audience;
 

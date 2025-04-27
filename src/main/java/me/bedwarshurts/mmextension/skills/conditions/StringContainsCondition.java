@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 @MythicCondition(author = "bedwarshurts", name = "stringcontains", aliases = {}, description = "Check if one string is contained within another")
 public class StringContainsCondition implements ISkillMetaCondition {
+
     private final PlaceholderString string;
     private final PlaceholderString contains;
 

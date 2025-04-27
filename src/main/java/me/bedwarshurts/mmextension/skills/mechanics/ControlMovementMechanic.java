@@ -16,6 +16,7 @@ import org.bukkit.util.Vector;
 
 @MythicMechanic(author = "bedwarshurts", name = "controlmovement", aliases = {}, description = "Controls the movement of a player to a specified location")
 public class ControlMovementMechanic implements ITargetedLocationSkill {
+
     private final double speed;
 
     public ControlMovementMechanic(MythicLineConfig mlc) {

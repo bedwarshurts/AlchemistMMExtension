@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public final class EventSubscriptionBuilder<T extends Event> implements Terminable {
+
     private final Class<T> eventClass;
     private final Listener listener = new Listener() {};
     private final EventPriority priority;

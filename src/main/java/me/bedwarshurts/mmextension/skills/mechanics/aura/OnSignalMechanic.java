@@ -17,6 +17,7 @@ import java.io.File;
 
 @MythicMechanic(author = "bedwarshurts", name = "onsignal", aliases = {}, description = "Triggers a skill when a player receives a signal")
 public class OnSignalMechanic extends AlchemistAura implements ITargetedEntitySkill {
+
     private final MythicSkill skill;
     private final String signal;
 

@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.mariuszgromada.math.mxparser.Expression;
 
 public class LoopHandler implements Terminable {
+
     private final MythicSkill skill;
     private BukkitTask task;
     private final SkillMetadata data;

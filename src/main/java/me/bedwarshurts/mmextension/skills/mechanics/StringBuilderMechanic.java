@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 
 @MythicMechanic(author = "bedwarshurts", name = "stringbuilder", aliases = {"sbuilder"}, description = "Builds a string using Java's StringBuilder")
 public class StringBuilderMechanic implements INoTargetSkill {
+
     private final PlaceholderString inputString;
     private final String variableName;
     private final String[] actions;

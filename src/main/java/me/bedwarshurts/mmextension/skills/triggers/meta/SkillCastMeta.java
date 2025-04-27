@@ -6,6 +6,7 @@ import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.lib.api.event.skill.PlayerCastSkillEvent;
 
 public class SkillCastMeta extends SkillTriggerMetadata {
+
     private final PlayerCastSkillEvent event;
 
     public SkillCastMeta(PlayerCastSkillEvent event) {

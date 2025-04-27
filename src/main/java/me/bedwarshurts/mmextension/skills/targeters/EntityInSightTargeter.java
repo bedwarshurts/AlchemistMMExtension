@@ -16,6 +16,7 @@ import java.util.List;
 
 @MythicTargeter(author = "bedwarshurts", name = "targetentityinsight", aliases = {"TEIS"}, description = "Targets the entity the caster is looking at")
 public class EntityInSightTargeter implements IEntityTargeter {
+
     private final double maxDistance;
 
     public EntityInSightTargeter(MythicLineConfig mlc) {

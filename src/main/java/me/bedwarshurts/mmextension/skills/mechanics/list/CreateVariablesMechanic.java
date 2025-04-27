@@ -13,6 +13,7 @@ import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 
 public class CreateVariablesMechanic implements ITargetedEntitySkill {
+
     private final String name;
     private final String registry;
 

@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 
 @MythicMechanic(author = "bedwarshurts", name = "events:subscribe", aliases = {"events:sub"}, description = "Subscribes to an event and runs a skill when it is triggered")
 public class EventSubscribeMechanic extends AlchemistAura implements ITargetedEntitySkill {
+
     private final Class<? extends Event> eventClass;
     private final MythicSkill skill;
     private final EventPriority priority;

@@ -23,6 +23,7 @@ import java.util.List;
 
 @MythicMechanic(author = "bedwarshurts", name = "periodicblockbreak", aliases = {"periodicbreak"}, description = "Breaks blocks in a list of locations over time")
 public class PeriodicBlockBreakMechanic implements INoTargetSkill {
+
     private final PlaceholderInt delayMs;
     private final Material blockType;
     private final PlaceholderDouble startX;

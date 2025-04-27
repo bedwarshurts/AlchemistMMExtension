@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MythicPlayer {
+
     private final Player player;
     private final ConcurrentHashMap<String, MythicPlayerTracker> data = new ConcurrentHashMap<>();
 

@@ -12,6 +12,7 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 @MythicMechanic(author = "bedwarshurts", name = "add", aliases = {}, description = "Gets a value from a list")
 public class GetMechanic implements INoTargetSkill {
+
     private final String name;
     private final int index;
 

@@ -17,6 +17,7 @@ import java.util.Collection;
 
 @MythicMechanic(author = "bedwarshurts", name = "foreachloop", aliases = {"foreach"}, description = "Execute a skill for each location or entity target")
 public class ForEachMechanic implements INoTargetSkill {
+
     private final String skillName;
     private final PlaceholderInt delayMs;
 

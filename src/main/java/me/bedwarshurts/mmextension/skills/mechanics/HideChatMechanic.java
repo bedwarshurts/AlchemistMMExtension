@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @MythicMechanic(author = "bedwarshurts", name = "hidechat", description = "Hide the chat for a player")
 public class HideChatMechanic implements ITargetedEntitySkill, TerminableConsumer {
+
     private final PlaceholderInt duration;
     private final TerminableRegistry consumer = new TerminableRegistry();
 

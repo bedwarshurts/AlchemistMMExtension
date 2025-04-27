@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @MythicMechanic(author = "bedwarshurts", name = "events:invokemethod", aliases = {"events:invoke"}, description = "Invokes a method on an event")
 public class InvokeMethodMechanic implements INoTargetSkill {
+
     private final ArrayList<String> methods = new ArrayList<>();
 
     public InvokeMethodMechanic(MythicLineConfig mlc) {

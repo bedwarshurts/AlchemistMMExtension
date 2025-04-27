@@ -10,6 +10,7 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 @MythicMechanic(author = "bedwarshurts", name = "size", aliases = {}, description = "Gets the size of a list")
 public class SizeMechanic implements INoTargetSkill {
+
     private final String name;
 
     public SizeMechanic(MythicLineConfig mlc) {

@@ -10,6 +10,7 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 @MythicMechanic(author = "bedwarshurts", name = "index", aliases = {}, description = "Gets the index of a value in a list")
 public class IndexMechanic implements INoTargetSkill {
+
     private final String name;
     private final String value;
     private final boolean last;

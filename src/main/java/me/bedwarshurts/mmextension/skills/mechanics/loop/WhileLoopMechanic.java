@@ -10,6 +10,7 @@ import me.bedwarshurts.mmextension.mythic.MythicSkill;
 
 @MythicMechanic(author = "bedwarshurts", name = "whileloop", aliases = {"while"}, description = "Executes a skill sequence in a while loop")
 public class WhileLoopMechanic implements INoTargetSkill {
+
     private final String condition;
     private final MythicSkill skill;
     private final PlaceholderDouble delayMs;

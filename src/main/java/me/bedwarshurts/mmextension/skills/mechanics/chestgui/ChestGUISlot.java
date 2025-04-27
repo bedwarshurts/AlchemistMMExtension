@@ -4,28 +4,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
-public class ChestGUISlot {
-    private final int slot;
-    private final ItemStack item;
-    private final Map<String, String> actions;
-
-    public ChestGUISlot(int slot, ItemStack item, Map<String, String> actions) {
-        this.slot = slot;
-        this.item = item;
-        this.actions = actions;
-    }
-
-    public int getSlot() {
-        return slot;
-    }
-
-    public ItemStack getItem() {
-        return item;
-    }
-
-    public Map<String, String> getActions() {
-        return actions;
-    }
+public record ChestGUISlot(int slot, ItemStack item, Map<String, String> actions) {
 
     public boolean canInteract() {
         return !actions.getOrDefault("interact", "false").equalsIgnoreCase("false");

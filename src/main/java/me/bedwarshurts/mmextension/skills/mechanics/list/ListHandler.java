@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public class ListHandler<T> {
+
     private final String name;
     private final ArrayList<T> registry = new ArrayList<>();
     private final VariableTypes type;

@@ -12,8 +12,6 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.mythic.MythicPlayer;
 import me.bedwarshurts.mmextension.utils.events.Events;
-import me.bedwarshurts.mmextension.utils.terminable.TerminableConsumer;
-import me.bedwarshurts.mmextension.utils.terminable.TerminableRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
@@ -22,6 +20,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 @MythicMechanic(author = "bedwarshurts", name = "setworldborder", aliases = {"swb"}, description = "Sets the world border for a player")
 public class SetWorldBorderMechanic implements ITargetedEntitySkill {
+
     private final PlaceholderDouble radius;
     private final boolean cancelOnQuit;
     private final boolean remove;

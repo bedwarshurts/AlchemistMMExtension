@@ -8,6 +8,7 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 
 @MythicMechanic(author = "bedwarshurts", name = "replace", aliases = {}, description = "Replaces a value in a list")
 public class ReplaceMechanic implements INoTargetSkill {
+
     private final String name;
     private final int index;
     private final String value;

@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 
 @MythicMechanic(author = "bedwarshurts", name = "placeblock", aliases = {"pb"}, description = "Send a block packet to the target location")
 public class PlaceBlockMechanic implements ITargetedLocationSkill {
+
     private final String BLOCK_DATA;
     private final boolean fake;
 

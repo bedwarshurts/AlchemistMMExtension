@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @MythicMechanic(name = "mirrorplayerskin", aliases = {"mirrorskin"}, description = "Mirror the skin of the player to the entity")
 public class MirrorPlayerSkinMechanic implements INoTargetSkill, TerminableConsumer {
+
     private final TerminableRegistry consumer = new TerminableRegistry();
     private static final ConcurrentHashMap<SkillCaster, TerminableRegistry> disguisedCasters = new ConcurrentHashMap<>();
 

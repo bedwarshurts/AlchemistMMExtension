@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 
 @MythicMechanic(author = "bedwarshurts", name = "setmmocooldown", aliases = {"setmmocd"}, description = "Sets the cooldown for a specified mmo ability")
 public class SetMMOCooldownMechanic implements INoTargetSkill {
+
     private final PlaceholderString ability;
     private final PlaceholderDouble cooldown;
 

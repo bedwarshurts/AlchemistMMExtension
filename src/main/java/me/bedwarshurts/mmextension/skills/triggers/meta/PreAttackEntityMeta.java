@@ -6,6 +6,7 @@ import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 
 public class PreAttackEntityMeta extends SkillTriggerMetadata {
+
     private final PrePlayerAttackEntityEvent event;
 
     public PreAttackEntityMeta(PrePlayerAttackEntityEvent event) {
