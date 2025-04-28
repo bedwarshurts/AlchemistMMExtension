@@ -41,11 +41,11 @@ public final class EventSubscriptionBuilder<T extends Event> implements Terminab
                 eventClass,
                 listener,
                 priority,
-                (listener, event) -> {
-                    if (eventClass.isInstance(event)) {
-                        T casted = eventClass.cast(event);
-                        if (filter == null || filter.test(casted)) {
-                            handler.accept(casted);
+                (l, e) -> {
+                    if (eventClass.isInstance(e)) {
+                        T event = eventClass.cast(e);
+                        if (filter == null || filter.test(event)) {
+                            handler.accept(event);
                         }
                     }
                 },
