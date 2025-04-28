@@ -74,6 +74,16 @@ public class VariableEditMechanic implements ITargetedEntitySkill {
                     break;
                 case "=":
                     builder = new StringBuilder(operation);
+                    String[] split = operation.split("\\+");
+                    for (String s : split) {
+                        if (s.contains("*")) {
+                            String[] parts = s.split("\\*");
+                            int times = Integer.parseInt(parts[1]);
+                            builder.append(String.valueOf(parts[0]).repeat(Math.max(0, times)));
+                        } else {
+                            builder.append(s);
+                        }
+                    }
                     break;
                 default: throw new IllegalArgumentException("Invalid operation key for StringVariable: " + operationKey);
             }
