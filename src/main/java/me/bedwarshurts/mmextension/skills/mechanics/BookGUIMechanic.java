@@ -22,10 +22,10 @@ public class BookGUIMechanic implements INoTargetSkill {
     private final String title;
     private final String author;
 
-    public BookGUIMechanic(MythicLineConfig config) {
-        this.contents = config.getString("contents", "Alchemist - No Contents Specified");
-        this.title = config.getString("title", "BuffsMenu");
-        this.author = config.getString("author", "AlchemistNetwork");
+    public BookGUIMechanic(MythicLineConfig mlc) {
+        this.contents = mlc.getString("contents", "Alchemist - No Contents Specified");
+        this.title = mlc.getString("title", "BuffsMenu");
+        this.author = mlc.getString("author", "AlchemistNetwork");
     }
 
     @Override
