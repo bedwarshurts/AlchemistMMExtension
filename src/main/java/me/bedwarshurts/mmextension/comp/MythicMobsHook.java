@@ -1,8 +1,10 @@
 package me.bedwarshurts.mmextension.comp;
 
+import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.skills.conditions.OxygenLevelCondition;
 import me.bedwarshurts.mmextension.skills.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.skills.conditions.YLevelCondition;
@@ -17,6 +19,7 @@ import me.bedwarshurts.mmextension.skills.mechanics.PlaceBlockMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.PrimedTnTMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.SetWorldBorderMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.StringBuilderMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.TestMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.events.EventSubscribeMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.CancelPlayerDeathMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.events.InvokeMethodMechanic;
@@ -41,6 +44,8 @@ import me.bedwarshurts.mmextension.skills.mechanics.aura.OnSignalMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.VerticalSlashMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.RingShapeMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.SphereShapeMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.variable.VariableEditMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.variable.VariableMechanic;
 import me.bedwarshurts.mmextension.skills.targeters.ConnectedBlocksTargeter;
 import me.bedwarshurts.mmextension.skills.targeters.EntityInSightTargeter;
 import me.bedwarshurts.mmextension.skills.targeters.GroundLevelTargeter;
@@ -168,7 +173,32 @@ public final class MythicMobsHook implements Listener {
             case "controlmovement":
                 event.register(new ControlMovementMechanic(event.getConfig()));
                 break;
-            default: break;
+            case "test":
+                event.register(new TestMechanic(event.getConfig()));
+                break;
+            case "world":
+            case "skill":
+            case "caster":
+            case "target":
+            case "global":
+                // Supress error on first load since we haven't replaced SkillExecutor yet
+                if (!AlchemistMMExtension.inst().isOverriden()) {
+                    event.register((INoTargetSkill) data -> null);
+                    break;
+                }
+
+                String line = event.getConfig().getLine();
+                String[] parts = line.trim().split(" ");
+                String secondWord = parts[1].toLowerCase();
+                if (secondWord.equals("int") || secondWord.equals("string") || secondWord.equals("double")
+                        || secondWord.equals("boolean") || secondWord.equals("float")) {
+                    event.register(new VariableMechanic(line));
+                    break;
+                }
+                event.register(new VariableEditMechanic(line));
+                break;
+            default:
+                break;
         }
     }
 
@@ -198,7 +228,8 @@ public final class MythicMobsHook implements Listener {
             case "teir":
                 event.register(new EntityByClassInRadiusTargeter(event.getConfig()));
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 
@@ -223,7 +254,8 @@ public final class MythicMobsHook implements Listener {
              *   event.register(new IsInDungeonCondition());
              *   break;
              */
-            default: break;
+            default:
+                break;
         }
     }
 }
