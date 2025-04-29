@@ -52,6 +52,10 @@ public class AlchemistSkillManager extends SkillExecutor {
             int firstSpace = mechanicPart.indexOf(' ');
             if (firstSpace != -1) {
                 mechanicName = mechanicPart.substring(0, firstSpace);
+                System.out.println(mechanicName);
+                if (mechanicName.equalsIgnoreCase("skill")) {
+                    mechanicName = "skillvariable";
+                }
             } else {
                 mechanicName = mechanicPart;
             }

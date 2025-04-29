@@ -16,6 +16,7 @@ import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 
 @MythicMechanic(author = "bedwarshurts", description = "Sets a variable in an easier to read way")
@@ -46,7 +47,7 @@ public class VariableMechanic implements ITargetedEntitySkill {
     @Override
     public SkillResult castAtEntity(SkillMetadata data, AbstractEntity target) {
         key = PlaceholderUtils.parseStringPlaceholders(key, data);
-        value = PlaceholderUtils.parseStringPlaceholders(value, data);
+        value = PlaceholderUtils.parseStringPlaceholders(value, data).replaceAll("\"", "");
         if (target.isPlayer()) {
             value = PlaceholderAPI.setPlaceholders((Player) target.getBukkitEntity(), value);
             key = PlaceholderAPI.setPlaceholders((Player) target.getBukkitEntity(), key);
@@ -67,7 +68,8 @@ public class VariableMechanic implements ITargetedEntitySkill {
                 registry.put(key, new IntegerVariable(Integer.parseInt(value)));
                 break;
             case "string":
-                registry.put(key, new StringVariable(value));
+                MiniMessage miniMessage = MiniMessage.miniMessage();
+                registry.put(key, new StringVariable(miniMessage.serialize(miniMessage.deserialize(value))));
                 break;
             case "double":
                 registry.put(key, new DoubleVariable(Double.parseDouble(value)));

@@ -77,6 +77,7 @@ public final class PlaceholderUtils {
         text = text.replaceAll("<&co>", ":");
         text = text.replaceAll("<&cm>", ",");
         text = text.replaceAll("<&da>", "-");
+        text = text.replaceAll("<&fs>", "/");
 
         return text;
     }

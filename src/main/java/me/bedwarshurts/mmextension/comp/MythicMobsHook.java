@@ -177,7 +177,7 @@ public final class MythicMobsHook implements Listener {
                 event.register(new TestMechanic(event.getConfig()));
                 break;
             case "world":
-            case "skill":
+            case "skillvariable":
             case "caster":
             case "target":
             case "global":

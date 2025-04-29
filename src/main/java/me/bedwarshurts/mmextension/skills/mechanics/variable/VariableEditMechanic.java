@@ -14,6 +14,7 @@ import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.mariuszgromada.math.mxparser.Expression;
 
@@ -64,6 +65,7 @@ public class VariableEditMechanic implements ITargetedEntitySkill {
         }
 
         if (variable instanceof StringVariable casted) {
+            operation = removeSpacesOutsideQuotes(operation);
             StringBuilder builder = new StringBuilder(casted.getValue());
             switch (operationKey) {
                 case "*=":
@@ -73,12 +75,12 @@ public class VariableEditMechanic implements ITargetedEntitySkill {
                     builder.append(operation);
                     break;
                 case "=":
-                    builder = new StringBuilder(operation);
+                    builder = new StringBuilder();
                     String[] split = operation.split("\\+");
                     for (String s : split) {
                         if (s.contains("*")) {
                             String[] parts = s.split("\\*");
-                            int times = Integer.parseInt(parts[1]);
+                            int times = Integer.parseInt(parts[1].trim());
                             builder.append(String.valueOf(parts[0]).repeat(Math.max(0, times)));
                         } else {
                             builder.append(s);
@@ -87,7 +89,8 @@ public class VariableEditMechanic implements ITargetedEntitySkill {
                     break;
                 default: throw new IllegalArgumentException("Invalid operation key for StringVariable: " + operationKey);
             }
-            casted.setValue(builder.toString());
+            MiniMessage miniMessage = MiniMessage.miniMessage();
+            casted.setValue(miniMessage.serialize(miniMessage.deserialize(PlaceholderUtils.parseMythicTags(builder.toString()))));
             return SkillResult.SUCCESS;
         }
         Expression ex;
@@ -104,5 +107,21 @@ public class VariableEditMechanic implements ITargetedEntitySkill {
         }
 
         return SkillResult.SUCCESS;
+    }
+
+    private String removeSpacesOutsideQuotes(String input) {
+        StringBuilder sb = new StringBuilder();
+        boolean inQuotes = false;
+
+        for (char c : input.toCharArray()) {
+            if (c == '\"') {
+                inQuotes = !inQuotes;
+                sb.append(c);
+            } else if (c != ' ' || inQuotes) {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString().replaceAll("\"", "");
     }
 }
