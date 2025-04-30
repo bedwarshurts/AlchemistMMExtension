@@ -78,7 +78,7 @@ public class AlchemistSkillManager extends SkillExecutor {
                 mechanic.setParent(parent);
                 return mechanic;
             } catch (Exception e) {
-                MythicLogger.error("Failed to construct mechanic {0}", skillLine);
+                MythicLogger.error("[AlchemistSkillExecutor] Failed to construct mechanic {0}", skillLine);
                 throw new UnsupportedOperationException(e);
             }
         }
@@ -89,15 +89,14 @@ public class AlchemistSkillManager extends SkillExecutor {
                 mechanic.setPack(pack);
                 mechanic.setParent(parent);
                 return mechanic;
-            } else {
-                String skillName = mechanicName.substring(mechanicName.indexOf(":") + 1);
-                SkillMechanic mechanic = new MetaSkillMechanic(this, file, skillLine, skillName, mlc);
-                mechanic.setPack(pack);
-                mechanic.setParent(parent);
-                return mechanic;
             }
+            String skillName = mechanicName.substring(mechanicName.indexOf(":") + 1);
+            SkillMechanic mechanic = new MetaSkillMechanic(this, file, skillLine, skillName, mlc);
+            mechanic.setPack(pack);
+            mechanic.setParent(parent);
+            return mechanic;
         } catch (Exception e) {
-            MythicLogger.error("Failed to load skill line due to bad syntax: {0}", skillLine);
+            MythicLogger.error("[AlchemistSkillExecutor] Failed to load skill line due to bad syntax: {0}", skillLine);
             MythicLogger.handleMinorError(e);
             return null;
         }

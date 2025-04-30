@@ -20,14 +20,15 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 
 @MythicMechanic(author = "bedwarshurts", description = "Sets a variable in an easier to read way")
-public class VariableMechanic implements ITargetedEntitySkill {
+public class VariableInitialiseMechanic implements ITargetedEntitySkill {
+
     private final VariableScope scope;
     private final String type;
     private String key;
     private String value;
     private final String line;
 
-    public VariableMechanic(String variableLine) {
+    public VariableInitialiseMechanic(String variableLine) {
         String[] parts = variableLine.split(" ");
         String scope = parts[0];
         this.scope = switch (scope) {

@@ -22,6 +22,7 @@ import java.util.Arrays;
 
 @MythicMechanic(author = "bedwarshurts", description = "Mechanic that allows you to edit variables in a more conventional way")
 public class VariableEditMechanic implements ITargetedEntitySkill {
+
     private final VariableScope scope;
     private String key;
     private final String operationKey;
@@ -93,6 +94,7 @@ public class VariableEditMechanic implements ITargetedEntitySkill {
             casted.setValue(miniMessage.serialize(miniMessage.deserialize(PlaceholderUtils.parseMythicTags(builder.toString()))));
             return SkillResult.SUCCESS;
         }
+
         Expression ex;
         if (operationKey.equals("=")) {
             ex = new Expression(operation);
@@ -116,7 +118,6 @@ public class VariableEditMechanic implements ITargetedEntitySkill {
         for (char c : input.toCharArray()) {
             if (c == '\"') {
                 inQuotes = !inQuotes;
-                sb.append(c);
             } else if (c != ' ' || inQuotes) {
                 sb.append(c);
             }

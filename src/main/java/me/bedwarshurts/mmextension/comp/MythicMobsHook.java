@@ -44,8 +44,9 @@ import me.bedwarshurts.mmextension.skills.mechanics.aura.OnSignalMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.VerticalSlashMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.RingShapeMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.SphereShapeMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.variable.VariableDeleteMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.variable.VariableEditMechanic;
-import me.bedwarshurts.mmextension.skills.mechanics.variable.VariableMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.variable.VariableInitialiseMechanic;
 import me.bedwarshurts.mmextension.skills.targeters.ConnectedBlocksTargeter;
 import me.bedwarshurts.mmextension.skills.targeters.EntityInSightTargeter;
 import me.bedwarshurts.mmextension.skills.targeters.GroundLevelTargeter;
@@ -178,6 +179,7 @@ public final class MythicMobsHook implements Listener {
                 break;
             case "world":
             case "skillvariable":
+            case "skillv":
             case "caster":
             case "target":
             case "global":
@@ -192,10 +194,16 @@ public final class MythicMobsHook implements Listener {
                 String secondWord = parts[1].toLowerCase();
                 if (secondWord.equals("int") || secondWord.equals("string") || secondWord.equals("double")
                         || secondWord.equals("boolean") || secondWord.equals("float")) {
-                    event.register(new VariableMechanic(line));
+                    event.register(new VariableInitialiseMechanic(line));
                     break;
                 }
+
                 event.register(new VariableEditMechanic(line));
+                break;
+            case "deletevariable":
+            case "delete":
+            case "del":
+                event.register(new VariableDeleteMechanic(event.getConfig().getLine()));
                 break;
             default:
                 break;
