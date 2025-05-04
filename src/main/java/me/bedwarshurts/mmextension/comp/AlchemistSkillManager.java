@@ -10,6 +10,7 @@ import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.skills.mechanics.CustomMechanic;
 import io.lumine.mythic.core.skills.mechanics.MetaSkillMechanic;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Map;
@@ -45,23 +46,7 @@ public class AlchemistSkillManager extends SkillExecutor {
 
         MythicLogger.debug(MythicLogger.DebugLevel.INFO, "[AlchemistSkillExecutor] Mechanic part: {0}", mechanicPart);
         MythicLogger.debug(MythicLogger.DebugLevel.INFO, "[AlchemistSkillExecutor] Extra part: {0}", extraPart);
-
-        String mechanicName;
-
-        if (!mechanicPart.contains("{")) {
-            int firstSpace = mechanicPart.indexOf(' ');
-            if (firstSpace != -1) {
-                mechanicName = mechanicPart.substring(0, firstSpace);
-                System.out.println(mechanicName);
-                if (mechanicName.equalsIgnoreCase("skill")) {
-                    mechanicName = "skillvariable";
-                }
-            } else {
-                mechanicName = mechanicPart;
-            }
-        } else {
-            mechanicName = mechanicPart.substring(0, mechanicPart.indexOf("{"));
-        }
+        String mechanicName = getString(mechanicPart);
 
         MythicLineConfig mlc = (file != null)
                 ? new MythicLineConfigImpl(file, mechanicPart.trim())
@@ -100,5 +85,24 @@ public class AlchemistSkillManager extends SkillExecutor {
             MythicLogger.handleMinorError(e);
             return null;
         }
+    }
+
+    private @NotNull String getString(String mechanicPart) {
+        String mechanicName;
+
+        if (!mechanicPart.contains("{")) {
+            int firstSpace = mechanicPart.indexOf(' ');
+            if (firstSpace != -1) {
+                mechanicName = mechanicPart.substring(0, firstSpace);
+                if (mechanicName.equalsIgnoreCase("skill")) {
+                    mechanicName = "skillvariable";
+                }
+            } else {
+                mechanicName = mechanicPart;
+            }
+        } else {
+            mechanicName = mechanicPart.substring(0, mechanicPart.indexOf("{"));
+        }
+        return mechanicName;
     }
 }
