@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.entity.TNTPrimed;
-import org.bukkit.plugin.java.JavaPlugin;
 
 @MythicMechanic(author = "bedwarshurts", name = "primedtnt", aliases = {}, description = "Spawns a primed TNT at a specific location with break and damage options")
 public class PrimedTnTMechanic implements ITargetedLocationSkill {
@@ -43,11 +42,11 @@ public class PrimedTnTMechanic implements ITargetedLocationSkill {
         tnt.setFuseTicks(fuseTicks);
 
         if (!breakBlocks) {
-            tnt.setMetadata("noBreak", new FixedMetadataValue(JavaPlugin.getProvidingPlugin(getClass()), true));
+            tnt.setMetadata("noBreak", new FixedMetadataValue(AlchemistMMExtension.inst(), true));
         }
 
         if (!damage) {
-            tnt.setMetadata("noDamage", new FixedMetadataValue(JavaPlugin.getProvidingPlugin(getClass()), true));
+            tnt.setMetadata("noDamage", new FixedMetadataValue(AlchemistMMExtension.inst(), true));
         }
     }
 }
