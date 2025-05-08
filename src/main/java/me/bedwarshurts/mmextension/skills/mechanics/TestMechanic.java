@@ -32,7 +32,7 @@ public class TestMechanic implements INoTargetSkill {
         System.out.println(key);
         System.out.println("------------------------------");
         for (Map.Entry<String, String> entry : map) {
-            System.out.println(entry.getValue());
+            System.out.println(entry + " " + entry.getValue());
         }
 
         return SkillResult.SUCCESS;

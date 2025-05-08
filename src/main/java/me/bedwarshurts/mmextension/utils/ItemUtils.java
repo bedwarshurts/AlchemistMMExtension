@@ -1,6 +1,7 @@
 package me.bedwarshurts.mmextension.utils;
 
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
+import me.bedwarshurts.mmextension.comp.PluginHooks;
 import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
 import net.Indyuce.mmoitems.MMOItems;
 import net.Indyuce.mmoitems.api.Type;
@@ -42,7 +43,7 @@ public final class ItemUtils {
 
     public static ItemStack getItemStack(String itemString) {
         if (itemString.toLowerCase().startsWith("mmoitem:")) {
-            if (!AlchemistMMExtension.inst().isMMOItems()) throw new DependencyNotFoundException("MMOItems is not installed!");
+            if (!PluginHooks.isInstalled(PluginHooks.MMOItems)) throw new DependencyNotFoundException("MMOItems is not installed!");
             String[] parts = itemString.split(":");
             if (parts.length == 3) {
                 MMOItem mmoItem = MMOItems.plugin.getMMOItem(Type.get(parts[1]), parts[2]);

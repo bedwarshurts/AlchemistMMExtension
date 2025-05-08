@@ -49,6 +49,7 @@ public class OnSignalMechanic extends AlchemistAura implements ITargetedEntitySk
         @Override
         public void auraStart() {
             executeAuraSkill(onStartSkill, skillMetadata);
+
             Events.subscribe(MythicPlayerSignalEvent.class, EventPriority.NORMAL).filter(event -> {
                 Player eventPlayer = (Player) event.getProfile().getEntity().getBukkitEntity();
                 return eventPlayer != null && eventPlayer.getUniqueId().equals(target.getUniqueId()) && event.getSignal().equals(signal);
