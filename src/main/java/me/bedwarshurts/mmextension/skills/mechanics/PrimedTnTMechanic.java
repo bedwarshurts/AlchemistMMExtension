@@ -5,6 +5,7 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.ITargetedLocationSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
+import io.lumine.mythic.api.skills.ThreadSafetyLevel;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.listeners.TnTExplosionListener;
@@ -33,6 +34,11 @@ public class PrimedTnTMechanic implements ITargetedLocationSkill {
         Location location = targetLocation.toPosition().toLocation();
         spawnPrimedTNT(location);
         return SkillResult.SUCCESS;
+    }
+
+    @Override
+    public ThreadSafetyLevel getThreadSafetyLevel() {
+        return ThreadSafetyLevel.SYNC_ONLY;
     }
 
     private void spawnPrimedTNT(Location location) {
