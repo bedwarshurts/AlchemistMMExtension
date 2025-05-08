@@ -6,12 +6,14 @@ import me.bedwarshurts.mmextension.commands.PlayerSpawnMythicMobCommand;
 import me.bedwarshurts.mmextension.comp.AlchemistSkillManager;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
+import me.bedwarshurts.mmextension.comp.PluginHooks;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
 import me.bedwarshurts.mmextension.listeners.SkillTriggerListeners;
 import me.bedwarshurts.mmextension.listeners.mmocore.SkillCastTriggerListener;
 import me.bedwarshurts.mmextension.skills.placeholders.RandomColorPlaceholder;
 import me.bedwarshurts.mmextension.skills.placeholders.TernaryPlaceholder;
 import me.bedwarshurts.mmextension.skills.triggers.MoreSkillTriggers;
+import me.bedwarshurts.mmextension.utils.ConfigUtils;
 import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,10 +24,6 @@ import java.util.Objects;
 
 public class AlchemistMMExtension extends JavaPlugin {
 
-    @Getter private boolean isMMOItems = true;
-    @Getter private boolean isMMOCore = true;
-    @Getter private boolean isPlaceholderAPI = true;
-    @Getter private boolean isProtocolLib = true;
     @Getter private boolean isOverriden = false;
 
     private static AlchemistMMExtension plugin;
@@ -43,22 +41,10 @@ public class AlchemistMMExtension extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") == null) {
             throw new DependencyNotFoundException("xd? you seriously installed an extension for mythicmobs without mythicmobs");
         }
+        PluginHooks.detectAll();
 
-        if (Bukkit.getPluginManager().getPlugin("MMOItems") == null) {
-            this.isMMOItems = false;
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            this.isPlaceholderAPI = false;
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("MMOCore") == null) {
-            this.isMMOCore = false;
-        }
-
-        if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null) {
-            this.isProtocolLib = false;
-        }
+        getLogger().info("Loading configuration...");
+        ConfigUtils.load();
 
         getLogger().info("Registering mythic skills...");
         Bukkit.getPluginManager().registerEvents(new MythicMobsHook(), this);
@@ -69,7 +55,7 @@ public class AlchemistMMExtension extends JavaPlugin {
         getLogger().info("Registering events...");
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
         Bukkit.getPluginManager().registerEvents(new SkillTriggerListeners(), this);
-        if (isMMOCore) Bukkit.getPluginManager().registerEvents(new SkillCastTriggerListener(), this);
+        if (PluginHooks.isInstalled(PluginHooks.MMOCore)) Bukkit.getPluginManager().registerEvents(new SkillCastTriggerListener(), this);
 
         getLogger().info("Registering commands...");
         Objects.requireNonNull(this.getCommand("playerspawnmythicmob")).setExecutor(new PlayerSpawnMythicMobCommand());
@@ -78,25 +64,27 @@ public class AlchemistMMExtension extends JavaPlugin {
         MythicBukkit.inst().getPlaceholderManager().register("eval", new TernaryPlaceholder());
         MythicBukkit.inst().getPlaceholderManager().register("random.color", new RandomColorPlaceholder());
 
-        Bukkit.getScheduler().runTaskLater(this, () -> {
-            getLogger().info("Overriding Mythic's Skill Executor...");
-            try {
-                MythicBukkit mythicInst = MythicBukkit.inst();
+        if (ConfigUtils.getConfig().getBoolean("VolatileSettings.OverrideMythicSkillExecutor")) {
+            Bukkit.getScheduler().runTaskLater(this, () -> {
+                getLogger().info("Overriding Mythic's Skill Executor...");
+                try {
+                    MythicBukkit mythicInst = MythicBukkit.inst();
 
-                Field field = MythicBukkit.class.getDeclaredField("skillManager");
-                field.setAccessible(true);
+                    Field field = MythicBukkit.class.getDeclaredField("skillManager");
+                    field.setAccessible(true);
 
-                field.set(mythicInst, new AlchemistSkillManager(mythicInst));
-            } catch (Exception e) {
-                throw new IllegalStateException("Failed to override Mythic's Skill Executor", e);
-            }
-            isOverriden = true;
-            MythicBukkit.inst().getPackManager().loadPacks();
-            MythicBukkit.inst().getMobManager().loadMobs();
-            MythicBukkit.inst().getSkillManager().loadSkills();
-        }, 1L);
+                    field.set(mythicInst, new AlchemistSkillManager(mythicInst));
+                } catch (Exception e) {
+                    throw new IllegalStateException("Failed to override Mythic's Skill Executor", e);
+                }
+                isOverriden = true;
+                MythicBukkit.inst().getPackManager().loadPacks();
+                MythicBukkit.inst().getMobManager().loadMobs();
+                MythicBukkit.inst().getSkillManager().loadSkills();
+            }, 1L);
+        }
 
-        if (isPlaceholderAPI) {
+        if (PluginHooks.isInstalled(PluginHooks.PlaceholderAPI)) {
             getLogger().info("Registering PlaceholderAPI Placeholders...");
             new PlaceholderAPIHook().register();
         }
