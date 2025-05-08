@@ -25,12 +25,7 @@ public class SkillCastTriggerListener implements Listener {
 
         Player player = event.getPlayer();
 
-        Location targetLocation;
-        if (event.getMetadata().hasTargetLocation()) {
-            targetLocation = event.getMetadata().getTargetLocation();
-        } else {
-            targetLocation = player.getLocation();
-        }
+        Location targetLocation = event.getMetadata().hasTargetLocation() ? event.getMetadata().getTargetLocation() : player.getLocation();
 
         for (Entity entity : targetLocation.getNearbyEntities(30, 30, 30)) {
             if (MythicBukkit.inst().getAPIHelper().isMythicMob(entity)) {
