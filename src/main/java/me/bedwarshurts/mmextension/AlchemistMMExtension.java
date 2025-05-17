@@ -2,7 +2,8 @@ package me.bedwarshurts.mmextension;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
-import me.bedwarshurts.mmextension.commands.PlayerSpawnMythicMobCommand;
+import me.bedwarshurts.mmextension.commands.AMECommand;
+import me.bedwarshurts.mmextension.commands.subcommands.PlayerSpawnMythicMobCommand;
 import me.bedwarshurts.mmextension.comp.AlchemistSkillManager;
 import me.bedwarshurts.mmextension.comp.MythicMobsHook;
 import me.bedwarshurts.mmextension.comp.PlaceholderAPIHook;
@@ -55,10 +56,12 @@ public class AlchemistMMExtension extends JavaPlugin {
         getLogger().info("Registering events...");
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
         Bukkit.getPluginManager().registerEvents(new SkillTriggerListeners(), this);
-        if (PluginHooks.isInstalled(PluginHooks.MMOCore)) Bukkit.getPluginManager().registerEvents(new SkillCastTriggerListener(), this);
+        if (PluginHooks.isInstalled(PluginHooks.MMOCore))
+            Bukkit.getPluginManager().registerEvents(new SkillCastTriggerListener(), this);
 
         getLogger().info("Registering commands...");
-        Objects.requireNonNull(this.getCommand("playerspawnmythicmob")).setExecutor(new PlayerSpawnMythicMobCommand());
+        Objects.requireNonNull(this.getCommand("ame")).setExecutor(new AMECommand());
+        AMECommand.registerSubcommand(new PlayerSpawnMythicMobCommand());
 
         getLogger().info("Registering placeholders...");
         MythicBukkit.inst().getPlaceholderManager().register("eval", new TernaryPlaceholder());
@@ -78,11 +81,14 @@ public class AlchemistMMExtension extends JavaPlugin {
                     throw new IllegalStateException("Failed to override Mythic's Skill Executor", e);
                 }
                 isOverriden = true;
-                MythicBukkit.inst().getPackManager().loadPacks();
-                MythicBukkit.inst().getMobManager().loadMobs();
-                MythicBukkit.inst().getSkillManager().loadSkills();
             }, 1L);
         }
+
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            MythicBukkit.inst().getPackManager().loadPacks();
+            MythicBukkit.inst().getMobManager().loadMobs();
+            MythicBukkit.inst().getSkillManager().loadSkills();
+        }, 1L);
 
         if (PluginHooks.isInstalled(PluginHooks.PlaceholderAPI)) {
             getLogger().info("Registering PlaceholderAPI Placeholders...");
