@@ -9,6 +9,8 @@ softdepend: [MythicLib,MMOCore,MMOItems,PlaceholderAPI,ProtocolLib]
 commands:
   playerspawnmythicmob:
     description: Spawns a MythicMob for a player
+  ame:
+    description: General command
 libraries:
   - net.kyori:adventure-api:4.16.0
   - net.kyori:adventure-platform-bukkit:4.3.2
