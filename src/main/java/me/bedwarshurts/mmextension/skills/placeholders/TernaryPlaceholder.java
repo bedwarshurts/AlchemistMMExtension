@@ -3,6 +3,7 @@ package me.bedwarshurts.mmextension.skills.placeholders;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.skills.SkillCondition;
+import io.lumine.mythic.core.skills.conditions.InvalidCondition;
 import io.lumine.mythic.core.skills.placeholders.PlaceholderMeta;
 import io.lumine.mythic.core.skills.placeholders.types.MetaPlaceholder;
 import io.lumine.mythic.core.utils.annotations.MythicPlaceholder;
@@ -28,7 +29,7 @@ public class TernaryPlaceholder implements MetaPlaceholder {
         if (negate) conditionString = conditionString.substring(1);
 
         SkillCondition condition = MythicBukkit.inst().getSkillManager().getCondition(conditionString);
-        if (condition == null) return "[Invalid Condition]";
+        if (condition instanceof InvalidCondition) return "[Invalid Condition]";
 
         boolean result = switch (scope) {
             case "caster" -> condition.evaluateCaster(data);
