@@ -3,7 +3,7 @@ package me.bedwarshurts.mmextension.skills.placeholders;
 import io.lumine.mythic.core.skills.placeholders.types.GeneralPlaceholder;
 import io.lumine.mythic.core.utils.annotations.MythicPlaceholder;
 
-@MythicPlaceholder(placeholder = "Random Color Placeholder by bedwarshurts", description = "Returns a random color between two hex values.")
+@MythicPlaceholder(placeholder = "random.color", description = "Returns a random color between two hex values.")
 public class RandomColorPlaceholder implements GeneralPlaceholder {
 
     @Override

@@ -1,6 +1,8 @@
 package me.bedwarshurts.mmextension;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.skills.placeholders.Placeholder;
+import io.lumine.mythic.core.utils.annotations.MythicPlaceholder;
 import lombok.Getter;
 import me.bedwarshurts.mmextension.commands.AMECommand;
 import me.bedwarshurts.mmextension.commands.subcommands.PlayerSpawnMythicMobCommand;
@@ -11,16 +13,17 @@ import me.bedwarshurts.mmextension.comp.PluginHooks;
 import me.bedwarshurts.mmextension.listeners.EntityDamageListener;
 import me.bedwarshurts.mmextension.listeners.SkillTriggerListeners;
 import me.bedwarshurts.mmextension.listeners.mmocore.SkillCastTriggerListener;
-import me.bedwarshurts.mmextension.skills.placeholders.RandomColorPlaceholder;
-import me.bedwarshurts.mmextension.skills.placeholders.TernaryPlaceholder;
 import me.bedwarshurts.mmextension.skills.triggers.MoreSkillTriggers;
 import me.bedwarshurts.mmextension.utils.ConfigUtils;
+import me.bedwarshurts.mmextension.utils.ReflectionUtils;
 import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mariuszgromada.math.mxparser.License;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.Objects;
 
 public class AlchemistMMExtension extends JavaPlugin {
@@ -64,8 +67,23 @@ public class AlchemistMMExtension extends JavaPlugin {
         AMECommand.registerSubcommand(new PlayerSpawnMythicMobCommand());
 
         getLogger().info("Registering placeholders...");
-        MythicBukkit.inst().getPlaceholderManager().register("eval", new TernaryPlaceholder());
-        MythicBukkit.inst().getPlaceholderManager().register("random.color", new RandomColorPlaceholder());
+        try {
+            Collection<Class<?>> placeholderClasses =
+                    ReflectionUtils.getAnnotatedClasses("me.bedwarshurts.mmextension.skills.placeholders", MythicPlaceholder.class);
+            placeholderClasses.forEach(clazz -> {
+                MythicPlaceholder placeholder = clazz.getAnnotation(MythicPlaceholder.class);
+                if (placeholder != null) {
+                    try {
+                        MythicBukkit.inst().getPlaceholderManager().register(placeholder.placeholder(), (Placeholder) clazz.getConstructor().newInstance());
+                    } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
+                             IllegalAccessException e) {
+                        throw new UnsupportedOperationException("Failed to register placeholder " + placeholder.placeholder(), e);
+                    }
+                }
+            });
+        } catch (ClassNotFoundException e) {
+            throw new UnsupportedOperationException("Failed to register placeholders", e);
+        }
 
         if (ConfigUtils.getConfig().getBoolean("VolatileSettings.OverrideMythicSkillExecutor")) {
             Bukkit.getScheduler().runTaskLater(this, () -> {
@@ -88,7 +106,7 @@ public class AlchemistMMExtension extends JavaPlugin {
             MythicBukkit.inst().getPackManager().loadPacks();
             MythicBukkit.inst().getMobManager().loadMobs();
             MythicBukkit.inst().getSkillManager().loadSkills();
-        }, 1L);
+        }, 2L);
 
         if (PluginHooks.isInstalled(PluginHooks.PlaceholderAPI)) {
             getLogger().info("Registering PlaceholderAPI Placeholders...");

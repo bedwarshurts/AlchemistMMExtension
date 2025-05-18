@@ -8,7 +8,7 @@ import io.lumine.mythic.core.skills.placeholders.PlaceholderMeta;
 import io.lumine.mythic.core.skills.placeholders.types.MetaPlaceholder;
 import io.lumine.mythic.core.utils.annotations.MythicPlaceholder;
 
-@MythicPlaceholder(placeholder = "Ternary Placeholder by bedwarshurts", description = "A placeholder that evaluates a condition and returns one of two values based on the result.")
+@MythicPlaceholder(placeholder = "eval", description = "A placeholder that evaluates a condition and returns one of two values based on the result.")
 public class TernaryPlaceholder implements MetaPlaceholder {
 
     @Override
