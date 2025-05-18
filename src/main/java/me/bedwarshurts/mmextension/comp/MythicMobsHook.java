@@ -4,6 +4,7 @@ import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
+import io.lumine.mythic.bukkit.utils.papi.Placeholder;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.skills.conditions.OxygenLevelCondition;
 import me.bedwarshurts.mmextension.skills.conditions.StringContainsCondition;
@@ -16,6 +17,7 @@ import me.bedwarshurts.mmextension.skills.mechanics.MirrorPlayerSkinMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.OpenChestMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.PeriodicBlockBreakMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.PlaceBlockMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.PlaceholderSkillMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.PrimedTnTMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.SetWorldBorderMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.StringBuilderMechanic;
@@ -205,6 +207,9 @@ public final class MythicMobsHook implements Listener {
             case "del":
                 event.register(new VariableDeleteMechanic(event.getConfig().getLine()));
                 break;
+            case "placeholderskill":
+            case "skillp":
+                event.register(new PlaceholderSkillMechanic(event.getConfig()));
             default:
                 break;
         }
