@@ -2,17 +2,28 @@ package me.bedwarshurts.mmextension.utils;
 
 import com.google.common.collect.Maps;
 
+import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
 
-public final class InvokeUtils {
+public final class ReflectionUtils {
 
     private static final ConcurrentMap<String, Method> cachedMethods = Maps.newConcurrentMap();
     private static final ConcurrentMap<String, Class<?>> cachedClasses = Maps.newConcurrentMap();
 
-    private InvokeUtils() {
+    private ReflectionUtils() {
         throw new UnsupportedOperationException("You really shouldnt initialise this class");
     }
 
@@ -70,4 +81,42 @@ public final class InvokeUtils {
         });
     }
 
+    public static Collection<Class<?>> getAnnotatedClasses(String packageName, Class<? extends Annotation> annotation)
+            throws ClassNotFoundException {
+        Collection<Class<?>> result = new HashSet<>();
+        String pkgPath = packageName.replace('.', '/');
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        URL dirUrl = cl.getResource(pkgPath);
+        if (dirUrl == null || !dirUrl.getProtocol().equals("file")) {
+            return result;
+        }
+
+        File root = new File(URLDecoder.decode(dirUrl.getFile(), StandardCharsets.UTF_8));
+        Deque<File> stack = new ArrayDeque<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            File current = stack.pop();
+            if (current.isDirectory()) {
+                for (File child : Objects.requireNonNull(current.listFiles())) {
+                    stack.push(child);
+                }
+            } else if (current.getName().endsWith(".class")) {
+                String relPath = current.getAbsolutePath()
+                        .substring(root.getAbsolutePath().length() + 1);
+                String className = packageName + "."
+                        + relPath.replace(File.separatorChar, '.')
+                        .replaceAll("\\.class$", "");
+
+                Class<?> cls = Class.forName(className);
+                if (!cls.isInterface()
+                        && !Modifier.isAbstract(cls.getModifiers())
+                        && cls.isAnnotationPresent(annotation)) {
+                    result.add(cls);
+                }
+            }
+        }
+        return result;
+    }
 }
+

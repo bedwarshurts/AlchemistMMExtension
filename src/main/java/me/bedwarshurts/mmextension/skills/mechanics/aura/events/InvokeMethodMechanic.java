@@ -6,7 +6,7 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
-import me.bedwarshurts.mmextension.utils.InvokeUtils;
+import me.bedwarshurts.mmextension.utils.ReflectionUtils;
 import org.bukkit.event.Event;
 
 import java.lang.reflect.InvocationTargetException;
@@ -53,11 +53,11 @@ public class InvokeMethodMechanic implements INoTargetSkill {
                         if (spaceIndex == -1) continue;
                         String type = arg.substring(0, spaceIndex).trim();
                         String value = arg.substring(spaceIndex).trim();
-                        Class<?> argClass = InvokeUtils.getClassFromString(type);
+                        Class<?> argClass = ReflectionUtils.getClassFromString(type);
                         argTypes[i] = argClass;
-                        argValues[i] = InvokeUtils.getValue(argClass, value);
+                        argValues[i] = ReflectionUtils.getValue(argClass, value);
                     }
-                    method = InvokeUtils.getMethod(objClass, methodName, argTypes);
+                    method = ReflectionUtils.getMethod(objClass, methodName, argTypes);
                     obj = length == 0
                             ? method.invoke(obj)
                             : method.invoke(obj, argValues);

@@ -13,7 +13,7 @@ import io.lumine.mythic.core.skills.variables.types.IntegerVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.AlchemistAura;
-import me.bedwarshurts.mmextension.utils.InvokeUtils;
+import me.bedwarshurts.mmextension.utils.ReflectionUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -70,7 +70,7 @@ public class EventSubscribeMechanic extends AlchemistAura implements ITargetedEn
             Events.subscribe(eventClass, priority)
                     .filter(e -> {
                         try {
-                            Method isCancelled = InvokeUtils.getMethod(e.getClass(), "isCancelled");
+                            Method isCancelled = ReflectionUtils.getMethod(e.getClass(), "isCancelled");
                             return !((boolean) isCancelled.invoke(e));
                         } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException ignored) {
                             return true;
@@ -81,7 +81,7 @@ public class EventSubscribeMechanic extends AlchemistAura implements ITargetedEn
                         skillMetadata.setMetadata("event", e);
 
                         try {
-                            Method getTrigger = InvokeUtils.getMethod(e.getClass(), triggerMethod.substring(0, triggerMethod.indexOf("(")));
+                            Method getTrigger = ReflectionUtils.getMethod(e.getClass(), triggerMethod.substring(0, triggerMethod.indexOf("(")));
                             Entity trigger = (Entity) getTrigger.invoke(e);
                             if (!trigger.getUniqueId().equals(target.getBukkitEntity().getUniqueId())) return;
                             skillMetadata.setTrigger(BukkitAdapter.adapt(trigger));
@@ -93,7 +93,7 @@ public class EventSubscribeMechanic extends AlchemistAura implements ITargetedEn
                             skill.cast(skillMetadata);
 
                             if (this.cancel) {
-                                Method cancelEvent = InvokeUtils.getMethod(e.getClass(), "setCancelled", boolean.class);
+                                Method cancelEvent = ReflectionUtils.getMethod(e.getClass(), "setCancelled", boolean.class);
                                 try {
                                     cancelEvent.invoke(e, true);
                                 } catch (IllegalAccessException | InvocationTargetException ex) {

@@ -9,7 +9,7 @@ import io.lumine.mythic.core.skills.variables.VariableRegistry;
 import io.lumine.mythic.core.skills.variables.types.StringVariable;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
-import me.bedwarshurts.mmextension.utils.InvokeUtils;
+import me.bedwarshurts.mmextension.utils.ReflectionUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -51,16 +51,16 @@ public class StringBuilderMechanic implements INoTargetSkill {
                     throw new IllegalArgumentException("Invalid argument format: " + argValues[i] + ". Expected format: 'type value'");
                 }
                 try {
-                    Class<?> paramType = InvokeUtils.getClassFromString(args[0]);
+                    Class<?> paramType = ReflectionUtils.getClassFromString(args[0]);
                     paramTypes[i] = paramType;
-                    parsedValues[i] = InvokeUtils.getValue(paramType, args[1].trim());
+                    parsedValues[i] = ReflectionUtils.getValue(paramType, args[1].trim());
                 } catch (ClassNotFoundException e) {
                     throw new IllegalArgumentException("Invalid class name: " + args[0], e);
                 }
             }
 
             try {
-                Method method = InvokeUtils.getMethod(StringBuilder.class, methodName, paramTypes);
+                Method method = ReflectionUtils.getMethod(StringBuilder.class, methodName, paramTypes);
                 method.invoke(builder, parsedValues);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 AlchemistMMExtension.inst().getLogger().severe("An error occurred while invoking method: " + methodName + " - " + e);
