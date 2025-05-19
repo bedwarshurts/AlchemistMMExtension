@@ -3,20 +3,23 @@ package me.bedwarshurts.mmextension.utils;
 import com.google.common.collect.Maps;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
+import java.security.CodeSource;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Deque;
+import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public final class ReflectionUtils {
 
@@ -82,31 +85,34 @@ public final class ReflectionUtils {
     }
 
     public static Collection<Class<?>> getAnnotatedClasses(String packageName, Class<? extends Annotation> annotation)
-            throws ClassNotFoundException {
+            throws IOException, ClassNotFoundException {
         Collection<Class<?>> result = new HashSet<>();
-        String pkgPath = packageName.replace('.', '/');
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        URL dirUrl = cl.getResource(pkgPath);
-        if (dirUrl == null || !dirUrl.getProtocol().equals("file")) {
-            return result;
+        String pkgPath = packageName.replace('.', '/') + "/";
+
+        CodeSource src = ReflectionUtils.class
+                .getProtectionDomain()
+                .getCodeSource();
+        if (src == null) return result;
+
+        URL location = src.getLocation();
+        JarFile jar;
+        if (location.getProtocol().equals("jar")) {
+            JarURLConnection conn = (JarURLConnection) location.openConnection();
+            jar = conn.getJarFile();
+        } else {
+            File file = new File(URLDecoder.decode(location.getFile(), StandardCharsets.UTF_8));
+            jar = new JarFile(file);
         }
 
-        File root = new File(URLDecoder.decode(dirUrl.getFile(), StandardCharsets.UTF_8));
-        Deque<File> stack = new ArrayDeque<>();
-        stack.push(root);
+        Enumeration<JarEntry> entries = jar.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry entry = entries.nextElement();
+            String name = entry.getName();
 
-        while (!stack.isEmpty()) {
-            File current = stack.pop();
-            if (current.isDirectory()) {
-                for (File child : Objects.requireNonNull(current.listFiles())) {
-                    stack.push(child);
-                }
-            } else if (current.getName().endsWith(".class")) {
-                String relPath = current.getAbsolutePath()
-                        .substring(root.getAbsolutePath().length() + 1);
-                String className = packageName + "."
-                        + relPath.replace(File.separatorChar, '.')
-                        .replaceAll("\\.class$", "");
+            if (name.startsWith(pkgPath) && name.endsWith(".class")) {
+                String className = name
+                        .substring(0, name.length() - 6)
+                        .replace('/', '.');
 
                 Class<?> cls = Class.forName(className);
                 if (!cls.isInterface()
@@ -116,7 +122,8 @@ public final class ReflectionUtils {
                 }
             }
         }
+
+        jar.close();
         return result;
     }
 }
-

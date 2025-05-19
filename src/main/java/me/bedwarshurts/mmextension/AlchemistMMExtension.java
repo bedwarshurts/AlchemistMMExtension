@@ -21,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mariuszgromada.math.mxparser.License;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -81,7 +82,7 @@ public class AlchemistMMExtension extends JavaPlugin {
                     }
                 }
             });
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | IOException e) {
             throw new UnsupportedOperationException("Failed to register placeholders", e);
         }
 
