@@ -25,14 +25,10 @@ public enum PluginHooks {
     public static void detectAll() {
         detectedHooks.clear();
         PluginManager pm = AlchemistMMExtension.inst().getServer().getPluginManager();
-        Logger log = AlchemistMMExtension.inst().getLogger();
         for (PluginHooks hook : values()) {
             if (pm.isPluginEnabled(hook.pluginName)) {
                 detectedHooks.add(hook);
-                log.info("Detected hook: " + hook.pluginName);
-                continue;
             }
-            log.info("Hook not found: " + hook.pluginName);
         }
     }
 
