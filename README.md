@@ -167,7 +167,7 @@ This allows you to return any entities in radius that match a bukkit interface, 
 ### OxygenLevelCondition
 
 ```
-?stringcontains{air=;}
+?oxygenlevel{air=;}
 ```
 
 ### YLevelCondition
