@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-
 public class SkillCastTriggerListener implements Listener {
     private final EventExecutor eventExecutor = MythicBukkit.inst().getSkillManager().getEventBus();
 
