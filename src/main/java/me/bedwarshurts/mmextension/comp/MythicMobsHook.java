@@ -4,7 +4,6 @@ import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
-import io.lumine.mythic.bukkit.utils.papi.Placeholder;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.skills.conditions.OxygenLevelCondition;
 import me.bedwarshurts.mmextension.skills.conditions.StringContainsCondition;
@@ -13,6 +12,7 @@ import me.bedwarshurts.mmextension.skills.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.skills.mechanics.BookGUIMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.ControlMovementMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.HideChatMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.SlerpRotateMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.MirrorPlayerSkinMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.OpenChestMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.PeriodicBlockBreakMechanic;
@@ -210,6 +210,11 @@ public final class MythicMobsHook implements Listener {
             case "placeholderskill":
             case "skillp":
                 event.register(new PlaceholderSkillMechanic(event.getConfig()));
+                break;
+            case "slerprotate":
+            case "slerp":
+                event.register(new SlerpRotateMechanic(event.getConfig()));
+                break;
             default:
                 break;
         }

@@ -53,7 +53,7 @@ public class CancelPlayerDeathMechanic extends AlchemistAura implements ITargete
                     .handler(e -> {
                         e.setCancelled(true);
                         e.setReviveHealth(Objects.requireNonNull
-                                (e.getEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() * healthPercentage / 100.0);
+                                (e.getEntity().getAttribute(Attribute.MAX_HEALTH)).getValue() * healthPercentage / 100.0);
                         skill.cast(skillMetadata);
                     }).bindWith(this);
         }
