@@ -13,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
 
-@MythicMechanic(author = "bedwarshurts", name = "lerprotate", aliases = {"slerp"}, description = "Interpolates Display rotation via setTransformation.")
+@MythicMechanic(author = "bedwarshurts", name = "lerprotate", aliases = {"slerp"}, description = "Interpolates a display's rotation.")
 public class SlerpRotateMechanic implements INoTargetSkill {
 
     private final PlaceholderDouble rotPitchDeg;
