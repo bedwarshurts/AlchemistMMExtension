@@ -5,6 +5,7 @@ import io.lumine.mythic.api.skills.INoTargetSkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
+import io.lumine.mythic.api.skills.placeholders.PlaceholderInt;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import org.bukkit.entity.Display;
@@ -19,6 +20,7 @@ public class SlerpRotateMechanic implements INoTargetSkill {
     private final PlaceholderDouble rotPitchDeg;
     private final PlaceholderDouble rotYawDeg;
     private final PlaceholderDouble rotRollDeg;
+    private final PlaceholderInt loops;
     private final int durationTicks;
     private final String mode;
 
@@ -26,6 +28,7 @@ public class SlerpRotateMechanic implements INoTargetSkill {
         this.rotPitchDeg = mlc.getPlaceholderDouble("x", "0");
         this.rotYawDeg = mlc.getPlaceholderDouble("y", "0");
         this.rotRollDeg = mlc.getPlaceholderDouble("z", "0");
+        this.loops = mlc.getPlaceholderInteger("loops", 1);
         this.durationTicks = mlc.getInteger("ticks", 20);
         this.mode = mlc.getString("mode", "ADD").toUpperCase();
     }
@@ -58,13 +61,25 @@ public class SlerpRotateMechanic implements INoTargetSkill {
 
         new BukkitRunnable() {
             int tick = 0;
+            int currentLoop = 0;
+            int totalLoops = loops.get(data.getCaster());
 
             @Override
             public void run() {
-                if (tick > durationTicks || display.isDead()) {
+                if (display.isDead()) {
                     cancel();
                     return;
                 }
+                if (tick > durationTicks) {
+                    if (currentLoop < totalLoops) {
+                        currentLoop++;
+                        tick = 0;
+                    } else {
+                        cancel();
+                        return;
+                    }
+                }
+
                 float t = tick / (float) durationTicks;
                 Quaternionf interp = new Quaternionf(startQuat)
                         .slerp(endQuat, t, new Quaternionf())
