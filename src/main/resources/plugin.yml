@@ -1,7 +1,7 @@
 name: AlchemistMMExtension
 main: me.bedwarshurts.mmextension.AlchemistMMExtension
 version: ${project.version}
-api-version: 1.21
+api-version: 1.21.4
 description: An extension for MythicMobs
 author: bedwarshurts
 depend: [MythicMobs]
