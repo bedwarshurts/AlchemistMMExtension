@@ -48,11 +48,8 @@ public class SlerpRotateMechanic implements INoTargetSkill {
         Quaternionf startQuat = mode.equals("SET")
                 ? new Quaternionf()
                 : new Quaternionf(original.getRightRotation());
-        Quaternionf endQuat = new Quaternionf(startQuat)
-                .rotateX(dx)
-                .rotateY(dy)
-                .rotateZ(dz)
-                .normalize();
+        Quaternionf delta = new Quaternionf().rotationXYZ(dx, dy, dz);
+        Quaternionf endQuat = new Quaternionf(startQuat).mul(delta).normalize();
 
         if (durationTicks <= 0) {
             applyTransformation(display, endQuat);
@@ -63,6 +60,9 @@ public class SlerpRotateMechanic implements INoTargetSkill {
             int tick = 0;
             int currentLoop = 0;
             final int totalLoops = loops.get(data.getCaster());
+            final Quaternionf startQ = new Quaternionf().set(startQuat);
+            final Quaternionf endQ = new Quaternionf().set(endQuat);
+            final Quaternionf storageQ = new Quaternionf();
 
             @Override
             public void run() {
@@ -74,6 +74,19 @@ public class SlerpRotateMechanic implements INoTargetSkill {
                     if (currentLoop < totalLoops) {
                         currentLoop++;
                         tick = 0;
+                        if (mode.equals("ADD")) {
+                            startQ.set(endQ);
+
+                            float dx = (float) Math.toRadians(rotPitchDeg.get(data.getCaster()));
+                            float dy = (float) Math.toRadians(rotYawDeg.get(data.getCaster()));
+                            float dz = (float) Math.toRadians(rotRollDeg.get(data.getCaster()));
+
+                            storageQ.rotationXYZ(dx, dy, dz);
+
+                            endQ.set(startQ)
+                                    .mul(storageQ)
+                                    .normalize();
+                        }
                     } else {
                         cancel();
                         return;
@@ -81,9 +94,7 @@ public class SlerpRotateMechanic implements INoTargetSkill {
                 }
 
                 float t = tick / (float) durationTicks;
-                Quaternionf interp = new Quaternionf(startQuat)
-                        .slerp(endQuat, t, new Quaternionf())
-                        .normalize();
+                Quaternionf interp = startQ.slerp(endQ, t, storageQ);
                 applyTransformation(display, interp);
                 tick++;
             }
