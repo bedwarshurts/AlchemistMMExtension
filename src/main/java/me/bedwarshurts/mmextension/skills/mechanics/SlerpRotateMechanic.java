@@ -62,7 +62,7 @@ public class SlerpRotateMechanic implements INoTargetSkill {
         new BukkitRunnable() {
             int tick = 0;
             int currentLoop = 0;
-            int totalLoops = loops.get(data.getCaster());
+            final int totalLoops = loops.get(data.getCaster());
 
             @Override
             public void run() {
