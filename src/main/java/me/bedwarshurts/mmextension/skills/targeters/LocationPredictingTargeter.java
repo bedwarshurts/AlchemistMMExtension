@@ -4,12 +4,14 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.api.skills.targeters.ILocationTargeter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.players.PlayerManager;
 import io.lumine.mythic.core.utils.annotations.MythicTargeter;
 import io.lumine.mythic.bukkit.utils.serialize.Position;
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
@@ -17,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -31,8 +34,6 @@ public class LocationPredictingTargeter implements ILocationTargeter {
     private final boolean ignoreIfStill;
 
     public LocationPredictingTargeter(MythicLineConfig mlc) {
-        MythicBukkit.inst().getPlayerManager().trackPlayerMovement();
-
         this.predictionTimeTicks = PlaceholderDouble.of(mlc.getString("time", String.valueOf(1.0)));
         this.yOffset = mlc.getDouble("y", 0.0);
         this.ignoreY = mlc.getBoolean(new String[]{"ignoreY", "iy"}, false);
@@ -41,6 +42,12 @@ public class LocationPredictingTargeter implements ILocationTargeter {
 
     @Override
     public Collection<AbstractLocation> getLocations(SkillMetadata data) {
+        if (!AlchemistMMExtension.inst().isTrackingPlayerMovement()) {
+            AlchemistMMExtension.inst().getLogger().severe("LocationPredictingTargeter requires player movement tracking to be enabled.");
+
+            return Collections.emptyList();
+        }
+
         Set<AbstractLocation> locations = new HashSet<>();
 
         for (AbstractEntity targetEntity : data.getEntityTargets()) {
@@ -60,7 +67,7 @@ public class LocationPredictingTargeter implements ILocationTargeter {
 
             double speedBpt = 4.317; // Default speed
             if (bukkitEntity instanceof Player player) {
-                speedBpt = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getValue();
+                speedBpt = Objects.requireNonNull(player.getAttribute(Attribute.MOVEMENT_SPEED)).getValue();
             }
 
             Vector predictedMovement = direction.multiply(speedBpt * predictionTimeTicks.get(data));

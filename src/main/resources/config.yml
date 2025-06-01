@@ -1,2 +1,5 @@
+Settings:
+  TrackPlayerMovement: false
+
 VolatileSettings:
   OverrideMythicSkillExecutor: false

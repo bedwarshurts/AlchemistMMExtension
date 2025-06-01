@@ -30,6 +30,7 @@ import java.util.Objects;
 public class AlchemistMMExtension extends JavaPlugin {
 
     @Getter private boolean isOverriden = false;
+    @Getter private boolean trackingPlayerMovement = false;
 
     private static AlchemistMMExtension plugin;
 
@@ -76,6 +77,7 @@ public class AlchemistMMExtension extends JavaPlugin {
                 if (placeholder != null) {
                     try {
                         MythicBukkit.inst().getPlaceholderManager().register(placeholder.placeholder(), (Placeholder) clazz.getConstructor().newInstance());
+                        getLogger().info("Registered placeholder: " + placeholder.placeholder());
                     } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
                              IllegalAccessException e) {
                         throw new UnsupportedOperationException("Failed to register placeholder " + placeholder.placeholder(), e);
@@ -108,6 +110,11 @@ public class AlchemistMMExtension extends JavaPlugin {
             MythicBukkit.inst().getMobManager().loadMobs();
             MythicBukkit.inst().getSkillManager().loadSkills();
         }, 2L);
+
+        if (ConfigUtils.getConfig().getBoolean("Settings.TrackPlayerMovement")) {
+            MythicBukkit.inst().getPlayerManager().trackPlayerMovement();
+            trackingPlayerMovement = true;
+        }
 
         if (PluginHooks.isInstalled(PluginHooks.PlaceholderAPI)) {
             getLogger().info("Registering PlaceholderAPI Placeholders...");
