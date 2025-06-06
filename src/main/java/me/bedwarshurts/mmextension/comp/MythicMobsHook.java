@@ -5,6 +5,7 @@ import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicMechanicLoadEvent;
 import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
+import me.bedwarshurts.mmextension.skills.conditions.IsTriggerCondition;
 import me.bedwarshurts.mmextension.skills.conditions.OxygenLevelCondition;
 import me.bedwarshurts.mmextension.skills.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.skills.conditions.YLevelCondition;
@@ -267,6 +268,9 @@ public final class MythicMobsHook implements Listener {
                 break;
             case "oxygenlevel":
                 event.register(new OxygenLevelCondition(event.getConfig()));
+                break;
+            case "istrigger":
+                event.register(new IsTriggerCondition());
                 break;
             /* case "isindungeon":
              *   event.register(new IsInDungeonCondition());

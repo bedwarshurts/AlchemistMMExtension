@@ -77,7 +77,6 @@ public class AlchemistMMExtension extends JavaPlugin {
                 if (placeholder != null) {
                     try {
                         MythicBukkit.inst().getPlaceholderManager().register(placeholder.placeholder(), (Placeholder) clazz.getConstructor().newInstance());
-                        getLogger().info("Registered placeholder: " + placeholder.placeholder());
                     } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
                              IllegalAccessException e) {
                         throw new UnsupportedOperationException("Failed to register placeholder " + placeholder.placeholder(), e);

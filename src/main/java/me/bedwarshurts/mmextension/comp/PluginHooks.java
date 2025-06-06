@@ -5,7 +5,6 @@ import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.EnumSet;
-import java.util.logging.Logger;
 
 @Getter
 public enum PluginHooks {
