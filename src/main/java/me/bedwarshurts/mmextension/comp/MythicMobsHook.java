@@ -44,6 +44,7 @@ import me.bedwarshurts.mmextension.skills.mechanics.loop.ForEachMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.loop.WhileLoopMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.mmocore.SetMMOCooldownMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.OnSignalMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.mythicdungeon.AddDungeonRewardMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.VerticalSlashMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.RingShapeMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.SphereShapeMechanic;
@@ -215,6 +216,10 @@ public final class MythicMobsHook implements Listener {
             case "slerprotate":
             case "slerp":
                 event.register(new SlerpRotateMechanic(event.getConfig()));
+                break;
+            case "adddungeonreward":
+            case "addreward":
+                event.register(new AddDungeonRewardMechanic(event.getConfig()));
                 break;
             default:
                 break;
