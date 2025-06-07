@@ -2,7 +2,7 @@ package me.bedwarshurts.mmextension.listeners;
 
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.BukkitAdapter;
-import me.bedwarshurts.mmextension.skills.mechanics.chestgui.ChestGUIMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.chestgui.ChestGUIHolder;
 import me.bedwarshurts.mmextension.skills.mechanics.chestgui.ChestGUISlot;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -11,7 +11,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 public class ChestGUIListener implements Listener {
@@ -19,31 +20,34 @@ public class ChestGUIListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory inv = event.getInventory();
-        if (!ChestGUIMechanic.INVENTORY_SLOTS.containsKey(inv)) return;
+        if (!(inv.getHolder() instanceof ChestGUIHolder holder)) return;
 
-        SkillMetadata data = ChestGUIMechanic.INVENTORY_METADATA.get(inv);
-        if (event.getRawSlot() < 0 || event.getCurrentItem() == null) return;
+        event.setCancelled(true);
+        int rawSlot = event.getRawSlot();
+        ChestGUISlot[] slots = holder.getSlots();
+        if (rawSlot < 0 || rawSlot >= slots.length) return;
 
-        ChestGUISlot[] slots = ChestGUIMechanic.INVENTORY_SLOTS.get(inv);
-        if (event.getRawSlot() >= slots.length) return;
-
-        ChestGUISlot guiSlot = slots[event.getRawSlot()];
-        if (guiSlot == null) return;
-
-        if (!guiSlot.canInteract()) {
-            event.setCancelled(true);
-        }
+        ChestGUISlot guiSlot = slots[rawSlot];
+        if (guiSlot == null || !guiSlot.canInteract()) return;
 
         Player player = (Player) event.getWhoClicked();
-        ClickType clickType = event.getClick();
-        boolean rightClick = (clickType == ClickType.RIGHT || clickType == ClickType.SHIFT_RIGHT);
-        boolean leftClick = (clickType == ClickType.LEFT || clickType == ClickType.SHIFT_LEFT);
+        boolean right = event.getClick().isRightClick();
+        boolean left  = event.getClick().isLeftClick();
+        SkillMetadata data = holder.getMetadata();
 
-        if (rightClick && guiSlot.getRightClickAction() != null) {
+        if (right && guiSlot.getRightClickAction() != null) {
             runAction(player, data, guiSlot.getRightClickAction());
         }
-        if (leftClick && guiSlot.getLeftClickAction() != null) {
+        if (left && guiSlot.getLeftClickAction() != null) {
             runAction(player, data, guiSlot.getLeftClickAction());
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        Inventory inv = event.getInventory();
+        if (inv.getHolder() instanceof ChestGUIHolder holder) {
+            holder.setInventory(null);
         }
     }
 
@@ -51,28 +55,20 @@ public class ChestGUIListener implements Listener {
         String[] parts = action.split(":", 2);
         if (parts.length < 2) return;
         String type = parts[0];
-        String execute = parts[1];
+        String exec = parts[1];
 
-        if ("command".equalsIgnoreCase(type)) {
-            player.performCommand(execute);
-        } else if ("console_command".equalsIgnoreCase(type)) {
-            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            Bukkit.dispatchCommand(console, execute);
-        } else if ("skill".equalsIgnoreCase(type)) {
-            data.setTrigger(BukkitAdapter.adapt(player));
-            MythicSkill skill = new MythicSkill(execute);
-            skill.cast(data);
-        } else {
-            player.sendMessage(NamedTextColor.GRAY + "[SYS] " + NamedTextColor.WHITE
-                    + "Invalid action, please contact the Alchemist admin team if you see this " + type);
+        switch (type.toLowerCase()) {
+            case "command" -> player.performCommand(exec);
+            case "console_command" -> {
+                ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+                Bukkit.dispatchCommand(console, exec);
+            }
+            case "skill" -> {
+                data.setTrigger(BukkitAdapter.adapt(player));
+                new MythicSkill(exec).cast(data);
+            }
+            default -> player.sendMessage(NamedTextColor.GRAY + "[SYS] " + NamedTextColor.WHITE
+                    + "Invalid action type: " + type);
         }
-    }
-
-    @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-        Inventory inv = event.getInventory();
-
-        ChestGUIMechanic.INVENTORY_SLOTS.remove(inv);
-        ChestGUIMechanic.INVENTORY_METADATA.remove(inv);
     }
 }
