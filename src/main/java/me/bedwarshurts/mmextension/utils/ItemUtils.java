@@ -1,5 +1,8 @@
 package me.bedwarshurts.mmextension.utils;
 
+import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.items.MythicItem;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.comp.PluginHooks;
 import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
@@ -19,7 +22,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,7 +61,24 @@ public final class ItemUtils {
             if (mmoItem != null) {
                 return mmoItem.newBuilder().build();
             }
+
+            throw new IllegalArgumentException("MMOItem not found: " + itemString);
         }
+
+        if (key.startsWith("mythic:")) {
+            if (parts.length != 2)
+                throw new IllegalArgumentException("Invalid Mythic Item format. Expected format: mythic:<item_name>");
+
+            Optional<MythicItem> optionalItem = MythicBukkit.inst()
+                    .getItemManager()
+                    .getItem(parts[1]);
+            if (optionalItem.isPresent())
+                return BukkitAdapter.adapt(optionalItem.get().generateItemStack(1));
+
+            AlchemistMMExtension.inst().getLogger().warning("Mythic Item not found: " + parts[2]);
+            return null;
+        }
+
         Material mat = Material.matchMaterial(itemString);
         return new ItemStack(mat != null ? mat : Material.BARRIER);
     }
@@ -98,6 +120,22 @@ public final class ItemUtils {
             } catch (NumberFormatException e) {
                 throw new ArithmeticException("Does that look like a number to you??? " + cmdValue);
             }
+        }
+
+        // Item Model
+        String itemModelValue = itemMetadata.getOrDefault("itemModel", "");
+        if (!itemModelValue.isEmpty()) {
+            String namespace = "minecraft";
+            String modelName = itemModelValue;
+
+            int colonIdx = itemModelValue.indexOf(':');
+            if (colonIdx > 0 && colonIdx < itemModelValue.length() - 1) {
+                namespace = itemModelValue.substring(0, colonIdx);
+                modelName = itemModelValue.substring(colonIdx + 1);
+            }
+
+            NamespacedKey key = new NamespacedKey(namespace, modelName);
+            meta.setItemModel(key);
         }
 
         // Enchants
