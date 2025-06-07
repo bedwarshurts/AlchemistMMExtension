@@ -88,11 +88,11 @@ public final class ItemUtils {
         String bracketContent = itemInfo.contains("[") ? itemInfo.substring(itemInfo.indexOf("[") + 1, itemInfo.lastIndexOf("]")) : "";
         Map<String, String> itemMetadata = ItemUtils.parse(bracketContent);
 
-        Material material = Material.matchMaterial(materialPart.toUpperCase());
-        if (material == null) material = Material.BARRIER;
-        ItemStack item = new ItemStack(material);
+        ItemStack item = ItemUtils.getItemStack(materialPart);
+        if (item == null) item = new ItemStack(Material.BARRIER);
+
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return null;
+        if (meta == null) return item;
 
         // Name
         String nameValue = itemMetadata.getOrDefault("name", "");
@@ -157,7 +157,7 @@ public final class ItemUtils {
         // Skills
         String skillValue = itemMetadata.getOrDefault("skill", "");
         if (!skillValue.isEmpty()) {
-            NamespacedKey key = new NamespacedKey(JavaPlugin.getProvidingPlugin(AlchemistMMExtension.class), "skill");
+            NamespacedKey key = new NamespacedKey(AlchemistMMExtension.inst(), "skill");
             meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, skillValue);
         }
         item.setItemMeta(meta);

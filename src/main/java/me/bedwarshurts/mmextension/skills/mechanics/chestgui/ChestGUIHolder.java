@@ -24,7 +24,6 @@ public class ChestGUIHolder implements InventoryHolder {
 
     ChestItem addItemFromTemplate(String template) {
         ItemStack stack = ItemUtils.buildItem(template);
-        if (stack == null) return null;
 
         String bracket = template.substring(template.indexOf('[') + 1, template.lastIndexOf(']'));
         Map<String, String> info = ItemUtils.parse(bracket);
