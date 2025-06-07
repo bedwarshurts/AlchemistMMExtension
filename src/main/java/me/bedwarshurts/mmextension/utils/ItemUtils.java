@@ -42,14 +42,19 @@ public final class ItemUtils {
     }
 
     public static ItemStack getItemStack(String itemString) {
-        if (itemString.toLowerCase().startsWith("mmoitem:")) {
-            if (!PluginHooks.isInstalled(PluginHooks.MMOItems)) throw new DependencyNotFoundException("MMOItems is not installed!");
-            String[] parts = itemString.split(":");
-            if (parts.length == 3) {
-                MMOItem mmoItem = MMOItems.plugin.getMMOItem(Type.get(parts[1]), parts[2]);
-                if (mmoItem != null) {
-                    return mmoItem.newBuilder().build();
-                }
+        String key = itemString.trim().toLowerCase(Locale.ROOT);
+        String[] parts = itemString.split(":", 3);
+
+        if (key.startsWith("mmoitem:")) {
+            if (!PluginHooks.isInstalled(PluginHooks.MMOItems))
+                throw new DependencyNotFoundException("MMOItems is not installed!");
+
+            if (parts.length != 3)
+                throw new IllegalArgumentException("Invalid MMOItem format. Expected format: mmoitem:<category>:<id>");
+
+            MMOItem mmoItem = MMOItems.plugin.getMMOItem(Type.get(parts[1]), parts[2]);
+            if (mmoItem != null) {
+                return mmoItem.newBuilder().build();
             }
         }
         Material mat = Material.matchMaterial(itemString);
