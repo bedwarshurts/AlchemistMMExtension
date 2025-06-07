@@ -31,9 +31,11 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
     private final int durationTicks;
     private final String itemsArg;
 
-    public HotbarSnapshotMechanic(MythicLineConfig mlc) {
+    static {
         Bukkit.getPluginManager().registerEvents(new HotbarSnapshotListener(), AlchemistMMExtension.inst());
+    }
 
+    public HotbarSnapshotMechanic(MythicLineConfig mlc) {
         this.itemsArg = mlc.getString("items", "air");
         this.replacementItems = new ItemStack[9];
         this.durationTicks = mlc.getInteger("duration", 60);

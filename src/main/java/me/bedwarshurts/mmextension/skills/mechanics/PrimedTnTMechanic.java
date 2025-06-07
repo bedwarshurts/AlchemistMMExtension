@@ -21,9 +21,11 @@ public class PrimedTnTMechanic implements ITargetedLocationSkill {
     private final int fuseTicks;
     private final boolean damage;
 
-    public PrimedTnTMechanic(MythicLineConfig mlc) {
+    static {
         Bukkit.getPluginManager().registerEvents(new TnTExplosionListener(), AlchemistMMExtension.inst());
+    }
 
+    public PrimedTnTMechanic(MythicLineConfig mlc) {
         this.breakBlocks = mlc.getBoolean("break", false);
         this.fuseTicks = mlc.getInteger("fuse", 80);
         this.damage = mlc.getBoolean("damage", false);
