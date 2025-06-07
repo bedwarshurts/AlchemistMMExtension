@@ -217,10 +217,11 @@ public final class MythicMobsHook implements Listener {
             case "slerp":
                 event.register(new SlerpRotateMechanic(event.getConfig()));
                 break;
-            case "adddungeonreward":
-            case "addreward":
-                event.register(new AddDungeonRewardMechanic(event.getConfig()));
-                break;
+        /*    case "adddungeonreward":
+         *    case "addreward":
+         *       event.register(new AddDungeonRewardMechanic(event.getConfig()));
+         *       break;
+         */
             default:
                 break;
         }
