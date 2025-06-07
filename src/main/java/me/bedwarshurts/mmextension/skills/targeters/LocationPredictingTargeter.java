@@ -11,10 +11,13 @@ import io.lumine.mythic.core.players.PlayerManager;
 import io.lumine.mythic.core.utils.annotations.MythicTargeter;
 import io.lumine.mythic.bukkit.utils.serialize.Position;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
@@ -33,7 +36,9 @@ public class LocationPredictingTargeter implements ILocationTargeter {
     private final boolean ignoreIfStill;
 
     public LocationPredictingTargeter(MythicLineConfig mlc) {
-        this.predictionTimeTicks = PlaceholderDouble.of(mlc.getString("time", String.valueOf(1.0)));
+        this.predictionTimeTicks = PlaceholderDouble.of(
+                mlc.getString("time", String.valueOf(1.0))
+        );
         this.yOffset = mlc.getDouble("y", 0.0);
         this.ignoreY = mlc.getBoolean(new String[]{"ignoreY", "iy"}, false);
         this.ignoreIfStill = mlc.getBoolean(new String[]{"ignoreStill", "is"}, false);
@@ -43,7 +48,6 @@ public class LocationPredictingTargeter implements ILocationTargeter {
     public Collection<AbstractLocation> getLocations(SkillMetadata data) {
         if (!AlchemistMMExtension.inst().isTrackingPlayerMovement()) {
             AlchemistMMExtension.inst().getLogger().severe("LocationPredictingTargeter requires player movement tracking to be enabled.");
-
             return Collections.emptyList();
         }
 
@@ -54,33 +58,108 @@ public class LocationPredictingTargeter implements ILocationTargeter {
 
             Entity bukkitEntity = targetEntity.getBukkitEntity();
             UUID entityId = bukkitEntity.getUniqueId();
-            PlayerManager.PlayerMovementData playerMovementData = MythicBukkit.inst().getPlayerManager().getPlayerPositions().get(entityId);
+
+            PlayerManager.PlayerMovementData playerMovementData = MythicBukkit.inst()
+                    .getPlayerManager()
+                    .getPlayerPositions()
+                    .get(entityId);
+            if (playerMovementData == null) continue;
+
             Location currentLocation = playerMovementData.getTo();
             Location previousLocation = playerMovementData.getFrom();
 
-            Vector direction = currentLocation.toVector().subtract(previousLocation.toVector()).normalize();
-
+            Vector direction = currentLocation.toVector()
+                    .subtract(previousLocation.toVector())
+                    .normalize();
             if (ignoreY) {
                 direction.setY(0);
             }
 
-            double speedBpt = 4.317; // Default speed
+            double speedBpt = 4.317;
             if (bukkitEntity instanceof Player player) {
                 speedBpt = Objects.requireNonNull(player.getAttribute(Attribute.MOVEMENT_SPEED)).getValue();
             }
 
-            Vector predictedMovement = direction.multiply(speedBpt * predictionTimeTicks.get(data));
+            double ticksAhead = predictionTimeTicks.get(data);
+            Vector predictedMovement = direction.multiply(speedBpt * ticksAhead);
 
-            boolean isStill = Double.isNaN(direction.length()) || System.currentTimeMillis() - playerMovementData.getLastMovementTime() >= 60;
+            boolean isStill = Double.isNaN(direction.length())
+                    || (System.currentTimeMillis() - playerMovementData.getLastMovementTime() >= 60);
             if (isStill && ignoreIfStill) continue;
 
-            Location targetLocation = currentLocation.clone();
-            if (!isStill) {
-                targetLocation.add(predictedMovement);
-            }
-            targetLocation.setY(targetLocation.getY() + yOffset);
+            Location naiveTarget = currentLocation.clone();
+            if (!isStill) naiveTarget.add(predictedMovement);
 
-            locations.add(new AbstractLocation(Position.of(targetLocation)));
+            Location finalTarget = currentLocation.clone();
+            if (!isStill) {
+                Vector fromVec = currentLocation.toVector();
+                Vector toVec = naiveTarget.toVector();
+                Vector rayDir = toVec.clone().subtract(fromVec).normalize();
+                double maxDistance = toVec.distance(fromVec);
+
+                Location footOrigin = currentLocation.clone();
+                footOrigin.setY(currentLocation.getY() + 0.10);
+
+                RayTraceResult footHit = footOrigin.getWorld().rayTraceBlocks(
+                        footOrigin,
+                        rayDir,
+                        maxDistance,
+                        FluidCollisionMode.NEVER,
+                        true
+                );
+
+                Location headOrigin = currentLocation.clone();
+                headOrigin.setY(currentLocation.getY() + 1.80);
+
+                RayTraceResult headHit = headOrigin.getWorld().rayTraceBlocks(
+                        headOrigin,
+                        rayDir,
+                        maxDistance,
+                        FluidCollisionMode.NEVER,
+                        true
+                );
+
+                if (footHit == null && headHit == null) {
+                    finalTarget = naiveTarget.clone();
+                } else if (footHit != null && headHit == null) {
+                    Block lowerBlock = footHit.getHitBlock();
+                    Block aboveBlock = lowerBlock.getWorld().getBlockAt(
+                            lowerBlock.getX(),
+                            lowerBlock.getY() + 2,
+                            lowerBlock.getZ()
+                    );
+
+                    if (aboveBlock.getType().isSolid()) {
+                        Vector pos = footHit.getHitPosition();
+                        finalTarget = new Location(
+                                currentLocation.getWorld(),
+                                pos.getX(),
+                                pos.getY(),
+                                pos.getZ()
+                        );
+                    } else {
+                        finalTarget = new Location(
+                                currentLocation.getWorld(),
+                                footHit.getHitPosition().getX(),
+                                lowerBlock.getY() + 1.0,
+                                footHit.getHitPosition().getZ()
+                        );
+                    }
+
+                } else {
+                    RayTraceResult hitToUse = (footHit != null) ? footHit : headHit;
+                    Vector pos = hitToUse.getHitPosition();
+                    finalTarget = new Location(
+                            currentLocation.getWorld(),
+                            pos.getX(),
+                            pos.getY(),
+                            pos.getZ()
+                    );
+                }
+            }
+            finalTarget.setY(finalTarget.getY() + yOffset);
+
+            locations.add(new AbstractLocation(Position.of(finalTarget)));
         }
 
         return locations;
