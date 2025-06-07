@@ -131,15 +131,6 @@ public final class SkillUtils {
 
     }
 
-    public static boolean isAuraValid(TerminableRegistry components, int startDuration, int chargesRemaining, int startCharges, int ticksRemaining, AbstractEntity entity, boolean hasEnded) {
-        if (hasEnded || components.hasTerminated()) return false;
-        if (startCharges > 0 && chargesRemaining <= 0) return false;
-        if (startDuration < 0) {
-            return entity.isValid();
-        }
-        return ticksRemaining > 0 && entity.isValid();
-    }
-
     public static void castItemSkill(PlayerInteractEvent event, NamespacedKey skillKey, NamespacedKey casterKey) {
         if (event.getItem() == null) return;
         ItemMeta meta = event.getItem().getItemMeta();
