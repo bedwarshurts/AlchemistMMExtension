@@ -11,7 +11,7 @@ import me.bedwarshurts.mmextension.skills.conditions.StringContainsCondition;
 import me.bedwarshurts.mmextension.skills.conditions.YLevelCondition;
 import me.bedwarshurts.mmextension.skills.conditions.IsInFactionCondition;
 import me.bedwarshurts.mmextension.skills.mechanics.BookGUIMechanic;
-import me.bedwarshurts.mmextension.skills.mechanics.ControlMovementMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.EvaluateMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.HideChatMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.SlerpRotateMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.MirrorPlayerSkinMechanic;
@@ -174,10 +174,6 @@ public final class MythicMobsHook implements Listener {
             case "events:invokemethod":
                 event.register(new InvokeMethodMechanic(event.getConfig()));
                 break;
-            case "controlmovementmechanic":
-            case "controlmovement":
-                event.register(new ControlMovementMechanic(event.getConfig()));
-                break;
             case "test":
                 event.register(new TestMechanic(event.getConfig()));
                 break;
@@ -222,6 +218,9 @@ public final class MythicMobsHook implements Listener {
          *       event.register(new AddDungeonRewardMechanic(event.getConfig()));
          *       break;
          */
+            case "evaluate":
+                event.register(new EvaluateMechanic(event.getConfig()));
+                break;
             default:
                 break;
         }
