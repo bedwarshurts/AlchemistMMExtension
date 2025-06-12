@@ -1,5 +1,8 @@
 package me.bedwarshurts.mmextension.skills.mechanics.loop;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.parser.ParseException;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.mythic.MythicSkill;
@@ -7,7 +10,6 @@ import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.bedwarshurts.mmextension.utils.terminable.Terminable;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.mariuszgromada.math.mxparser.Expression;
 
 public class LoopHandler implements Terminable {
 
@@ -49,7 +51,13 @@ public class LoopHandler implements Terminable {
         parsedCondition = PlaceholderUtils.parseIntPlaceholders(parsedCondition, data);
         Expression expression = new Expression(parsedCondition);
 
-        return expression.calculate() == 1;
+        try {
+            return expression.evaluate().getBooleanValue();
+        } catch (EvaluationException | ParseException e) {
+            AlchemistMMExtension.inst().getLogger().severe("Error evaluating condition: " + parsedCondition
+                    + " skill being looped: " + skill);
+            return false;
+        }
     }
 
     @Override

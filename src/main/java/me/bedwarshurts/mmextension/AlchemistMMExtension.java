@@ -19,7 +19,6 @@ import me.bedwarshurts.mmextension.utils.ReflectionUtils;
 import me.bedwarshurts.mmextension.utils.exceptions.DependencyNotFoundException;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mariuszgromada.math.mxparser.License;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -33,10 +32,6 @@ public class AlchemistMMExtension extends JavaPlugin {
     @Getter private boolean trackingPlayerMovement = false;
 
     private static AlchemistMMExtension plugin;
-
-    static {
-        License.iConfirmCommercialUse("bedwarshurts@alchemistnetwork.org");
-    }
 
     @Override
     @SuppressWarnings("deprecation")

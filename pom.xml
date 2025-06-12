@@ -140,7 +140,11 @@
             <version>2.7.0</version>
             <scope>provided</scope>
         </dependency>
-
+            <dependency>
+                <groupId>com.ezylang</groupId>
+                <artifactId>EvalEx</artifactId>
+                <version>3.5.0</version>
+            </dependency>
         <!--
         <dependency>
             <groupId>net.playavalon</groupId>
@@ -150,13 +154,6 @@
             <systemPath>${project.basedir}/../libs/MythicDungeons.jar</systemPath>
         </dependency>
         -->
-
-        <dependency>
-            <groupId>org.mariuszgromada.math</groupId>
-            <artifactId>MathParser.org-mXparser</artifactId>
-            <version>6.1.0</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>

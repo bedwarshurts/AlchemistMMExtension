@@ -1,5 +1,8 @@
 package me.bedwarshurts.mmextension.skills.mechanics.variable;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.parser.ParseException;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.skills.ITargetedEntitySkill;
 import io.lumine.mythic.api.skills.SkillMetadata;
@@ -16,7 +19,6 @@ import me.bedwarshurts.mmextension.utils.PlaceholderUtils;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
-import org.mariuszgromada.math.mxparser.Expression;
 
 import java.util.Arrays;
 
@@ -102,12 +104,15 @@ public class VariableEditMechanic implements ITargetedEntitySkill {
             ex = new Expression(String.format("%s %s (%s)", variable.get().toString(), operationKey.replace("=", ""), operation));
         }
 
-        if (variable instanceof DoubleVariable casted) {
-            casted.setValue(ex.calculate());
-        } else if (variable instanceof IntegerVariable casted) {
-            casted.setValue((int) ex.calculate());
-        }
-
+       try {
+           if (variable instanceof DoubleVariable casted) {
+               casted.setValue(ex.evaluate().getNumberValue().doubleValue());
+           } else if (variable instanceof IntegerVariable casted) {
+               casted.setValue(ex.evaluate().getNumberValue().intValue());
+           }
+       } catch (EvaluationException | ParseException e) {
+              throw new IllegalArgumentException("Failed to evaluate operation: " + operation, e);
+       }
         return SkillResult.SUCCESS;
     }
 

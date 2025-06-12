@@ -11,7 +11,6 @@ import io.lumine.mythic.api.skills.SkillCaster;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
-import io.lumine.mythic.bukkit.utils.terminable.TerminableRegistry;
 import io.lumine.mythic.core.players.PlayerData;
 import io.lumine.mythic.core.skills.SkillMetadataImpl;
 import io.lumine.mythic.core.skills.SkillTriggers;
