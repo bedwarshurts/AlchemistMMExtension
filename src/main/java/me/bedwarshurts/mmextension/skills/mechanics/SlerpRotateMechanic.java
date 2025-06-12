@@ -21,7 +21,7 @@ public class SlerpRotateMechanic implements INoTargetSkill {
     private final PlaceholderDouble rotYawDeg;
     private final PlaceholderDouble rotRollDeg;
     private final PlaceholderInt loops;
-    private final int durationTicks;
+    private final PlaceholderInt durationTicks;
     private final String mode;
 
     public SlerpRotateMechanic(MythicLineConfig mlc) {
@@ -29,7 +29,7 @@ public class SlerpRotateMechanic implements INoTargetSkill {
         this.rotYawDeg = mlc.getPlaceholderDouble("y", "0");
         this.rotRollDeg = mlc.getPlaceholderDouble("z", "0");
         this.loops = mlc.getPlaceholderInteger("loops", 1);
-        this.durationTicks = mlc.getInteger("ticks", 20);
+        this.durationTicks = mlc.getPlaceholderInteger("ticks", 20);
         this.mode = mlc.getString("mode", "ADD").toUpperCase();
     }
 
@@ -50,6 +50,8 @@ public class SlerpRotateMechanic implements INoTargetSkill {
                 : new Quaternionf(original.getRightRotation());
         Quaternionf delta = new Quaternionf().rotationXYZ(dx, dy, dz);
         Quaternionf endQuat = new Quaternionf(startQuat).mul(delta).normalize();
+
+        final int durationTicks = this.durationTicks.get(data);
 
         if (durationTicks <= 0) {
             applyTransformation(display, endQuat);
