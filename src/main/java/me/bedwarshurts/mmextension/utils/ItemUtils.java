@@ -17,7 +17,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +74,7 @@ public final class ItemUtils {
             if (optionalItem.isPresent())
                 return BukkitAdapter.adapt(optionalItem.get().generateItemStack(1));
 
-            AlchemistMMExtension.inst().getLogger().warning("Mythic Item not found: " + parts[2]);
+            AlchemistMMExtension.inst().getLogger().warning("Mythic Item not found: " + parts[1]);
             return null;
         }
 

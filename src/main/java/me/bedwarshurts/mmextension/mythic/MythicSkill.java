@@ -50,4 +50,11 @@ public class MythicSkill {
         data.setEntityTarget(BukkitAdapter.adapt(entity));
         skill.execute(data);
     }
+
+    @Override
+    public String toString() {
+        return "MythicSkill{" +
+                "skill=" + skill.getInternalName() +
+                '}';
+    }
 }
