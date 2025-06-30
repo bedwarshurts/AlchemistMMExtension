@@ -34,32 +34,32 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.14.0</version>
-            <configuration>
-                <annotationProcessorPaths>
-                    <path>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                        <version>1.18.38</version>
-                    </path>
-                </annotationProcessorPaths>
-            </configuration>
-        </plugin>
-        <plugin>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.4.1</version>
-            <configuration>
-                <excludes>
-                    <exclude>**/mythicdungeon/IsInDungeonCondition.class</exclude>
-                    <exclude>**/mythicdungeon/AddDungeonRewardMechanic.class</exclude>
-                </excludes>
-            </configuration>
-        </plugin>
-    </plugins>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.38</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/mythicdungeon/IsInDungeonCondition.class</exclude>
+                        <exclude>**/mythicdungeon/AddDungeonRewardMechanic.class</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
 
     </build>
 
@@ -122,12 +122,12 @@
             <version>11.0.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-            <dependency>
-                <groupId>com.mojang</groupId>
-                <artifactId>authlib</artifactId>
-                <version>6.0.58</version>
-                <scope>provided</scope>
-            </dependency>
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>6.0.58</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>net.Indyuce</groupId>
             <artifactId>MMOItems-API</artifactId>
@@ -140,11 +140,11 @@
             <version>2.7.0</version>
             <scope>provided</scope>
         </dependency>
-            <dependency>
-                <groupId>com.ezylang</groupId>
-                <artifactId>EvalEx</artifactId>
-                <version>3.5.0</version>
-            </dependency>
+        <dependency>
+            <groupId>com.ezylang</groupId>
+            <artifactId>EvalEx</artifactId>
+            <version>3.5.0</version>
+        </dependency>
         <!--
         <dependency>
             <groupId>net.playavalon</groupId>
