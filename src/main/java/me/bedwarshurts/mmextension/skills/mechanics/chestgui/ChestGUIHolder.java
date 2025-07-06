@@ -17,12 +17,12 @@ public class ChestGUIHolder implements InventoryHolder {
     @Getter private final ChestGUISlot[] slots;
     @Setter private Inventory inventory;
 
-    ChestGUIHolder(SkillMetadata metadata, int size) {
+    protected ChestGUIHolder(SkillMetadata metadata, int size) {
         this.metadata = metadata;
         this.slots = new ChestGUISlot[size];
     }
 
-    ChestItem addItemFromTemplate(String template) {
+    protected ChestItem addItemFromTemplate(String template) {
         ItemStack stack = ItemUtils.buildItem(template);
 
         String bracket = template.substring(template.indexOf('[') + 1, template.lastIndexOf(']'));

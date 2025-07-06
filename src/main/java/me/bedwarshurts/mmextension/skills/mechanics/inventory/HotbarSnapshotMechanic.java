@@ -20,9 +20,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 @MythicMechanic(author = "bedwarshurts", name = "hotbarsnapshot", aliases = {}, description = "Saves and replaces a player's hotbar for a duration")
 public class HotbarSnapshotMechanic implements INoTargetSkill {
@@ -43,23 +43,36 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
 
     @Override
     public SkillResult cast(SkillMetadata data) {
-        String[] items = itemsArg.split("],");
+        ArrayList<String> items = new ArrayList<>();
+
+        StringBuilder sb = new StringBuilder();
+        int depth = 0;
+
+        for (char c : itemsArg.toCharArray()) {
+            if (c == '[') depth++;
+            if (c == ']') depth--;
+
+            if (c == ',' && depth == 0) {
+                items.add(sb.toString().trim());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+        }
+        if (!sb.isEmpty())
+            items.add(sb.toString().trim());
+
         for (int i = 0; i < 9; i++) {
-            if (i < items.length) {
-                if (!items[i].contains("[")) continue;
-                ItemStack item = ItemUtils.buildItem(items[i]);
-                if (item == null) {
-                    replacementItems[i] = new ItemStack(Material.AIR);
-                    continue;
-                }
+            if (i < items.size()) {
+                ItemStack item = ItemUtils.buildItem(items.get(i) + "]");
                 ItemMeta meta = item.getItemMeta();
                 meta.getPersistentDataContainer().set(
-                        new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "caster"),
+                        new NamespacedKey(AlchemistMMExtension.inst(), "caster"),
                         PersistentDataType.STRING,
                         data.getCaster().getEntity().getUniqueId().toString()
                 );
                 meta.getPersistentDataContainer().set(
-                        new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "hotbarsnapshot"),
+                        new NamespacedKey(AlchemistMMExtension.inst(), "hotbarsnapshot"),
                         PersistentDataType.STRING,
                         "true"
                 );
@@ -88,7 +101,7 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
                 player.getInventory().setItem(slot, replacementItems[slot]);
             }
 
-            Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()), () -> {
+            Bukkit.getScheduler().runTaskLater(AlchemistMMExtension.inst(), () -> {
                 if (!player.isOnline()) return;
                 RestoreHotbarMechanic.restoreHotbar(player);
             }, durationTicks);

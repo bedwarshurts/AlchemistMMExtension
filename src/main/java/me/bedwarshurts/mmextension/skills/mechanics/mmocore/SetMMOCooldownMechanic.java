@@ -19,13 +19,13 @@ import org.bukkit.entity.Player;
 public class SetMMOCooldownMechanic implements INoTargetSkill {
 
     private final PlaceholderString ability;
-    private final PlaceholderDouble cooldown;
+    private final PlaceholderDouble cooldownTicks;
 
     public SetMMOCooldownMechanic(MythicLineConfig config) {
         if (!PluginHooks.isInstalled(PluginHooks.MMOCore)) throw new DependencyNotFoundException("MMOCore is required to use SetMMOCooldownMechanic");
 
         this.ability = PlaceholderString.of(config.getString(new String[]{"ability", "a"}, ""));
-        this.cooldown = PlaceholderDouble.of(String.valueOf(config.getDouble(new String[]{"cooldown", "cd"}, 0)));
+        this.cooldownTicks = PlaceholderDouble.of(String.valueOf(config.getDouble(new String[]{"cooldown", "cd"}, 0)));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SetMMOCooldownMechanic implements INoTargetSkill {
                 PlayerData playerData = PlayerData.get(player);
                 try {
                     playerData.getCooldownMap().resetCooldown(playerData.getProfess().getSkill(MMOCore.plugin.skillManager.getSkill(ability.get(data))));
-                    playerData.getCooldownMap().applyCooldown(playerData.getProfess().getSkill(MMOCore.plugin.skillManager.getSkill(ability.get(data))), cooldown.get(data));
+                    playerData.getCooldownMap().applyCooldown(playerData.getProfess().getSkill(MMOCore.plugin.skillManager.getSkill(ability.get(data))), cooldownTicks.get(data) / 20);
                 }
                 catch (Exception e) {
                     AlchemistMMExtension.inst().getLogger().info("Failed to apply cooldown for " + ability + " to " + player.getName());

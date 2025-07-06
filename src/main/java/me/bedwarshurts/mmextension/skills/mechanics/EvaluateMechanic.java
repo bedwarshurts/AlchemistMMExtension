@@ -47,7 +47,7 @@ public class EvaluateMechanic implements ITargetedEntitySkill {
         Expression expression = new Expression(parsedExpression);
 
         try {
-            registry.put("expression.result", new DoubleVariable(expression.evaluate().getNumberValue().doubleValue()));
+            registry.put("expression_result", new DoubleVariable(expression.evaluate().getNumberValue().doubleValue()));
         } catch (EvaluationException | ParseException e) {
             throw new IllegalArgumentException("Failed to evaluate expression: " + parsedExpression, e);
         }

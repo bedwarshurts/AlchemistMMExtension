@@ -140,7 +140,7 @@ public final class ItemUtils {
         // Enchants
         String enchantsValue = itemMetadata.getOrDefault("enchants", "");
         if (!enchantsValue.isEmpty()) {
-            String[] pairs = enchantsValue.split(",");
+            String[] pairs = enchantsValue.split("\\|");
             for (String pair : pairs) {
                 String[] parts = pair.split(":");
                 if (parts.length == 2) {

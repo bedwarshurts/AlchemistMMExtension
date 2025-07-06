@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,15 +32,29 @@ public class ChestGUIMechanic implements INoTargetSkill {
         Bukkit.getPluginManager().registerEvents(new ChestGUIListener(), AlchemistMMExtension.inst());
     }
 
-    public ChestGUIMechanic(MythicLineConfig config) {
-        String rawTitle = config.getString("title", "Alchemist Chest GUI");
+    public ChestGUIMechanic(MythicLineConfig mlc) {
+        String rawTitle = mlc.getString("title", "Alchemist Chest GUI");
         this.titleTemplate = MiniMessage.miniMessage().deserialize(rawTitle);
-        this.size = Math.max(9, config.getInteger("slots", 9));
-        String rawContents = config.getString("contents", "");
-        this.itemTemplates = Arrays.stream(rawContents.split("],"))
-                .map(String::trim)
-                .filter(s -> s.contains("["))
-                .collect(Collectors.toList());
+        this.size = Math.max(9, mlc.getInteger("slots", 9));
+
+        String rawContents = mlc.getString("contents", "");
+        this.itemTemplates = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        int depth = 0;
+
+        for (char c : rawContents.toCharArray()) {
+            if (c == '[') depth++;
+            if (c == ']') depth--;
+
+            if (c == ',' && depth == 0) {
+                itemTemplates.add(sb.toString().trim());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+        }
+        if (!sb.isEmpty())
+            itemTemplates.add(sb.toString().trim());
     }
 
     @Override

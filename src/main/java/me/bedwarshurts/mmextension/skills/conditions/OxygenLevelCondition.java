@@ -21,12 +21,9 @@ public class OxygenLevelCondition implements ISkillMetaCondition {
         if (!(data.getCaster().getEntity().getBukkitEntity() instanceof LivingEntity caster)) return false;
 
         return switch (airTicks.get(data).charAt(0)) {
-            case '<':
-                yield caster.getRemainingAir() < Integer.parseInt(airTicks.get(data).substring(1));
-            case '>':
-                yield caster.getRemainingAir() > Integer.parseInt(airTicks.get(data).substring(1));
-            default:
-                yield caster.getRemainingAir() == Integer.parseInt(airTicks.get(data));
+            case '<' -> caster.getRemainingAir() < Integer.parseInt(airTicks.get(data).substring(1));
+            case '>' -> caster.getRemainingAir() > Integer.parseInt(airTicks.get(data).substring(1));
+            default -> caster.getRemainingAir() == Integer.parseInt(airTicks.get(data));
         };
     }
 }

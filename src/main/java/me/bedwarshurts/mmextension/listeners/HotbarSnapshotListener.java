@@ -1,5 +1,6 @@
 package me.bedwarshurts.mmextension.listeners;
 
+import me.bedwarshurts.mmextension.AlchemistMMExtension;
 import me.bedwarshurts.mmextension.skills.mechanics.inventory.RestoreHotbarMechanic;
 import me.bedwarshurts.mmextension.utils.SkillUtils;
 import org.bukkit.Bukkit;
@@ -13,19 +14,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class HotbarSnapshotListener implements Listener {
-    private final NamespacedKey skillKey = new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "skill");
-    private final NamespacedKey casterKey = new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "caster");
-    private final NamespacedKey key = new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "hotbarsnapshot");
+    private final NamespacedKey skillKey = new NamespacedKey(AlchemistMMExtension.inst(), "skill");
+    private final NamespacedKey casterKey = new NamespacedKey(AlchemistMMExtension.inst(), "caster");
+    private final NamespacedKey key = new NamespacedKey(AlchemistMMExtension.inst(), "hotbarsnapshot");
 
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(getClass()), () -> {
+        Bukkit.getScheduler().runTaskLater(AlchemistMMExtension.inst(), () -> {
             if (!player.isOnline()) return;
 
             RestoreHotbarMechanic.restoreHotbar(player);

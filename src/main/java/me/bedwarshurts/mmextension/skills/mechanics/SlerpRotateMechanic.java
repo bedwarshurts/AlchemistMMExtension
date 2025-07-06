@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
 
-@MythicMechanic(author = "bedwarshurts", name = "lerprotate", aliases = {"slerp"}, description = "Interpolates a display's rotation.")
+@MythicMechanic(author = "bedwarshurts", name = "slerprotate", aliases = {"slerp"}, description = "Interpolates a display's rotation.")
 public class SlerpRotateMechanic implements INoTargetSkill {
 
     private final PlaceholderDouble rotPitchDeg;
@@ -29,7 +29,7 @@ public class SlerpRotateMechanic implements INoTargetSkill {
         this.rotYawDeg = mlc.getPlaceholderDouble("y", "0");
         this.rotRollDeg = mlc.getPlaceholderDouble("z", "0");
         this.loops = mlc.getPlaceholderInteger("loops", 1);
-        this.durationTicks = mlc.getPlaceholderInteger("ticks", 20);
+        this.durationTicks = mlc.getPlaceholderInteger(new String[]{"ticks", "time", "t"}, 20);
         this.mode = mlc.getString("mode", "ADD").toUpperCase();
     }
 

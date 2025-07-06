@@ -31,7 +31,6 @@ public class PlaceToInventoryMechanic implements ITargetedEntitySkill {
 
         Player player = (Player) target.getBukkitEntity();
         ItemStack stack = ItemUtils.buildItem(itemString);
-        if (stack == null) return SkillResult.ERROR;
 
         ItemMeta meta = stack.getItemMeta();
         NamespacedKey key = new NamespacedKey(JavaPlugin.getProvidingPlugin(getClass()), "caster");
