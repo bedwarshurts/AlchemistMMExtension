@@ -3,6 +3,7 @@ package me.bedwarshurts.mmextension.skills.mechanics.aura;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.*;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.utils.Events;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.utils.annotations.MythicMechanic;
@@ -24,7 +25,7 @@ public class CancelPlayerDeathMechanic extends AlchemistAura implements ITargete
         super(manager, file, mlc.getLine(), mlc);
 
         this.healthPercentage = mlc.getDouble("healthPercentage", 100.0);
-        this.skill = new MythicSkill(mlc.getString("skill", ""));
+        this.skill = new MythicSkill(mlc.getString(new String[]{"skill", "onDeath"}, ""));
     }
     
     @SuppressWarnings("resource")
@@ -54,6 +55,7 @@ public class CancelPlayerDeathMechanic extends AlchemistAura implements ITargete
                         e.setCancelled(true);
                         e.setReviveHealth(Objects.requireNonNull
                                 (e.getEntity().getAttribute(Attribute.MAX_HEALTH)).getValue() * healthPercentage / 100.0);
+                        skillMetadata.setTrigger(BukkitAdapter.adapt((e.getEntity())));
                         skill.cast(skillMetadata);
                     }).bindWith(this);
         }

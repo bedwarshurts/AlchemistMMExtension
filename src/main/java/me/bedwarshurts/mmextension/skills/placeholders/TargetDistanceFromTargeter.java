@@ -8,23 +8,23 @@ import io.lumine.mythic.api.skills.targeters.ILocationTargeter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.skills.SkillTargeter;
 import io.lumine.mythic.core.skills.placeholders.PlaceholderMeta;
-import io.lumine.mythic.core.skills.placeholders.types.MetaPlaceholder;
+import io.lumine.mythic.core.skills.placeholders.all.MetaTargetPlaceholder;
 import io.lumine.mythic.core.utils.annotations.MythicPlaceholder;
 
 import java.util.Collection;
 import java.util.Comparator;
 
-@MythicPlaceholder(placeholder = "caster.distanceFrom", description = "Returns distance from a targeter")
-public class DistanceFromTargeterPlaceholder implements MetaPlaceholder {
+@MythicPlaceholder(placeholder = "target.distanceFrom", description = "Returns the distance from the targeter to the target.")
+public class TargetDistanceFromTargeter implements MetaTargetPlaceholder {
 
     @Override
-    public String apply(PlaceholderMeta placeholderMeta, String s) {
+    public String apply(PlaceholderMeta placeholderMeta, AbstractEntity abstractEntity, String s) {
         if (!(placeholderMeta instanceof SkillMetadata data)) return "[Invalid PlaceholderMeta]";
 
         String[] parts = s.split("\\.");
         SkillTargeter targeter = MythicBukkit.inst().getSkillManager().getTargeter(parts[0]);
 
-        AbstractLocation casterLoc = data.getCaster().getLocation();
+        AbstractLocation targetLoc = abstractEntity.getLocation();
         Collection<AbstractLocation> targeterList;
 
         if (targeter instanceof ILocationTargeter locTargeter) {
@@ -50,11 +50,11 @@ public class DistanceFromTargeterPlaceholder implements MetaPlaceholder {
             }
             targeterResult = parts[1].equalsIgnoreCase("min") ?
                     targeterList.stream()
-                            .min(Comparator.comparingDouble(casterLoc::distance)).get() :
+                            .min(Comparator.comparingDouble(targetLoc::distance)).get() :
                     targeterList.stream()
-                            .max(Comparator.comparingDouble(casterLoc::distance)).get();
+                            .max(Comparator.comparingDouble(targetLoc::distance)).get();
         }
 
-        return String.valueOf(casterLoc.distance(targeterResult));
+        return String.valueOf(targetLoc.distance(targeterResult));
     }
 }

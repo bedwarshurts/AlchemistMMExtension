@@ -72,7 +72,8 @@ public class EventSubscribeMechanic extends AlchemistAura implements ITargetedEn
                         try {
                             Method isCancelled = ReflectionUtils.getMethod(e.getClass(), "isCancelled");
                             return !((boolean) isCancelled.invoke(e));
-                        } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException ignored) {
+                        } catch (InvocationTargetException | IllegalAccessException |
+                                 IllegalArgumentException ignored) {
                             return true;
                         }
                     })
@@ -90,17 +91,17 @@ public class EventSubscribeMechanic extends AlchemistAura implements ITargetedEn
                         }
 
                         skillMetadata.getVariables().put("lastCallTime", new IntegerVariable((int) lastCallTime));
-                            skill.cast(skillMetadata);
+                        skill.cast(skillMetadata);
 
-                            if (this.cancel) {
-                                Method cancelEvent = ReflectionUtils.getMethod(e.getClass(), "setCancelled", boolean.class);
-                                try {
-                                    cancelEvent.invoke(e, true);
-                                } catch (IllegalAccessException | InvocationTargetException ex) {
-                                    throw new UnsupportedOperationException("This event cannot be cancelled", ex);
-                                }
+                        if (this.cancel) {
+                            Method cancelEvent = ReflectionUtils.getMethod(e.getClass(), "setCancelled", boolean.class);
+                            try {
+                                cancelEvent.invoke(e, true);
+                            } catch (IllegalAccessException | InvocationTargetException ex) {
+                                throw new UnsupportedOperationException("This event cannot be cancelled", ex);
                             }
-                        })
+                        }
+                    })
                     .bindWith(this);
         }
 
