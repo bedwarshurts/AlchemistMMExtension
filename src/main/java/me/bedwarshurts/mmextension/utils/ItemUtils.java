@@ -45,6 +45,28 @@ public final class ItemUtils {
         return map;
     }
 
+    public static ArrayList<String> splitItems(String itemsArg) {
+        ArrayList<String> items = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        int depth = 0;
+
+        for (char c : itemsArg.toCharArray()) {
+            if (c == '[') depth++;
+            if (c == ']') depth--;
+
+            if (c == ',' && depth == 0) {
+                items.add(sb.toString().trim());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+        }
+        if (!sb.isEmpty())
+            items.add(sb.toString().trim());
+
+        return items;
+    }
+
     public static ItemStack getItemStack(String itemString) {
         String key = itemString.trim().toLowerCase(Locale.ROOT);
         String[] parts = itemString.split(":", 3);

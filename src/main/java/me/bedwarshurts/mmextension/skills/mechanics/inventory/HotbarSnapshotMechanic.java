@@ -43,25 +43,7 @@ public class HotbarSnapshotMechanic implements INoTargetSkill {
 
     @Override
     public SkillResult cast(SkillMetadata data) {
-        ArrayList<String> items = new ArrayList<>();
-
-        StringBuilder sb = new StringBuilder();
-        int depth = 0;
-
-        for (char c : itemsArg.toCharArray()) {
-            if (c == '[') depth++;
-            if (c == ']') depth--;
-
-            if (c == ',' && depth == 0) {
-                items.add(sb.toString().trim());
-                sb.setLength(0);
-            } else {
-                sb.append(c);
-            }
-        }
-        if (!sb.isEmpty())
-            items.add(sb.toString().trim());
-
+        ArrayList<String> items = ItemUtils.splitItems(itemsArg);
         for (int i = 0; i < 9; i++) {
             if (i < items.size()) {
                 ItemStack item = ItemUtils.buildItem(items.get(i) + "]");
