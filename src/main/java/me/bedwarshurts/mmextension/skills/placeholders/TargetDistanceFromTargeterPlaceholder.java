@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Comparator;
 
 @MythicPlaceholder(placeholder = "target.distanceFrom", description = "Returns the distance from the targeter to the target.")
-public class TargetDistanceFromTargeter implements MetaTargetPlaceholder {
+public class TargetDistanceFromTargeterPlaceholder implements MetaTargetPlaceholder {
 
     @Override
     public String apply(PlaceholderMeta placeholderMeta, AbstractEntity abstractEntity, String s) {
