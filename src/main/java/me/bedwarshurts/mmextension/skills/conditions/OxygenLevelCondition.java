@@ -1,29 +1,28 @@
 package me.bedwarshurts.mmextension.skills.conditions;
 
+import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
-import io.lumine.mythic.api.skills.SkillMetadata;
-import io.lumine.mythic.api.skills.conditions.ISkillMetaCondition;
-import io.lumine.mythic.api.skills.placeholders.PlaceholderString;
+import io.lumine.mythic.api.skills.conditions.IEntityCondition;
 import io.lumine.mythic.core.utils.annotations.MythicCondition;
 import org.bukkit.entity.LivingEntity;
 
 @MythicCondition(author = "bedwarshurts", name = "oxygenlevel", aliases = {}, description = "Check the oxygen level of the caster")
-public class OxygenLevelCondition implements ISkillMetaCondition {
+public class OxygenLevelCondition implements IEntityCondition {
 
-    private final PlaceholderString airTicks;
+    private final String airTicks;
 
     public OxygenLevelCondition(MythicLineConfig mlc) {
-        this.airTicks = mlc.getPlaceholderString(new String[]{"air", "a"}, "<0");
+        this.airTicks = mlc.getString(new String[]{"air", "a"}, "<0");
     }
 
     @Override
-    public boolean check(SkillMetadata data) {
-        if (!(data.getCaster().getEntity().getBukkitEntity() instanceof LivingEntity caster)) return false;
+    public boolean check(AbstractEntity target) {
+        if (!(target.getBukkitEntity() instanceof LivingEntity entity)) return false;
 
-        return switch (airTicks.get(data).charAt(0)) {
-            case '<' -> caster.getRemainingAir() < Integer.parseInt(airTicks.get(data).substring(1));
-            case '>' -> caster.getRemainingAir() > Integer.parseInt(airTicks.get(data).substring(1));
-            default -> caster.getRemainingAir() == Integer.parseInt(airTicks.get(data));
+        return switch (airTicks.charAt(0)) {
+            case '<' -> entity.getRemainingAir() < Integer.parseInt(airTicks.substring(1));
+            case '>' -> entity.getRemainingAir() > Integer.parseInt(airTicks.substring(1));
+            default -> entity.getRemainingAir() == Integer.parseInt(airTicks);
         };
     }
 }
