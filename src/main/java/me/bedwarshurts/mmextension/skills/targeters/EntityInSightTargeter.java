@@ -18,9 +18,11 @@ import java.util.List;
 public class EntityInSightTargeter implements IEntityTargeter {
 
     private final double maxDistance;
+    private final boolean seeThroughWalls;
 
     public EntityInSightTargeter(MythicLineConfig mlc) {
         this.maxDistance = mlc.getDouble(new String[]{"maxDistance", "md"}, 10);
+        this.seeThroughWalls = mlc.getBoolean(new String[]{"seeThroughWalls", "stw"}, false);
     }
 
     @Override
@@ -45,7 +47,8 @@ public class EntityInSightTargeter implements IEntityTargeter {
         }
 
         // check for blocks in the way xd moyang
-        if (blockResult != null && blockResult.getHitPosition().distance(eyeLocation.toVector()) < entityResult.getHitPosition().distance(eyeLocation.toVector())) {
+        if (!seeThroughWalls && (blockResult != null && blockResult.getHitPosition().distance(eyeLocation.toVector())
+                < entityResult.getHitPosition().distance(eyeLocation.toVector()))) {
             return null;
         }
 
