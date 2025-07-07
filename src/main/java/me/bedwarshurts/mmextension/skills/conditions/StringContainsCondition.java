@@ -14,13 +14,8 @@ public class StringContainsCondition implements ISkillMetaCondition {
     private final PlaceholderString contains;
 
     public StringContainsCondition(MythicLineConfig mlc) {
-        this.string = placeholders(mlc.getString(new String[]{"string", "s"}, "anexampleword"));
-        this.contains = placeholders(mlc.getString(new String[]{"contains", "c"}, "example"));
-    }
-
-    @Nullable
-    private PlaceholderString placeholders(@Nullable String input) {
-        return input == null ? null : PlaceholderString.of(input);
+        this.string = mlc.getPlaceholderString(new String[]{"string", "s"}, "anexampleword");
+        this.contains = mlc.getPlaceholderString(new String[]{"contains", "c"}, "example");
     }
 
     @Override
