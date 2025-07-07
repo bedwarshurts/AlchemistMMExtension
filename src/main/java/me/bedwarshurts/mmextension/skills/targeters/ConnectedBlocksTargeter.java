@@ -67,7 +67,7 @@ public class ConnectedBlocksTargeter implements ILocationTargeter {
         if (location != null) {
             startLocation = new Location(world, location.get(0).get(data), location.get(1).get(data), location.get(2).get(data));
         } else {
-            startLocation = BukkitAdapter.adapt(data.getCaster().getLocation());
+            startLocation = BukkitAdapter.adapt(data.getOrigin());
         }
 
         startLocation.add(locationOffset.get(0).get(data), locationOffset.get(1).get(data), locationOffset.get(2).get(data));
