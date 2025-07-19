@@ -8,8 +8,6 @@ import io.lumine.mythic.api.packs.Pack;
 import io.lumine.mythic.api.skills.SkillHolder;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.utils.config.properties.types.NodeListProp;
-import io.lumine.mythic.core.config.IOHandler;
-import io.lumine.mythic.core.config.IOLoader;
 import io.lumine.mythic.core.config.MythicConfigImpl;
 import io.lumine.mythic.core.config.MythicLineConfigImpl;
 import io.lumine.mythic.core.logging.MythicLogger;
@@ -42,9 +40,7 @@ public class AlchemistSkillManager extends SkillExecutor {
 
     @Override
     public void loadSkills() {
-        MythicLogger.log("Loading Skills...");
-        
-        IOLoader<MythicBukkit> defaultSkills = new IOLoader<>(MythicBukkit.inst(), "ExampleSkills.yml", "Skills");
+        MythicLogger.log("[AlchemistSkillExecutor] Loading Skills...");
 
         try {
             Field skillsField = SkillExecutor.class.getDeclaredField("skills");
