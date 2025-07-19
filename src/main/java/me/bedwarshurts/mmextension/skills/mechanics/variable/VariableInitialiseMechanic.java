@@ -41,7 +41,7 @@ public class VariableInitialiseMechanic implements ITargetedEntitySkill {
         };
         this.type = parts[1];
         this.key = parts[2];
-        this.value = parts[4];
+        if (!type.equalsIgnoreCase("location")) this.value = parts[4];
         this.line = variableLine;
     }
 

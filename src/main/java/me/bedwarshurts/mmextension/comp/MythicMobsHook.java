@@ -22,7 +22,6 @@ import me.bedwarshurts.mmextension.skills.mechanics.PlaceholderSkillMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.PrimedTnTMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.SetWorldBorderMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.StringBuilderMechanic;
-import me.bedwarshurts.mmextension.skills.mechanics.TestMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.events.EventSubscribeMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.CancelPlayerDeathMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.aura.events.InvokeMethodMechanic;
@@ -174,9 +173,6 @@ public final class MythicMobsHook implements Listener {
             case "events:invokemethod":
                 event.register(new InvokeMethodMechanic(event.getConfig()));
                 break;
-            case "test":
-                event.register(new TestMechanic(event.getConfig()));
-                break;
             case "world":
             case "skillvariable":
             case "skillv":
@@ -191,9 +187,9 @@ public final class MythicMobsHook implements Listener {
 
                 String line = event.getConfig().getLine();
                 String[] parts = line.trim().split(" ");
-                String secondWord = parts[1].toLowerCase();
-                if (secondWord.equals("int") || secondWord.equals("string") || secondWord.equals("double")
-                        || secondWord.equals("boolean") || secondWord.equals("float")) {
+                String type = parts[1].toLowerCase();
+                if (type.equals("int") || type.equals("string") || type.equals("double")
+                        || type.equals("boolean") || type.equals("float")) {
                     event.register(new VariableInitialiseMechanic(line));
                     break;
                 }

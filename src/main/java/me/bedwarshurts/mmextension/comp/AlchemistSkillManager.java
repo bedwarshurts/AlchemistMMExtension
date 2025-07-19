@@ -1,19 +1,36 @@
 package me.bedwarshurts.mmextension.comp;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import io.lumine.mythic.api.config.MythicConfig;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.packs.Pack;
 import io.lumine.mythic.api.skills.SkillHolder;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.bukkit.utils.config.properties.types.NodeListProp;
+import io.lumine.mythic.core.config.IOHandler;
+import io.lumine.mythic.core.config.IOLoader;
+import io.lumine.mythic.core.config.MythicConfigImpl;
 import io.lumine.mythic.core.config.MythicLineConfigImpl;
 import io.lumine.mythic.core.logging.MythicLogger;
+import io.lumine.mythic.core.skills.MetaSkill;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
 import io.lumine.mythic.core.skills.mechanics.CustomMechanic;
 import io.lumine.mythic.core.skills.mechanics.MetaSkillMechanic;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AlchemistSkillManager extends SkillExecutor {
 
@@ -21,6 +38,80 @@ public class AlchemistSkillManager extends SkillExecutor {
 
     public AlchemistSkillManager(MythicBukkit inst) {
         super(inst);
+    }
+
+    @Override
+    public void loadSkills() {
+        MythicLogger.log("Loading Skills...");
+        
+        IOLoader<MythicBukkit> defaultSkills = new IOLoader<>(MythicBukkit.inst(), "ExampleSkills.yml", "Skills");
+        List<File> skillFiles = IOHandler.getAllFiles(defaultSkills.getFile().getParent());
+
+        try {
+            Field skillsField = SkillExecutor.class.getDeclaredField("skills");
+            skillsField.setAccessible(true);
+            Map<?,?> baseMap = (Map<?,?>) skillsField.get(this);
+            baseMap.clear();
+        } catch (Exception e) {
+            MythicLogger.error("[AlchemistSkillExecutor] Could not clear base skills map", e);
+        }
+
+        Pattern definePattern = Pattern.compile("^#define\\s+(\\w+)\\s+(.*)$");
+
+        for (Pack pack : this.getPlugin().getPackManager().getPacks()) {
+            for (File folder : pack.getPackFolders("Skills", true, true)) {
+                for (File file : io.lumine.mythic.bukkit.utils.files.Files.getAll(folder.getAbsolutePath(), Lists.newArrayList("yml", "txt"))) {
+                    try {
+                        List<String> lines = java.nio.file.Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+
+                        Map<String, String> defines = new LinkedHashMap<>();
+                        int startIndex = 0;
+
+                        while (startIndex < lines.size()) {
+                            Matcher matcher = definePattern.matcher(lines.get(startIndex));
+                            if (!matcher.matches()) {
+                                break;
+                            }
+                            defines.put(matcher.group(1), matcher.group(2));
+                            startIndex++;
+                        }
+
+                        // rebuild yaml after define cuz rito gems
+                        StringBuilder contentBuilder = new StringBuilder();
+                        for (int i = startIndex; i < lines.size(); i++) {
+                            contentBuilder.append(lines.get(i)).append("\n");
+                        }
+                        String yamlContent = contentBuilder.toString();
+
+                        for (Map.Entry<String, String> define : defines.entrySet()) {
+                            String key = define.getKey();
+                            String value = define.getValue();
+                            yamlContent = yamlContent.replaceAll("\\b" + Pattern.quote(key) + "\\b", Matcher.quoteReplacement(value));
+                        }
+
+                        YamlConfiguration yamlConfig = new YamlConfiguration();
+                        yamlConfig.loadFromString(yamlContent);
+                        MythicConfigImpl skillConfig = new MythicConfigImpl("", file, yamlConfig);
+
+                        for (String node : NodeListProp.getNodes(file, "")) {
+                            try {
+                                MythicConfig config = skillConfig.getNestedConfig(node);
+                                if (!folder.getName().equals("mono") || (!config.isSet("Id") && !config.isSet("Type"))) {
+                                    MetaSkill skill = new MetaSkill(this, pack, file, node, config);
+                                    this.registerSkill(node, skill);
+                                }
+                            } catch (Exception nodeEx) {
+                                MythicLogger.error("[AlchemistSkillExecutor] Error loading skill '" + node + "'. Enable debugging for stack trace.");
+                                MythicLogger.handleMinorError(nodeEx);
+                            }
+                        }
+                    } catch (IOException | InvalidConfigurationException ex) {
+                        MythicLogger.error("[AlchemistSkillExecutor] Failed to preprocess skill file: " + file.getName());
+                        MythicLogger.handleMinorError(ex);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -105,4 +196,10 @@ public class AlchemistSkillManager extends SkillExecutor {
         }
         return mechanicName;
     }
+
+    @Override
+    public ImmutableMap<String, Class<? extends SkillMechanic>> getMechanics() {
+        return ImmutableMap.copyOf(MECHANICS);
+    }
+
 }

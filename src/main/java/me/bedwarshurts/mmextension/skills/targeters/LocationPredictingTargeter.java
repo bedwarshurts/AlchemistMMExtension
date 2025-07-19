@@ -53,10 +53,10 @@ public class LocationPredictingTargeter implements ILocationTargeter {
 
         Set<AbstractLocation> locations = new HashSet<>();
 
-        for (AbstractEntity targetEntity : data.getEntityTargets()) {
-            if (!targetEntity.isPlayer()) continue;
+        for (AbstractEntity target : data.getEntityTargets()) {
+            if (!target.isPlayer()) continue;
 
-            Entity bukkitEntity = targetEntity.getBukkitEntity();
+            Entity bukkitEntity = target.getBukkitEntity();
             UUID entityId = bukkitEntity.getUniqueId();
 
             PlayerManager.PlayerMovementData playerMovementData = MythicBukkit.inst()
@@ -71,6 +71,7 @@ public class LocationPredictingTargeter implements ILocationTargeter {
             Vector direction = currentLocation.toVector()
                     .subtract(previousLocation.toVector())
                     .normalize();
+
             if (ignoreY) {
                 direction.setY(0);
             }

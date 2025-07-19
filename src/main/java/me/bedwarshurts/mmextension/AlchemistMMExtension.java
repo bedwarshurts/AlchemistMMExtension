@@ -100,6 +100,8 @@ public class AlchemistMMExtension extends JavaPlugin {
         }
 
         Bukkit.getScheduler().runTaskLater(this, () -> {
+            if (!isOverriden) return;
+
             MythicBukkit.inst().getPackManager().loadPacks();
             MythicBukkit.inst().getMobManager().loadMobs();
             MythicBukkit.inst().getSkillManager().loadSkills();
