@@ -45,7 +45,6 @@ public class AlchemistSkillManager extends SkillExecutor {
         MythicLogger.log("Loading Skills...");
         
         IOLoader<MythicBukkit> defaultSkills = new IOLoader<>(MythicBukkit.inst(), "ExampleSkills.yml", "Skills");
-        List<File> skillFiles = IOHandler.getAllFiles(defaultSkills.getFile().getParent());
 
         try {
             Field skillsField = SkillExecutor.class.getDeclaredField("skills");
