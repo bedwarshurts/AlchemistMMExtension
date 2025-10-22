@@ -39,7 +39,7 @@ public class ConnectedBlocksTargeter implements ILocationTargeter {
                 AlchemistMMExtension.inst().getLogger().warning("Invalid material: " + material);
             }
         }
-        String[] locationArgs = mlc.getString(new String[]{"loc","location"}, "").split(",");
+        String[] locationArgs = mlc.getString(new String[]{"loc", "location"}, "").split(",");
         this.location = locationArgs.length == 3 ? List.of(
                 PlaceholderDouble.of(locationArgs[0]),
                 PlaceholderDouble.of(locationArgs[1]),
