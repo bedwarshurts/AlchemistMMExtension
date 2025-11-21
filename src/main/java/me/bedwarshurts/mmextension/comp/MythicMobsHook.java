@@ -47,6 +47,7 @@ import me.bedwarshurts.mmextension.skills.mechanics.aura.OnSignalMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.VerticalSlashMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.RingShapeMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.particle.SphereShapeMechanic;
+import me.bedwarshurts.mmextension.skills.mechanics.spectatortarget.SetSpectatorTargetMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.variable.VariableDeleteMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.variable.VariableEditMechanic;
 import me.bedwarshurts.mmextension.skills.mechanics.variable.VariableInitialiseMechanic;
@@ -216,6 +217,9 @@ public final class MythicMobsHook implements Listener {
          */
             case "evaluate":
                 event.register(new EvaluateMechanic(event.getConfig()));
+                break;
+            case "setspectatortarget":
+                event.register(new SetSpectatorTargetMechanic(event.getConfig()));
                 break;
             default:
                 break;

@@ -1,6 +1,7 @@
 package me.bedwarshurts.mmextension.mythic;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.bedwarshurts.mmextension.utils.terminable.Terminable;
 import me.bedwarshurts.mmextension.utils.terminable.TerminableConsumer;
 import me.bedwarshurts.mmextension.utils.terminable.TerminableRegistry;
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MythicPlayer {
 
     @Getter private final Player player;
+    @Getter @Setter volatile boolean isSpectating;
     private final ConcurrentHashMap<String, MythicPlayerTracker> data = new ConcurrentHashMap<>();
 
     private final static HashSet<MythicPlayer> loadedPlayers = new HashSet<>();
